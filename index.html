@@ -391,6 +391,20 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   </div>
 </nav>
 
+<!-- WELCOME — מוצג כשאין עדיין טיולים -->
+<div id="welcome-wrap" style="display:none;padding:64px 20px;text-align:center;max-width:520px;margin:0 auto">
+  <div style="font-size:3.4rem;margin-bottom:10px">🎒</div>
+  <h2 style="font-size:1.4rem;margin-bottom:10px">ברוכים הבאים למתכנן הטיולים</h2>
+  <p style="color:var(--muted);font-size:.92rem;line-height:1.7;margin-bottom:26px">
+    כאן מתכננים את הטיול המושלם: אוספים מקומות, שומרים התלבטויות כגיבוי,<br>
+    מסמנים בזמן הטיול איפה הייתם — ובסוף מקבלים סיכום עם דירוגים וחוות דעת.
+  </p>
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:320px;margin:0 auto">
+    <button class="bsave" style="font-size:1rem;padding:14px;background:var(--kr)" onclick="openTripModal()">➕ התחל טיול חדש</button>
+    <button class="bsave" style="font-size:1rem;padding:14px;background:#2563eb" onclick="openShareModal()">📥 ייבא טיול (קישור / קוד / קובץ)</button>
+  </div>
+</div>
+
 <div class="main">
 
   <!-- DASHBOARD -->
@@ -447,6 +461,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       <div class="dsec-title">🏨 לינות</div>
       <div id="hotels-section"></div>
     </div>
+    <!-- BUDGET TRACKER -->
+    <div class="dsec">
+      <div class="dsec-hdr">
+        <div class="dsec-title">🎯 תקציב הטיול</div>
+        <button class="abtn sm" id="edit-budget-btn" style="background:#0e7490">🎯 הגדר תקציב</button>
+      </div>
+      <div id="budget-section"></div>
+    </div>
+
     <!-- EXPENSES -->
     <div class="dsec">
       <div class="dsec-hdr">
@@ -600,6 +623,36 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   </div>
 </div>
 
+<!-- BUDGET MODAL -->
+<div class="overlay" id="bg-ov">
+  <div class="modal" style="max-width:440px;border-top:5px solid #0e7490">
+    <h2>🎯 תקציב הטיול</h2>
+    <form id="bg-form">
+      <div class="fr">
+        <div class="fg"><label>תקציב כולל לטיול</label><input type="number" class="fc" id="bg-total" min="0" step="any" placeholder="20000" required></div>
+        <div class="fg"><label>מטבע התקציב</label>
+          <select class="fc" id="bg-currency">
+            <option value="ILS">₪ שקל</option><option value="USD">$ דולר</option>
+            <option value="EUR">€ יורו</option><option value="JPY">¥ ין</option><option value="KRW">₩ וון</option>
+          </select>
+        </div>
+      </div>
+      <div class="route-groups-section" style="margin-top:6px;padding-top:12px">
+        <h3>שערי המרה</h3>
+        <div id="bg-rates"></div>
+        <p style="font-size:.7rem;color:var(--muted);margin-top:4px">שערים מוצעים אוטומטית — אפשר לעדכן לפי השער בפועל.</p>
+      </div>
+      <div class="f-acts" style="justify-content:space-between">
+        <button type="button" class="bcncl" id="bg-clear" style="border-color:#fca5a5;color:var(--err);display:none">הסר תקציב</button>
+        <div style="display:flex;gap:9px">
+          <button type="button" class="bcncl" id="bg-cncl">ביטול</button>
+          <button type="submit" class="bsave" style="background:#0e7490">💾 שמור</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- DILEMMA GROUP MODAL -->
 <div class="overlay" id="dg-ov">
   <div class="modal" style="max-width:400px">
@@ -713,26 +766,26 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     <h2 style="display:flex;align-items:center;gap:8px">📤 שתף טיול</h2>
     <div id="share-trip-info" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.86rem;text-align:center;color:#15803d"></div>
     <div style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:12px 14px;margin-bottom:12px">
-      <div style="font-size:.83rem;font-weight:700;color:#1e40af;margin-bottom:6px">✨ הכי פשוט — קובץ אחד עם הכל</div>
-      <div style="font-size:.78rem;color:#3b82f6;margin-bottom:10px;line-height:1.5">יוצר קובץ HTML אחד שכולל את כל הנתונים בפנים — היא פותחת אותו ו<strong>הכל כבר שם</strong>, ללא ייבוא</div>
-      <button class="bsave" id="share-create-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.88rem;background:#1d4ed8">
-        📱 צור קובץ לאשתי → שלח ב-WhatsApp
-      </button>
+      <div style="font-size:.83rem;font-weight:700;color:#1e40af;margin-bottom:6px">🔗 הכי נוח — קישור שיתוף</div>
+      <div style="font-size:.78rem;color:#3b82f6;margin-bottom:10px;line-height:1.5">שולחים קישור אחד ב-WhatsApp — לוחצים עליו, מאשרים, <strong>וכל הטיול נטען</strong>. מעולה גם לסנכרון בין הטלפון למחשב שלך.</div>
+      <div id="share-link-hint" style="display:none;font-size:.74rem;color:#b45309;background:#fef3c7;border-radius:7px;padding:6px 9px;margin-bottom:9px">⚠️ אתה בקובץ מקומי — קישור אמיתי זמין רק באתר החי. בינתיים השתמש ב"העתק קוד בלבד".</div>
+      <button class="bsave" id="share-link-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.88rem;background:#1d4ed8">🔗 העתק קישור לשיתוף</button>
+      <button class="bsave" id="share-wa-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.86rem;background:#16a34a;margin-top:8px">💬 פתח WhatsApp עם הקישור</button>
+    </div>
+    <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:11px 14px;margin-bottom:12px">
+      <div style="font-size:.78rem;color:#15803d;margin-bottom:9px;line-height:1.5">👥 <strong>לחברים:</strong> קישור נקי — הם יקבלו אפליקציה ריקה משלהם, בלי הטיולים שלך</div>
+      <button class="bsave" id="share-clean-btn" style="width:100%;background:#059669;font-size:.85rem">🌐 העתק קישור נקי לחברים</button>
     </div>
     <details style="margin-bottom:14px">
       <summary style="font-size:.8rem;color:var(--muted);cursor:pointer;padding:4px 0">אפשרויות נוספות ▾</summary>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-        <button class="bsave" id="share-copy-btn" style="background:#2563eb;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">
-          📋 העתק קוד → הדבק בצ'אט WhatsApp
-        </button>
-        <button class="bsave" id="share-dl-btn" style="background:#475569;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">
-          📁 הורד JSON בלבד
-        </button>
+        <button class="bsave" id="share-copy-btn" style="background:#2563eb;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">📋 העתק קוד בלבד</button>
+        <button class="bsave" id="share-dl-btn" style="background:#475569;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">📁 הורד קובץ JSON</button>
       </div>
     </details>
     <div style="border-top:1px solid #eee;padding-top:14px">
-      <div style="font-size:.84rem;font-weight:700;margin-bottom:7px;color:var(--text)">📥 קיבלת קוד שיתוף? הדבק כאן:</div>
-      <textarea class="fc" id="share-paste-ta" rows="3" placeholder="הדבק/י כאן את הקוד שקיבלת..."></textarea>
+      <div style="font-size:.84rem;font-weight:700;margin-bottom:7px;color:var(--text)">📥 קיבלת קישור או קוד? הדבק כאן:</div>
+      <textarea class="fc" id="share-paste-ta" rows="3" placeholder="הדבק/י כאן את הקישור או הקוד שקיבלת..."></textarea>
       <button class="bsave" id="share-import-code-btn" style="margin-top:8px;width:100%;background:#16a34a;font-size:.88rem">⬆️ ייבא קוד</button>
     </div>
     <div class="f-acts" style="margin-top:14px">
@@ -878,8 +931,17 @@ const TRIPS_KEY='trips_config_v1';
 let TRIPS={};
 function loadTrips(){
   try{const s=localStorage.getItem(TRIPS_KEY);TRIPS=s?JSON.parse(s):null;}catch{TRIPS=null;}
-  if(!TRIPS||typeof TRIPS!=='object'||!Object.keys(TRIPS).length)TRIPS=JSON.parse(JSON.stringify(BUILTIN_TRIPS));
-  saveTrips();
+  if(!TRIPS||typeof TRIPS!=='object'){
+    TRIPS={};
+    // מיגרציה: אם קיימים נתונים מגרסה קודמת (kj2027/budapest2026) — משחזרים את הגדרות הטיולים
+    try{
+      const s=localStorage.getItem(APP_KEY);const d=s?JSON.parse(s):{};
+      Object.keys(BUILTIN_TRIPS).forEach(id=>{
+        if(d[id]&&(d[id].places||[]).length)TRIPS[id]=JSON.parse(JSON.stringify(BUILTIN_TRIPS[id]));
+      });
+    }catch{}
+    saveTrips();
+  }
 }
 function saveTrips(){try{localStorage.setItem(TRIPS_KEY,JSON.stringify(TRIPS));}catch{}}
 
@@ -900,7 +962,7 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 // ══════════════════════════════
 //  STORAGE
 // ══════════════════════════════
-const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:ct().defaultCurrency,rating:null,verdict:'',review:'',...p,budget:p.budget??p.price??null});
+const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',...p,budget:p.budget??p.price??null});
 const RDEF=r=>({description:'',active:false,choices:{},...r});
 
 function seedFor(tid){
@@ -911,7 +973,7 @@ function seedFor(tid){
 
 function load(){
   loadTrips();
-  if(!TRIPS[currentTripId])currentTripId=Object.keys(TRIPS)[0];
+  if(!TRIPS[currentTripId])currentTripId=Object.keys(TRIPS)[0]||null;
   try{
     const s=localStorage.getItem(APP_KEY);
     if(s){
@@ -933,6 +995,7 @@ function load(){
 }
 
 function loadTripData(){
+  if(!currentTripId||!TRIPS[currentTripId]){places=[];groups=[];routes=[];tripPhase='planning';hereId=null;return;}
   const d=allData[currentTripId]||{};
   places=(d.places||[]).map(PDEF);
   groups=d.groups||[];
@@ -942,7 +1005,7 @@ function loadTripData(){
 }
 
 function persist(render=true){
-  allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
+  if(currentTripId&&TRIPS[currentTripId])allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
   try{localStorage.setItem(APP_KEY,JSON.stringify(allData));}
   catch{alert('⚠️ שגיאה בשמירה — אין מספיק מקום (נסה למחוק תמונות)');}
   if(render)renderAll();
@@ -950,7 +1013,7 @@ function persist(render=true){
 
 function switchTrip(newId){
   if(currentTripId===newId)return;
-  allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
+  if(currentTripId&&TRIPS[currentTripId])allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
   currentTripId=newId;
   localStorage.setItem('active_trip_id',newId);
   loadTripData();
@@ -1176,6 +1239,161 @@ function renderExpenses(){
   html+='</div>';
   el.innerHTML=html;
 }
+
+// ══════════════════════════════
+//  BUDGET — תקציב כולל, המרות מטבע, מחשבון חכם
+// ══════════════════════════════
+const DEF_ILS={ILS:1,USD:3.4,EUR:3.9,JPY:0.023,KRW:0.0025};
+function defRate(from,to){const a=DEF_ILS[from],b=DEF_ILS[to];if(!a||!b)return 1;return +(a/b).toPrecision(4);}
+
+function budgetSnapshot(){
+  const t=ct();if(!t||!t.budgetTotal)return null;
+  const B=t.budgetCurrency||'ILS';const rates=t.rates||{};
+  const conv=(amt,cur)=>{cur=cur||B;if(cur===B)return amt;const r=parseFloat(rates[cur]);return(r>0)?amt*r:null;};
+  const act=activePlaces();
+  let spent=0,estSpent=0,plannedFuture=0;const unconv=new Set();
+  act.forEach(p=>{
+    const a=parseFloat(p.actual)||0,b=parseFloat(p.budget)||0,cur=p.currency||B;
+    if(a>0){const v=conv(a,cur);v==null?unconv.add(cur):spent+=v;}
+    else if(b>0){
+      const v=conv(b,cur);
+      if(v==null){unconv.add(cur);return;}
+      if(p.visited)estSpent+=v;else plannedFuture+=v;
+    }
+  });
+  const totalSpent=spent+estSpent;
+  const free=t.budgetTotal-totalSpent-plannedFuture;
+  const today=new Date();today.setHours(12,0,0,0);
+  const st=new Date(t.startDate+'T12:00:00'),en=new Date(t.endDate+'T12:00:00');
+  const totalDays=Math.round((en-st)/864e5)+1;
+  let daysLeft,phaseD;
+  if(today<st){daysLeft=totalDays;phaseD='before';}
+  else if(today>en){daysLeft=0;phaseD='after';}
+  else{daysLeft=Math.round((en-today)/864e5)+1;phaseD='during';}
+  let todaySpent=0;
+  if(phaseD==='during'){
+    const ds=today.toISOString().slice(0,10);
+    act.forEach(p=>{if(p.date===ds){const a=parseFloat(p.actual)||0;if(a>0){const v=conv(a,p.currency||B);if(v!=null)todaySpent+=v;}}});
+  }
+  return{B,total:t.budgetTotal,spent,estSpent,totalSpent,plannedFuture,free,unconv:[...unconv],daysLeft,totalDays,phaseD,todaySpent,conv};
+}
+
+function renderBudget(){
+  const el=document.getElementById('budget-section');if(!el)return;
+  const btn=document.getElementById('edit-budget-btn');
+  const s=budgetSnapshot();
+  if(!s){
+    if(btn)btn.textContent='🎯 הגדר תקציב';
+    el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הגדר תקציב כולל כדי לראות כמה נשאר, מכסה יומית ומחשבון חכם שאומר כמה מותר להוציא בכל יום 💡</p>';
+    return;
+  }
+  if(btn)btn.textContent='⚙️ ערוך תקציב';
+  const F=v=>fmtPrice(Math.round(v),s.B);
+  const pctS=Math.min(100,s.totalSpent/s.total*100);
+  const pctP=Math.max(0,Math.min(100-pctS,s.plannedFuture/s.total*100));
+  const over=s.free<0;
+
+  let html=`
+  <div class="exp-grid">
+    <div class="exp-card grand"><div class="exp-lbl">🎯 תקציב כולל</div><div class="exp-amt">${F(s.total)}</div></div>
+    <div class="exp-card att"><div class="exp-lbl">💸 הוצאנו${s.estSpent?' (כולל הערכות*)':''}</div><div class="exp-amt">${F(s.totalSpent)}</div>${s.estSpent?`<div class="exp-sub">* ${F(s.estSpent)} לפי תקציב, למקומות שסומנו ✓ בלי "בפועל"</div>`:''}</div>
+    <div class="exp-card acc"><div class="exp-lbl">📌 מתוכנן קדימה</div><div class="exp-amt">${F(s.plannedFuture)}</div></div>
+    <div class="exp-card" style="border-top-color:${over?'var(--err)':'var(--ok)'}"><div class="exp-lbl">${over?'⚠️ חריגה צפויה':'✨ נשאר חופשי'}</div><div class="exp-amt" style="color:${over?'var(--err)':'#15803d'}">${F(Math.abs(s.free))}</div></div>
+  </div>
+  <div class="pbar" style="margin-top:12px;height:14px;display:flex;overflow:hidden">
+    <div style="width:${pctS}%;background:linear-gradient(90deg,#16a34a,#22c55e)"></div>
+    <div style="width:${pctP}%;background:repeating-linear-gradient(45deg,#93c5fd,#93c5fd 6px,#bfdbfe 6px,#bfdbfe 12px)"></div>
+  </div>
+  <div style="display:flex;gap:14px;font-size:.72rem;color:var(--muted);margin-top:4px;flex-wrap:wrap">
+    <span>🟩 הוצאנו ${Math.round(pctS)}%</span><span>🟦 מתוכנן ${Math.round(pctP)}%</span><span>⬜ פנוי ${Math.max(0,Math.round(100-pctS-pctP))}%</span>
+  </div>`;
+
+  if(s.daysLeft>0){
+    const smart=s.free/s.daysLeft;
+    const simple=(s.total-s.totalSpent)/s.daysLeft;
+    html+=`<div style="background:linear-gradient(135deg,#0e7490,#06b6d4);color:#fff;border-radius:12px;padding:13px 16px;margin-top:14px">
+      <div style="font-weight:800;font-size:.95rem">✨ המחשבון החכם</div>
+      <div style="font-size:.85rem;margin-top:6px;line-height:1.75">
+        ${s.phaseD==='before'?`הטיול בן <strong>${s.totalDays}</strong> ימים.`:`נשארו <strong>${s.daysLeft}</strong> ימי טיול.`}
+        אחרי ההוצאות המתוכננות — אפשר להוציא עוד <strong style="font-size:1.08rem">${smart>=0?F(smart):F(0)}</strong> ליום${smart<0?' <span style="opacity:.85">(המתוכנן כבר חורג מהתקציב ⚠️)</span>':''}.
+        <br><span style="opacity:.85;font-size:.78rem">בלי להתחשב במתוכנן: ${F(Math.max(simple,0))} ליום${s.phaseD==='during'?` · היום הוצאתם ${F(s.todaySpent)}`:''}</span>
+      </div>
+    </div>`;
+  } else if(s.phaseD==='after'){
+    html+=`<div style="font-size:.82rem;color:var(--muted);margin-top:10px">הטיול הסתיים — ${over?`חרגתם ב-${F(Math.abs(s.free))}`:`נשארתם בתקציב עם עודף של ${F(s.free)}`} 🏁</div>`;
+  }
+
+  const t=ct();const rows=[];const act=activePlaces();
+  for(let d=new Date(t.startDate+'T12:00:00');d<=new Date(t.endDate+'T12:00:00');d.setDate(d.getDate()+1)){
+    const ds=d.toISOString().slice(0,10);
+    let pb=0,pa=0;
+    act.forEach(p=>{if(p.date===ds){
+      const b=parseFloat(p.budget)||0,a=parseFloat(p.actual)||0;
+      if(a>0){const v=s.conv(a,p.currency);if(v!=null)pa+=v;}
+      if(b>0){const v=s.conv(b,p.currency);if(v!=null)pb+=v;}
+    }});
+    rows.push({ds,pb,pa});
+  }
+  const avg=s.total/s.totalDays;
+  const todayStr=(()=>{const d=new Date();d.setHours(12,0,0,0);return d.toISOString().slice(0,10);})();
+  html+=`<details style="margin-top:12px"><summary style="font-size:.82rem;color:var(--muted);cursor:pointer">📅 פירוט יומי (ממוצע מותר: ${F(avg)} ליום) ▾</summary>
+  <div style="overflow-x:auto"><table class="htable" style="margin-top:8px"><thead><tr><th>יום</th><th>מתוכנן</th><th>בפועל</th><th></th></tr></thead><tbody>
+  ${rows.map(r=>{
+    const isT=r.ds===todayStr;
+    const spentD=r.pa||r.pb;
+    const overD=spentD>avg;
+    return`<tr${isT?' style="background:#ecfeff"':''}><td>${fmtD(r.ds)}${isT?' <strong>· היום</strong>':''}</td><td class="${r.pb?'pc':'no-price'}">${r.pb?F(r.pb):'—'}</td><td class="${r.pa?'pc':'no-price'}">${r.pa?F(r.pa):'—'}</td><td style="font-size:.72rem">${spentD?(overD?'🔺 מעל הממוצע':'🟢 בתקציב'):''}</td></tr>`;
+  }).join('')}
+  </tbody></table></div></details>`;
+
+  if(s.unconv.length)html+=`<div style="margin-top:10px;font-size:.76rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:7px 11px;color:#92400e">⚠️ חסר שער המרה עבור: ${s.unconv.join(', ')} — סכומים במטבעות אלה לא נכללים בחישוב. הוסף שערים דרך "ערוך תקציב".</div>`;
+  el.innerHTML=html;
+}
+
+// ── מודל תקציב ──
+function bgRateRows(){
+  const B=document.getElementById('bg-currency').value;
+  const t=ct();const rates=t?.rates||{};
+  const used=[...new Set(places.map(p=>p.currency||'ILS'))].filter(c=>c!==B);
+  const wrap=document.getElementById('bg-rates');
+  if(!used.length){wrap.innerHTML='<p style="font-size:.78rem;color:var(--muted)">כל הסכומים בטיול כבר במטבע התקציב 👍</p>';return;}
+  wrap.innerHTML=used.map(c=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.84rem">
+      <span style="min-width:64px">1 ${CURR_SYM[c]||''} ${c} =</span>
+      <input class="fc bg-rate" data-cur="${c}" type="number" step="any" min="0" style="max-width:140px" value="${rates[c]??defRate(c,B)}">
+      <span>${CURR_SYM[B]||''} ${B}</span>
+    </div>`).join('');
+}
+function openBudgetModal(){
+  const t=ct();if(!t)return;
+  document.getElementById('bg-total').value=t.budgetTotal||'';
+  document.getElementById('bg-currency').value=t.budgetCurrency||'ILS';
+  document.getElementById('bg-clear').style.display=t.budgetTotal?'':'none';
+  bgRateRows();
+  document.getElementById('bg-ov').classList.add('open');
+}
+function closeBudgetModal(){document.getElementById('bg-ov').classList.remove('open');}
+document.getElementById('bg-cncl').addEventListener('click',closeBudgetModal);
+document.getElementById('bg-ov').addEventListener('click',e=>{if(e.target===document.getElementById('bg-ov'))closeBudgetModal();});
+document.getElementById('bg-currency').addEventListener('change',bgRateRows);
+document.getElementById('bg-clear').addEventListener('click',()=>{
+  const t=TRIPS[currentTripId];if(!t)return;
+  if(!confirm('להסיר את התקציב מהטיול? (המחירים על המקומות נשארים)'))return;
+  delete t.budgetTotal;delete t.budgetCurrency;delete t.rates;
+  saveTrips();closeBudgetModal();renderAll();
+});
+document.getElementById('bg-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const t=TRIPS[currentTripId];if(!t)return;
+  const total=parseFloat(document.getElementById('bg-total').value);
+  if(!(total>0)){alert('הכנס סכום תקציב חיובי');return;}
+  t.budgetTotal=total;
+  t.budgetCurrency=document.getElementById('bg-currency').value;
+  const rates={};
+  document.querySelectorAll('.bg-rate').forEach(inp=>{const v=parseFloat(inp.value);if(v>0)rates[inp.dataset.cur]=v;});
+  t.rates=rates;
+  saveTrips();closeBudgetModal();renderAll();
+});
 
 // ══════════════════════════════
 //  RENDER POKEMON (תוקן: getCC + כפילות מאזינים)
@@ -1417,10 +1635,27 @@ function makeCard(p,opts={}){
 //  RENDER ALL
 // ══════════════════════════════
 function renderAll(){
+  const hasTrips=Object.keys(TRIPS).length>0;
+  const wl=document.getElementById('welcome-wrap');
+  if(wl)wl.style.display=hasTrips?'none':'block';
+  document.querySelector('.main').style.display=hasTrips?'':'none';
+  document.getElementById('phase-bar').style.display=hasTrips?'':'none';
+  document.querySelector('.nav').style.display=hasTrips?'flex':'none';
+  if(!hasTrips){
+    renderTripSwitcher();
+    document.getElementById('hdr-flag').textContent='🎒';
+    document.getElementById('hdr-title').textContent='מתכנן הטיולים';
+    document.getElementById('hdr-sub').textContent='מתכננים · מתלבטים · מטיילים · מסכמים';
+    document.getElementById('main-hdr').style.background='linear-gradient(135deg,#1a1a2e,#374151)';
+    document.getElementById('pg-title').textContent='מתכנן הטיולים';
+    document.getElementById('h-country-stats').innerHTML='';
+    setT('h-tot',0);setT('h-vis',0);setT('h-dil',0);
+    return;
+  }
   renderHeader();renderPhaseBar();
   renderStats();renderNowPanel();renderDoneBanner();renderDash();renderTransport();
   if(ct().hasPokemon)renderPokemon();
-  renderHotels();renderExpenses();renderRoutes();
+  renderHotels();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
   renderDilemmas();renderTimeline();renderSummary();updateDilBadge();updateActiveRouteBars();
 }
@@ -1509,7 +1744,13 @@ function renderNowPanel(){
   const here=hereId?places.find(p=>p.id===hereId):null;
   const next=act.find(p=>!p.visited&&p.cat!=='accommodation'&&p.id!==hereId);
   const vis=act.filter(p=>p.visited).length;
-  let html=`<div class="now-panel"><div class="now-title">✈️ אנחנו בטיול! <span style="font-weight:400;font-size:.8rem;opacity:.85">${vis}/${act.length} מקומות סומנו ✓</span></div><div class="now-grid">`;
+  const bsn=budgetSnapshot();
+  let moneyChip='';
+  if(bsn&&bsn.daysLeft>0){
+    const per=Math.max(bsn.free,0)/bsn.daysLeft;
+    moneyChip=`<span style="font-weight:700;font-size:.8rem;background:rgba(255,255,255,.18);padding:3px 11px;border-radius:20px">💰 עוד ~${fmtPrice(Math.round(per),bsn.B)} ליום</span>`;
+  }
+  let html=`<div class="now-panel"><div class="now-title">✈️ אנחנו בטיול! <span style="font-weight:400;font-size:.8rem;opacity:.85">${vis}/${act.length} מקומות סומנו ✓</span>${moneyChip}</div><div class="now-grid">`;
 
   html+=`<div class="now-card"><div class="now-lbl">📍 אני נמצא עכשיו</div>`;
   if(here){
@@ -2013,8 +2254,13 @@ document.getElementById('tp-form').addEventListener('submit',e=>{
   if(!allData[tid])allData[tid]={places:[],groups:[],routes:[],phase:'planning',hereId:null};
   _ctKey='';
   closeTripModal();
-  if(!id)switchTrip(tid);
-  else renderAll();
+  if(!id){
+    if(!currentTripId||!TRIPS[currentTripId]||currentTripId===tid){
+      currentTripId=tid;
+      localStorage.setItem('active_trip_id',tid);
+      loadTripData();renderAll();gotoView('dashboard');
+    } else switchTrip(tid);
+  } else renderAll();
 });
 
 // ══════════════════════════════
@@ -2219,6 +2465,7 @@ function delRoute(rid){
 //  EXPORT / IMPORT
 // ══════════════════════════════
 function exportData(){
+  if(!ct()){alert('אין עדיין טיול לייצא');return;}
   const fname=`trip_${currentTripId}.json`;
   const blob=new Blob([JSON.stringify({places,groups,routes,phase:tripPhase,hereId,tripConfig:ct()},null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
@@ -2232,6 +2479,7 @@ function importData(){
         const d=JSON.parse(ev.target.result);
         const p=d.places||(Array.isArray(d)?d:[]);const g=d.groups||d.dilemmaGroups||[];const rt=d.routes||[];
         if(!Array.isArray(p))throw new Error();
+        if(!ct()&&!(d.tripConfig&&d.tripConfig.id)){alert('הקובץ לא כולל הגדרת טיול — צור טיול חדש קודם ואז ייבא');return;}
         if(confirm(`לייבא ${p.length} מקומות, ${g.length} התלבטויות, ${rt.length} מסלולים?`)){
           if(d.tripConfig&&d.tripConfig.id&&!TRIPS[d.tripConfig.id]){
             TRIPS[d.tripConfig.id]=d.tripConfig;saveTrips();
@@ -2251,153 +2499,169 @@ function importData(){
 // ══════════════════════════════
 //  SHARE
 // ══════════════════════════════
-let _sharePayload=null;
-function createShareApp(){
-  const btn=document.getElementById('share-create-btn');
-  btn.textContent='⏳ יוצר קובץ...';btn.disabled=true;
-  try{
-    const snap={};
-    Object.keys(allData).forEach(tid=>{
-      const d=allData[tid]||{};
-      snap[tid]={places:(d.places||[]).map(p=>({...p,refPhoto:null,myPhoto:null})),groups:d.groups||[],routes:d.routes||[],phase:d.phase||'planning',hereId:d.hereId||null};
-    });
-    snap[currentTripId]={places:places.map(p=>({...p,refPhoto:null,myPhoto:null})),groups,routes,phase:tripPhase,hereId};
-    const dataStr=JSON.stringify(JSON.stringify(snap));
-    const tripsCfgStr=JSON.stringify(JSON.stringify(TRIPS));
-    const tripId=JSON.stringify(currentTripId);
-    const tripName=esc(ct().name);
-    const gradient=ct().gradient;
-    const flag=ct().flag;
-    const pc=places.length, gc=groups.length, rc=routes.length;
-    const html=`<!DOCTYPE html>
-<html dir="rtl" lang="he">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>✈️ ${tripName}</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Arial,sans-serif;background:${gradient};display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;direction:rtl}
-.card{background:#fff;border-radius:18px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.flag{font-size:2.8rem;margin-bottom:10px}
-h2{font-size:1.25rem;color:#1a1a2e;margin-bottom:8px}
-.info{background:#f0fdf4;border:1.5px solid #86efac;border-radius:9px;padding:9px 14px;font-size:.82rem;color:#15803d;font-weight:600;margin:12px 0 16px}
-p{font-size:.84rem;color:#666;line-height:1.6;margin-bottom:18px}
-.btn{background:#16a34a;color:#fff;border:none;padding:14px;border-radius:10px;font-size:1rem;cursor:pointer;width:100%;font-family:inherit;font-weight:700}
-.btn:hover{background:#15803d}
-.success{display:none;background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:18px;margin-top:16px}
-.success h3{color:#15803d;margin-bottom:8px;font-size:1.05rem}
-.success p{font-size:.84rem;color:#555;margin-bottom:12px}
-.open-btn{background:#1d4ed8;color:#fff;border:none;padding:12px;border-radius:9px;font-size:.92rem;cursor:pointer;width:100%;font-family:inherit;font-weight:700}
-</style></head>
-<body>
-<div class="card">
-  <div class="flag">${flag}</div>
-  <h2>✈️ ${tripName}</h2>
-  <div class="info">${pc} מקומות · ${gc} התלבטויות · ${rc} מסלולים</div>
-  <p>לחץ/י כדי לטעון את נתוני הטיול לאפליקציה.<br>לאחר מכן פתח/י את <strong>index.html</strong> מאותה תיקייה.</p>
-  <button class="btn" id="load-btn">💾 טען נתונים לאפליקציה</button>
-  <div class="success" id="ok-box">
-    <h3>✅ הנתונים נטענו בהצלחה!</h3>
-    <p>כעת פתח/י את קובץ <strong>index.html</strong> באותה תיקייה — תמצאי את כל המידע שם.</p>
-    <button class="open-btn" onclick="window.location.href='index.html'">פתח index.html</button>
-  </div>
-</div>
-<scr`+`ipt>
-const DATA=${dataStr};
-const TRIPCFG=${tripsCfgStr};
-const TID=${tripId};
-document.getElementById('load-btn').addEventListener('click',function(){
-  try{
-    const existing=localStorage.getItem('trip_planner_v2');
-    const all=existing?JSON.parse(existing):{};
-    const incoming=JSON.parse(DATA);
-    Object.assign(all,incoming);
-    localStorage.setItem('trip_planner_v2',JSON.stringify(all));
-    const tc=localStorage.getItem('trips_config_v1');
-    const tAll=tc?JSON.parse(tc):{};
-    Object.assign(tAll,JSON.parse(TRIPCFG));
-    localStorage.setItem('trips_config_v1',JSON.stringify(tAll));
-    localStorage.setItem('active_trip_id',TID);
-    document.getElementById('load-btn').style.display='none';
-    document.getElementById('ok-box').style.display='block';
-    try{window.location.href='index.html';}catch(e){}
-  }catch(e){alert('שגיאה: '+e.message);}
-});
-<\/scr`+`ipt>
-</body>
-</html>`;
-    const fname='share_'+ct().name.replace(/[\s&]/g,'_')+'.html';
-    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-    btn.textContent='✅ קובץ נוצר! שלח אותו ב-WhatsApp';
-    btn.style.background='#16a34a';
-    setTimeout(()=>{btn.textContent='📱 צור קובץ לאשתי → שלח ב-WhatsApp';btn.style.background='#1d4ed8';btn.disabled=false;},5000);
-  }catch(err){
-    btn.disabled=false;btn.textContent='📱 צור קובץ לאשתי → שלח ב-WhatsApp';
-    alert('שגיאה: '+err.message);
-  }
-}
-
-function openShareModal(){
-  _sharePayload={
+// ══════════════════════════════
+//  SHARE — קישור/קוד: שיתוף עם אשתי + סנכרון בין המכשירים שלי
+// ══════════════════════════════
+function buildSharePayload(){
+  return{
     tripId:currentTripId,
     tripConfig:ct(),
     places:places.map(p=>({...p,refPhoto:null,myPhoto:null})),
     groups,routes,phase:tripPhase,hereId
   };
-  const cnt=places.length;
+}
+
+async function gzipB64(str){
+  const cs=new CompressionStream('gzip');
+  const ab=await new Response(new Blob([new TextEncoder().encode(str)]).stream().pipeThrough(cs)).arrayBuffer();
+  const u8=new Uint8Array(ab);let bin='';
+  for(let i=0;i<u8.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+async function gunzipB64(b64){
+  b64=b64.replace(/-/g,'+').replace(/_/g,'/');while(b64.length%4)b64+='=';
+  const bin=atob(b64);const u8=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+  const ds=new DecompressionStream('gzip');
+  const ab=await new Response(new Blob([u8]).stream().pipeThrough(ds)).arrayBuffer();
+  return new TextDecoder().decode(ab);
+}
+
+async function encodeShare(payload){
+  const json=JSON.stringify(payload);
+  if(typeof CompressionStream!=='undefined')return'v2.'+await gzipB64(json);
+  return btoa(unescape(encodeURIComponent(json)));   // דפדפן ישן — ללא דחיסה
+}
+async function decodeShare(input){
+  let code=String(input).trim();
+  const i=code.indexOf('#share=');
+  if(i>=0)code=code.slice(i+7);          // הודבק קישור מלא
+  code=code.split(/\s/)[0];
+  if(code.startsWith('v2.'))return JSON.parse(await gunzipB64(code.slice(3)));
+  return JSON.parse(decodeURIComponent(escape(atob(code))));   // קוד מהגרסה הישנה
+}
+
+function applySharedData(d){
+  if(!Array.isArray(d.places))throw new Error('bad payload');
+  if(d.tripConfig&&d.tripConfig.id){
+    TRIPS[d.tripConfig.id]={...d.tripConfig};saveTrips();
+    if(!allData[d.tripConfig.id])allData[d.tripConfig.id]={places:[],groups:[],routes:[]};
+    _ctKey='';
+  }
+  const targetId=(d.tripId&&TRIPS[d.tripId])?d.tripId:currentTripId;
+  if(targetId!==currentTripId)switchTrip(targetId);
+  places=(d.places||[]).map(PDEF);
+  groups=d.groups||[];
+  routes=(d.routes||[]).map(RDEF);
+  if(PHASES.includes(d.phase))tripPhase=d.phase;
+  hereId=d.hereId||null;
+  persist();
+}
+
+async function makeShareLink(){
+  const code=await encodeShare(buildSharePayload());
+  const link=location.protocol==='file:'?null:location.origin+location.pathname+'#share='+code;
+  return{code,link};
+}
+
+// כניסה דרך קישור שיתוף — הצעה לטעון את הטיול
+async function checkShareHash(){
+  const m=location.hash.match(/#share=(.+)/);
+  if(!m)return;
+  history.replaceState(null,'',location.pathname+location.search);
+  try{
+    const d=await decodeShare(m[1]);
+    const nm=d.tripConfig?.name||TRIPS[d.tripId]?.name||'טיול';
+    if(confirm(`📥 קיבלת טיול משותף: "${nm}"\n${(d.places||[]).length} מקומות · ${(d.groups||[]).length} התלבטויות · ${(d.routes||[]).length} מסלולים\n\nלטעון אותו? נתוני הטיול הזה במכשיר (אם קיימים) יוחלפו.`)){
+      applySharedData(d);
+      alert('✅ הטיול נטען!');
+    }
+  }catch{alert('❌ קישור שיתוף לא תקין או חתוך — בקש/י אותו שוב');}
+}
+
+function openShareModal(){
   const el=document.getElementById('share-trip-info');
-  el.innerHTML=`✈️ <strong>${ct().name}</strong><br>${cnt} מקומות · ${groups.length} התלבטויות · ${routes.length} מסלולים`;
+  if(ct()){
+    el.innerHTML=`✈️ <strong>${esc(ct().name)}</strong><br>${places.length} מקומות · ${groups.length} התלבטויות · ${routes.length} מסלולים`;
+  } else {
+    el.innerHTML=`אין עדיין טיולים — הדבק/י למטה קישור או קוד שקיבלת כדי לייבא 📥`;
+  }
   document.getElementById('share-paste-ta').value='';
-  document.getElementById('share-copy-btn').innerHTML="📋 העתק קוד → הדבק בצ'אט";
+  const lb=document.getElementById('share-link-btn');lb.textContent='🔗 העתק קישור לשיתוף';lb.style.background='#1d4ed8';lb.disabled=false;
+  const cb=document.getElementById('share-copy-btn');cb.textContent='📋 העתק קוד בלבד';cb.style.background='#2563eb';
+  document.getElementById('share-link-hint').style.display=location.protocol==='file:'?'block':'none';
   document.getElementById('share-ov').classList.add('open');
 }
+
 document.getElementById('share-cls').addEventListener('click',()=>document.getElementById('share-ov').classList.remove('open'));
 document.getElementById('share-ov').addEventListener('click',e=>{if(e.target===document.getElementById('share-ov'))document.getElementById('share-ov').classList.remove('open');});
-document.getElementById('share-create-btn').addEventListener('click',createShareApp);
+
+document.getElementById('share-link-btn').addEventListener('click',async()=>{
+  if(!ct()){alert('אין עדיין טיול לשתף — צור טיול קודם 🙂');return;}
+  const btn=document.getElementById('share-link-btn');
+  btn.disabled=true;btn.textContent='⏳ יוצר קישור...';
+  try{
+    const{code,link}=await makeShareLink();
+    await navigator.clipboard.writeText(link||code);
+    btn.textContent=link?'✅ הקישור הועתק — הדבק ב-WhatsApp!':'✅ הקוד הועתק (קובץ מקומי — אין קישור)';
+    btn.style.background='#16a34a';
+  }catch(err){alert('שגיאה ביצירת קישור: '+err.message);}
+  setTimeout(()=>{btn.textContent='🔗 העתק קישור לשיתוף';btn.style.background='#1d4ed8';btn.disabled=false;},4000);
+});
+
+document.getElementById('share-wa-btn').addEventListener('click',async()=>{
+  if(!ct()){alert('אין עדיין טיול לשתף — צור טיול קודם 🙂');return;}
+  try{
+    const{link}=await makeShareLink();
+    if(!link){alert('WhatsApp ישיר עובד רק באתר החי. בקובץ מקומי השתמש ב"העתק קוד בלבד".');return;}
+    const msg=`🎒 שיתפתי איתך טיול: ${ct().name}\nלחצו על הקישור והוא ייטען אצלכם:\n${link}`;
+    if(msg.length>28000){alert('הטיול גדול מדי לפתיחת WhatsApp ישירה — לחץ "העתק קישור" והדבק בצ\'אט.');return;}
+    window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  }catch(err){alert('שגיאה: '+err.message);}
+});
+
+document.getElementById('share-clean-btn').addEventListener('click',async()=>{
+  const btn=document.getElementById('share-clean-btn');
+  if(location.protocol==='file:'){alert('קישור נקי זמין רק באתר החי (Vercel)');return;}
+  const url=location.origin+location.pathname;
+  try{
+    await navigator.clipboard.writeText(url);
+    btn.textContent='✅ הועתק — שלח לחברים!';
+    setTimeout(()=>{btn.textContent='🌐 העתק קישור נקי לחברים';},3500);
+  }catch{prompt('העתק את הקישור:',url);}
+});
+
 document.getElementById('share-dl-btn').addEventListener('click',()=>{
-  if(!_sharePayload)return;
-  const blob=new Blob([JSON.stringify(_sharePayload,null,2)],{type:'application/json'});
+  if(!ct()){alert('אין עדיין טיול לייצא');return;}
+  const blob=new Blob([JSON.stringify(buildSharePayload(),null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
   a.href=url;a.download=`share_${currentTripId}.json`;a.click();URL.revokeObjectURL(url);
 });
+
 document.getElementById('share-copy-btn').addEventListener('click',async()=>{
-  if(!_sharePayload)return;
-  const json=JSON.stringify(_sharePayload);
-  const b64=btoa(unescape(encodeURIComponent(json)));
+  if(!ct()){alert('אין עדיין טיול לשתף — צור טיול קודם 🙂');return;}
+  const btn=document.getElementById('share-copy-btn');
+  btn.textContent='⏳ ...';
   try{
-    await navigator.clipboard.writeText(b64);
-    const btn=document.getElementById('share-copy-btn');
-    btn.textContent='✅ הועתק! כעת הדבק בצ\'אט';
-    btn.style.background='#16a34a';
-    setTimeout(()=>{btn.innerHTML="📋 העתק קוד → הדבק בצ'אט";btn.style.background='#2563eb';},3500);
-  }catch{alert('לא ניתן להעתיק אוטומטית — נסה להוריד קובץ');}
+    const code=await encodeShare(buildSharePayload());
+    await navigator.clipboard.writeText(code);
+    btn.textContent='✅ הקוד הועתק!';btn.style.background='#16a34a';
+  }catch{alert('לא ניתן להעתיק — נסה להוריד קובץ JSON');}
+  setTimeout(()=>{btn.textContent='📋 העתק קוד בלבד';btn.style.background='#2563eb';},3500);
 });
-document.getElementById('share-import-code-btn').addEventListener('click',()=>{
-  const code=document.getElementById('share-paste-ta').value.trim();
-  if(!code){alert('הדבק/י קוד שיתוף בתיבה');return;}
+
+document.getElementById('share-import-code-btn').addEventListener('click',async()=>{
+  const raw=document.getElementById('share-paste-ta').value.trim();
+  if(!raw){alert('הדבק/י קישור או קוד שיתוף בתיבה');return;}
   try{
-    const json=decodeURIComponent(escape(atob(code)));
-    const d=JSON.parse(json);
-    if(!Array.isArray(d.places))throw new Error();
-    if(confirm(`לייבא ${d.places.length} מקומות, ${(d.groups||[]).length} התלבטויות?\nהנתונים הנוכחיים יוחלפו.`)){
-      if(d.tripConfig&&d.tripConfig.id&&!TRIPS[d.tripConfig.id]){
-        TRIPS[d.tripConfig.id]=d.tripConfig;saveTrips();
-        allData[d.tripConfig.id]=allData[d.tripConfig.id]||{places:[],groups:[],routes:[]};
-        _ctKey='';
-      }
-      if(d.tripId&&d.tripId!==currentTripId&&TRIPS[d.tripId])switchTrip(d.tripId);
-      places=(d.places||[]).map(PDEF);
-      groups=d.groups||[];
-      routes=(d.routes||[]).map(RDEF);
-      if(PHASES.includes(d.phase))tripPhase=d.phase;
-      hereId=d.hereId||null;
-      persist();
+    const d=await decodeShare(raw);
+    const nm=d.tripConfig?.name||'הטיול';
+    if(confirm(`לייבא את "${nm}" — ${d.places.length} מקומות, ${(d.groups||[]).length} התלבטויות?\nנתוני הטיול הזה אצלך יוחלפו.`)){
+      applySharedData(d);
       document.getElementById('share-ov').classList.remove('open');
       alert('✅ יובא בהצלחה!');
     }
-  }catch{alert('❌ קוד לא תקין — וודא שהעתקת את הכל');}
+  }catch{alert('❌ קישור/קוד לא תקין — ודא/י שהעתקת את כל ההודעה');}
 });
 
 // ══════════════════════════════
@@ -2454,11 +2718,12 @@ document.getElementById('open-mixer-btn').addEventListener('click',openMixerModa
 document.getElementById('clear-route-btn').addEventListener('click',()=>{routes.forEach(r=>r.active=false);persist();});
 document.getElementById('tl-clear-btn').addEventListener('click',()=>{routes.forEach(r=>r.active=false);persist();});
 document.getElementById('export-summary-btn').addEventListener('click',exportSummary);
+document.getElementById('edit-budget-btn').addEventListener('click',()=>{if(!ct()){alert('צור טיול קודם 🙂');return;}openBudgetModal();});
 
 // ══════════════════════════════
 //  BOOT
 // ══════════════════════════════
-load();renderAll();
+load();renderAll();checkShareHash();
 </script>
 </body>
 </html>
