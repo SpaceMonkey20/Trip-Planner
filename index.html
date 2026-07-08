@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pg-title">מתכנן טיולים</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --kr:#C9243F;--jp:#BC002D;--bp:#CC0000;--dil:#d97706;--ok:#16a34a;--err:#dc2626;--rte:#7c3aed;
   --bg:#f0f2f5;--card:#fff;--text:#1a1a2e;--muted:#666;--brd:#e0e0e0;
-  --shadow:0 2px 12px rgba(0,0,0,.08);--r:12px
+  --shadow:0 1px 3px rgba(26,26,46,.06),0 8px 24px rgba(26,26,46,.08);--r:16px
 }
-body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh}
+body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* TRIP SWITCHER */
 .trip-sw{background:#111827;padding:7px 22px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -32,11 +33,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 
 /* PHASE BAR */
 .phase-bar{background:#fff;border-bottom:1px solid var(--brd);padding:9px 22px;display:flex;gap:2px;align-items:center;overflow-x:auto}
-.phase-step{display:flex;align-items:center;gap:7px;padding:7px 14px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:.83rem;color:var(--muted);white-space:nowrap;border-radius:8px;transition:all .2s}
-.phase-step .pnum{width:23px;height:23px;border-radius:50%;background:#e5e7eb;color:#666;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.76rem;flex-shrink:0}
+.phase-step{display:flex;align-items:center;gap:7px;padding:8px 16px;border:1.5px solid transparent;background:none;cursor:pointer;font-family:inherit;font-size:.83rem;color:var(--muted);white-space:nowrap;border-radius:999px;transition:all .2s}
+.phase-step .pnum{width:22px;height:22px;border-radius:50%;background:#e5e7eb;color:#666;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.74rem;flex-shrink:0;transition:all .2s}
 .phase-step:hover{background:#f5f5f5}
-.phase-step.active{color:var(--text);font-weight:700;background:#eff6ff}
-.phase-step.active .pnum{background:var(--kr);color:#fff}
+.phase-step.active{color:#fff;font-weight:700;background:linear-gradient(135deg,#1a1a2e,#3d3d5c);box-shadow:0 4px 14px rgba(26,26,46,.3)}
+.phase-step.active .pnum{background:rgba(255,255,255,.22);color:#fff}
+.phase-step.done-step{border-color:#bbf7d0;color:#15803d}
 .phase-step.done-step .pnum{background:var(--ok);color:#fff}
 .phase-arrow{color:#ccc;font-size:1rem;padding:0 2px;flex-shrink:0}
 .phase-hint{margin-right:auto;font-size:.74rem;color:var(--muted);white-space:nowrap;padding-right:10px}
@@ -48,7 +50,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .ntab.active{color:var(--kr);border-bottom-color:var(--kr);font-weight:700}
 .ntab .bdg{display:inline-flex;align-items:center;justify-content:center;background:var(--dil);color:#fff;font-size:.62rem;font-weight:700;border-radius:10px;padding:1px 5px;margin-right:3px}
 .nav-tools{margin-right:auto;display:flex;align-items:center;gap:5px;padding:5px 0}
-.tbtn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:7px;border:1.5px solid var(--brd);background:#fff;font-size:.78rem;font-family:inherit;cursor:pointer;color:var(--text);transition:all .15s;white-space:nowrap}
+.tbtn{display:inline-flex;align-items:center;gap:4px;padding:6px 13px;border-radius:999px;border:1.5px solid var(--brd);background:#fff;font-size:.78rem;font-family:inherit;cursor:pointer;color:var(--text);transition:all .15s;white-space:nowrap}
 .tbtn:hover{background:#f5f5f5}.tbtn.exp{border-color:var(--ok);color:var(--ok)}.tbtn.exp:hover{background:#f0fdf4}
 .tbtn.imp{border-color:#2563eb;color:#2563eb}.tbtn.imp:hover{background:#eff6ff}
 
@@ -63,7 +65,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 
 /* PLACE CARD */
 .pcard{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border-right:4px solid var(--kr);transition:transform .18s,box-shadow .18s;overflow:hidden;display:flex;flex-direction:column}
-.pcard:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,0,0,.13)}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 4px 8px rgba(26,26,46,.08),0 16px 36px rgba(26,26,46,.14)}
 .pcard.jp{border-right-color:var(--jp)}.pcard.visited{opacity:.85}.pcard.conflict{border-right-color:var(--err)}
 .pcard.here-card{box-shadow:0 0 0 2.5px #059669,var(--shadow)}
 .cphoto{position:relative;width:100%;height:130px;background:#f5f5f5;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;color:#bbb;font-size:.78rem;transition:background .15s}
@@ -164,7 +166,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .cho-btn.unpick{background:#f0fdf4;color:var(--ok);border:1.5px solid var(--ok)}.cho-btn.unpick:hover{background:#dcfce7}
 
 /* ADD BUTTONS */
-.abtn{display:inline-flex;align-items:center;gap:6px;background:var(--kr);color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit;white-space:nowrap;transition:background .2s}
+.abtn{display:inline-flex;align-items:center;gap:6px;background:var(--kr);color:#fff;border:none;padding:8px 17px;border-radius:999px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit;white-space:nowrap;transition:background .2s}
 .abtn:hover{background:#a01d30}.abtn.jp{background:var(--jp)}.abtn.jp:hover{background:#8a0020}
 .abtn.dil{background:var(--dil)}.abtn.dil:hover{background:#b45309}
 .abtn.rte{background:var(--rte)}.abtn.rte:hover{background:#5b21b6}
@@ -172,7 +174,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 
 /* DASHBOARD */
 .sumrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.scard{background:#fff;border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.scard{background:#fff;border-radius:var(--r);padding:15px 14px;text-align:center;box-shadow:var(--shadow)}
 .scard .big{font-size:2rem;font-weight:800}.scard .lbl{font-size:.76rem;color:var(--muted);margin-top:3px}
 .scard.ctot{border-top:4px solid #1a1a2e}.scard.ckr{border-top:4px solid var(--kr)}
 .scard.cjp{border-top:4px solid var(--jp)}.scard.cvis{border-top:4px solid var(--ok)}.scard.cdil{border-top:4px solid var(--dil)}
@@ -192,7 +194,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .now-name{font-weight:700;font-size:.92rem;line-height:1.35}
 .now-sub{font-size:.74rem;opacity:.85;margin-top:3px;line-height:1.5}
 .now-acts{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
-.now-btn{border:none;border-radius:7px;padding:6px 12px;font-size:.78rem;font-weight:700;font-family:inherit;cursor:pointer;background:#fff;color:#065f46;transition:opacity .15s}
+.now-btn{border:none;border-radius:999px;padding:6px 12px;font-size:.78rem;font-weight:700;font-family:inherit;cursor:pointer;background:#fff;color:#065f46;transition:opacity .15s}
 .now-btn:hover{opacity:.88}
 .now-btn.ghost{background:rgba(255,255,255,.18);color:#fff}
 
@@ -228,6 +230,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .next-list{display:flex;flex-direction:column;gap:7px}
 .next-item{background:#fff;border-radius:9px;box-shadow:var(--shadow);padding:9px 13px;display:flex;align-items:center;gap:9px;font-size:.85rem;border-right:3px solid var(--dil)}
 .next-item .ni-sub{font-size:.72rem;color:var(--muted)}
+
+/* SUGGESTIONS — אולי יעניין אותך */
+.sug-item{display:block;width:100%;text-align:right;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 10px;margin-bottom:6px;cursor:pointer;font-family:inherit;transition:background .15s}
+.sug-item:hover{background:#ccfbf1}
+.sug-name{font-size:.82rem;font-weight:700;color:#0f766e;display:block}
+.sug-desc{font-size:.72rem;color:var(--muted);display:block;margin-top:2px}
 
 /* ROUTES */
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(305px,1fr));gap:13px;margin-top:2px}
@@ -297,9 +305,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .fc:focus{outline:none;border-color:var(--kr)}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .f-acts{display:flex;gap:9px;justify-content:flex-end;margin-top:14px}
-.bcncl{padding:8px 16px;border:1.5px solid #ddd;background:#fff;border-radius:8px;cursor:pointer;font-size:.86rem;font-family:inherit}
+.bcncl{padding:9px 16px;border:1.5px solid #ddd;background:#fff;border-radius:10px;cursor:pointer;font-size:.86rem;font-family:inherit}
 .bcncl:hover{background:#f5f5f5}
-.bsave{padding:8px 20px;background:var(--kr);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit}
+.bsave{padding:9px 20px;background:var(--kr);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit}
 .bsave:hover{background:#a01d30}
 .bsave.rte-save{background:var(--rte)}.bsave.rte-save:hover{background:#5b21b6}
 .route-groups-section{border-top:1px solid #eee;margin-top:14px;padding-top:14px}
@@ -337,7 +345,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .empty{text-align:center;padding:44px 18px;color:var(--muted);grid-column:1/-1}
 .empty .ei{font-size:2.6rem;margin-bottom:9px}.empty p{font-size:.88rem}
 @media print{.nav,.abtn,.cacts,.ib,.cho-btn,.act-btn,.phase-bar,.trip-sw{display:none!important}.pcard{break-inside:avoid}}
-@media(max-width:560px){.main{padding:12px 14px}.hdr{padding:12px 14px}.fr,.pcgrid,.rgrid{grid-template-columns:1fr}.hdr h1{font-size:1.15rem}.phase-hint{display:none}}
+@media(max-width:560px){.main{padding:12px 14px}.hdr{padding:12px 14px}.fr,.pcgrid,.rgrid{grid-template-columns:1fr}.hdr h1{font-size:1.15rem}.phase-hint{display:none}.ntab{padding:14px 15px;font-size:.92rem}.ib{padding:7px 8px;font-size:.95rem}.abtn{padding:10px 18px}.now-btn{padding:9px 15px}}
 </style>
 </head>
 <body>
@@ -529,6 +537,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
         <div class="fg"><label>עיר</label><input type="text" class="fc" id="f-city" placeholder="סיאול" required></div>
         <div class="fg"><label>שם המקום</label><input type="text" class="fc" id="f-name" placeholder="Gyeongbokgung" required></div>
       </div>
+      <div class="fg">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="abtn sm" id="sug-btn" style="background:#0e7490">💡 אולי יעניין אותך</button>
+          <button type="button" class="abtn sm" id="sug-google" style="background:#4285F4">🌐 פתח בגוגל טיולים</button>
+        </div>
+        <div id="sug-results" style="margin-top:8px"></div>
+      </div>
       <div class="fr">
         <div class="fg"><label>תאריך</label><input type="date" class="fc" id="f-date"></div>
         <div class="fg"><label>לילות</label><input type="number" class="fc" id="f-nights" min="0" max="60" value="1"></div>
@@ -620,6 +635,22 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- SHARE APP LINK MODAL -->
+<div class="overlay" id="sa-ov">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <h2 style="margin-bottom:6px">📣 שתף את האפליקציה</h2>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px">קישור נקי — כל חבר מקבל אפליקציה ריקה משלו</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="bsave" id="sa-wa" style="background:#25D366;font-size:.92rem;padding:12px">💬 שלח ב-WhatsApp</button>
+      <button class="bsave" id="sa-native" style="background:#7c3aed;font-size:.92rem;padding:12px">📲 שיתוף (אפליקציות אחרות)</button>
+      <button class="bsave" id="sa-copy" style="background:#2563eb;font-size:.92rem;padding:12px">📋 העתק קישור</button>
+    </div>
+    <div class="f-acts" style="justify-content:center;margin-top:14px">
+      <button class="bcncl" id="sa-cncl">סגור</button>
+    </div>
   </div>
 </div>
 
@@ -2068,6 +2099,7 @@ function openModal(country,type='planned',dgid=''){
   document.getElementById('f-date').value=ct().startDate;document.getElementById('f-nights').value='1';
   document.getElementById('f-pri').value='medium';document.getElementById('f-cat').value='attraction';
   document.getElementById('f-currency').value=ct().defaultCurrency;
+  document.getElementById('sug-results').innerHTML='';
   document.getElementById('pl-ov').classList.add('open');
 }
 function openEdit(id){
@@ -2084,6 +2116,7 @@ function openEdit(id){
   document.getElementById('f-cat').value=p.cat||'attraction';document.getElementById('f-pri').value=p.pri||'medium';
   document.getElementById('f-notes').value=p.notes||'';
   document.getElementById('f-budget').value=p.budget||'';document.getElementById('f-actual').value=p.actual||'';document.getElementById('f-currency').value=p.currency||'ILS';
+  document.getElementById('sug-results').innerHTML='';
   document.getElementById('pl-ov').classList.add('open');
 }
 function closePlModal(){document.getElementById('pl-ov').classList.remove('open');}
@@ -2104,6 +2137,70 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
   if(id){const old=places.find(p=>p.id===id);if(old){data.visited=old.visited;data.refPhoto=old.refPhoto;data.myPhoto=old.myPhoto;data.rating=old.rating;data.verdict=old.verdict;data.review=old.review;}const i=places.findIndex(p=>p.id===id);places[i]=data;}
   else places.push(data);
   persist();closePlModal();
+});
+
+// ══════════════════════════════
+//  "אולי יעניין אותך" — הצעות אטרקציות (ויקיפדיה) + גוגל טיולים
+// ══════════════════════════════
+function hasHebrew(s){return /[\u0590-\u05FF]/.test(s);}
+async function wikiApi(lang,params){
+  const q=new URLSearchParams({format:'json',origin:'*',action:'query',...params});
+  const r=await fetch(`https://${lang}.wikipedia.org/w/api.php?`+q.toString());
+  if(!r.ok)throw new Error('wiki http '+r.status);
+  return r.json();
+}
+const SUG_KEYWORDS=['museum','palace','temple','shrine','park','tower','market','garden','castle','bridge','square','zoo','aquarium','gallery','cathedral','church','monument','observatory','amusement','theme park','landmark','fortress','beach','waterfall','viewpoint','מוזיאון','ארמון','מקדש','פארק','מגדל','שוק','טירה','גשר','כיכר','גן חיות','אקווריום','גלריה','קתדרלה','כנסייה','אנדרטה','מבצר','חוף','מפל','תצפית','אתר'];
+
+async function fetchSuggestions(city){
+  const lang=hasHebrew(city)?'he':'en';
+  // 1) קואורדינטות של העיר
+  let d=await wikiApi(lang,{prop:'coordinates',titles:city,redirects:1});
+  let coord=null;
+  Object.values(d.query?.pages||{}).forEach(p=>{if(!coord&&p.coordinates?.[0])coord=p.coordinates[0];});
+  if(!coord)throw new Error('city');
+  // 2) ערכים בסביבה (רדיוס 10 ק"מ)
+  d=await wikiApi(lang,{list:'geosearch',gscoord:coord.lat+'|'+coord.lon,gsradius:10000,gslimit:50});
+  const ids=(d.query?.geosearch||[]).map(g=>g.pageid);
+  if(!ids.length)return[];
+  // 3) תיאורים — סינון לאטרקציות בלבד
+  d=await wikiApi(lang,{pageids:ids.slice(0,50).join('|'),prop:'description'});
+  const out=[];
+  Object.values(d.query?.pages||{}).forEach(p=>{
+    const desc=(p.description||'').toLowerCase();
+    if(!desc)return;
+    if(p.title.toLowerCase()===city.toLowerCase())return;
+    if(SUG_KEYWORDS.some(k=>desc.includes(k)))out.push({title:p.title,desc:p.description});
+  });
+  return out.slice(0,8);
+}
+
+document.getElementById('sug-btn').addEventListener('click',async()=>{
+  const city=document.getElementById('f-city').value.trim();
+  const box=document.getElementById('sug-results');
+  if(!city){box.innerHTML='<span style="font-size:.78rem;color:var(--dil)">מלא/י קודם את שדה העיר 🙂</span>';return;}
+  box.innerHTML='<span style="font-size:.8rem;color:var(--muted)">⏳ מחפש אטרקציות מומלצות ב'+esc(city)+'…</span>';
+  try{
+    const sugs=await fetchSuggestions(city);
+    if(!sugs.length){box.innerHTML='<span style="font-size:.78rem;color:var(--muted)">לא נמצאו הצעות — נסה/י שם עיר באנגלית (Seoul, Tokyo) או פתח/י בגוגל טיולים 🌐</span>';return;}
+    box.innerHTML='<div style="font-size:.72rem;color:var(--muted);margin-bottom:5px">לחיצה על הצעה ממלאת את שם המקום:</div>'+
+      sugs.map(s=>`<button type="button" class="sug-item" data-name="${esc(s.title)}">
+        <span class="sug-name">＋ ${esc(s.title)}</span>
+        ${s.desc?`<span class="sug-desc">${esc(s.desc)}</span>`:''}
+      </button>`).join('');
+  }catch{
+    box.innerHTML='<span style="font-size:.78rem;color:var(--err)">לא הצלחתי להביא הצעות — בדוק/י חיבור לאינטרנט או נסה/י שם עיר באנגלית. תמיד אפשר בגוגל טיולים 🌐</span>';
+  }
+});
+document.getElementById('sug-results').addEventListener('click',e=>{
+  const b=e.target.closest('.sug-item');if(!b)return;
+  document.getElementById('f-name').value=b.dataset.name;
+});
+document.getElementById('sug-google').addEventListener('click',()=>{
+  const city=document.getElementById('f-city').value.trim();
+  const nm=document.getElementById('f-name').value.trim();
+  if(!city&&!nm){alert('מלא/י עיר או שם מקום כדי לחפש בגוגל טיולים');return;}
+  const q=encodeURIComponent([nm,city].filter(Boolean).join(' '));
+  window.open('https://www.google.com/travel/search?q='+q,'_blank');
 });
 
 // ══════════════════════════════
@@ -2670,17 +2767,32 @@ document.getElementById('share-import-code-btn').addEventListener('click',async(
 // 👇 שים כאן את המייל שלך כדי שכפתור "פידבק" יעבוד (למשל: 'dan@gmail.com')
 const FEEDBACK_EMAIL='';
 
-async function shareAppLink(){
-  const url=location.href;
-  if(url.startsWith('file:')){alert('האפליקציה עדיין רצה כקובץ מקומי.\nאחרי ההעלאה ל-Vercel יהיה כאן קישור אמיתי לשיתוף 🙂');return;}
-  const data={title:document.title,text:'מתכנן הטיולים שלי — תכנון, התלבטויות וסיכום טיול 🎒',url};
-  if(navigator.share){
-    try{await navigator.share(data);}catch{}
-  } else {
-    try{await navigator.clipboard.writeText(url);alert('✅ הקישור הועתק — הדבק ב-WhatsApp ושלח לחברים!');}
-    catch{prompt('העתק את הקישור:',url);}
-  }
+function appCleanUrl(){return location.origin+location.pathname;}
+
+function shareAppLink(){
+  if(location.protocol==='file:'){alert('האפליקציה עדיין רצה כקובץ מקומי.\nאחרי ההעלאה ל-Vercel יהיה כאן קישור אמיתי לשיתוף 🙂');return;}
+  // כפתור שיתוף מערכת מוצג רק אם הדפדפן תומך (בעיקר בטלפון)
+  document.getElementById('sa-native').style.display=navigator.share?'':'none';
+  document.getElementById('sa-copy').textContent='📋 העתק קישור';
+  document.getElementById('sa-ov').classList.add('open');
 }
+document.getElementById('sa-cncl').addEventListener('click',()=>document.getElementById('sa-ov').classList.remove('open'));
+document.getElementById('sa-ov').addEventListener('click',e=>{if(e.target===document.getElementById('sa-ov'))document.getElementById('sa-ov').classList.remove('open');});
+document.getElementById('sa-wa').addEventListener('click',()=>{
+  const msg=`🎒 מזמין אותך לנסות את מתכנן הטיולים שלי — תכנון, התלבטויות, מעקב תקציב וסיכום טיול:\n${appCleanUrl()}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  document.getElementById('sa-ov').classList.remove('open');
+});
+document.getElementById('sa-native').addEventListener('click',async()=>{
+  try{await navigator.share({title:document.title,text:'מתכנן הטיולים שלי 🎒',url:appCleanUrl()});}catch{}
+  document.getElementById('sa-ov').classList.remove('open');
+});
+document.getElementById('sa-copy').addEventListener('click',async()=>{
+  const btn=document.getElementById('sa-copy');
+  try{await navigator.clipboard.writeText(appCleanUrl());btn.textContent='✅ הועתק!';}
+  catch{prompt('העתק את הקישור:',appCleanUrl());}
+  setTimeout(()=>{btn.textContent='📋 העתק קישור';},2500);
+});
 function sendFeedback(){
   if(!FEEDBACK_EMAIL){alert('כדי להפעיל פידבק: פתח את הקובץ, חפש FEEDBACK_EMAIL והכנס את המייל שלך.');return;}
   const subject=encodeURIComponent('פידבק על מתכנן הטיולים ✈️');
