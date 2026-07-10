@@ -98,7 +98,7 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .crev{font-size:.78rem;color:#78350f;background:#fffbeb;border-radius:8px;padding:7px 10px;margin-top:6px;line-height:1.5;white-space:pre-wrap}
 
 /* POKEMON SECTION */
-.poke-wrap{background:linear-gradient(135deg,#1a237e 0%,#3B4CCA 60%,#CC0000 100%);border-radius:14px;padding:16px 18px;margin-top:4px}
+.poke-wrap{background:#27317e;border-radius:14px;padding:16px 18px;margin-top:4px}
 .poke-wrap .sec-label{color:rgba(255,255,255,.75);font-size:.75rem;font-weight:600;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .poke-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
 .pkcard{background:rgba(255,255,255,.13);border-radius:10px;padding:12px 13px;color:#fff;position:relative;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2)}
@@ -118,7 +118,7 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .poke-empty{color:rgba(255,255,255,.55);font-size:.84rem;padding:4px 0}
 
 /* JOURNEY STRIP */
-.journey-wrap{background:linear-gradient(135deg,#1a1a2e 0%,#2d3a5c 100%);border-radius:14px;padding:16px 18px;margin-top:4px}
+.journey-wrap{background:#1f2937;border-radius:14px;padding:16px 18px;margin-top:4px}
 .journey-strip{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .jcard{background:rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;min-width:148px;text-align:center;color:#fff;position:relative;border-top:3px solid rgba(201,36,63,.8);backdrop-filter:blur(4px);cursor:default;flex:1;max-width:200px}
 .jcard.jp-j{border-top-color:rgba(188,0,45,.9)}
@@ -230,6 +230,34 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .next-list{display:flex;flex-direction:column;gap:7px}
 .next-item{background:#fff;border-radius:9px;box-shadow:var(--shadow);padding:9px 13px;display:flex;align-items:center;gap:9px;font-size:.85rem;border-right:3px solid var(--dil)}
 .next-item .ni-sub{font-size:.72rem;color:var(--muted)}
+
+/* DASHBOARD — phase-aware ordering + progressive disclosure */
+#view-dashboard.active{display:flex;flex-direction:column}
+#view-dashboard>*{order:50}
+#now-panel-wrap{order:0}#done-banner-wrap{order:1}
+#view-dashboard>.sumrow{order:2}#view-dashboard>.progwrap{order:3}
+#routes-dsec{order:10}#dsec-budget{order:11}#dsec-transport{order:12}#dsec-hotels{order:13}
+#pokemon-dsec{order:14}#dsec-expenses{order:15}#dsec-plan{order:16}#dsec-vis{order:17}
+body.phase-traveling #dsec-budget{order:10}
+body.phase-traveling #dsec-plan{order:11}
+body.phase-traveling #dsec-transport{order:12}
+body.phase-traveling #dsec-hotels{order:13}
+body.phase-traveling #routes-dsec{order:15}
+body.phase-done #dsec-vis{order:10}
+body.phase-done #dsec-expenses{order:11}
+body.phase-done #dsec-budget{order:12}
+body.phase-done #dsec-plan{order:13}
+body.phase-done #routes-dsec{order:18}
+.dsec{margin-top:40px}
+.dsec-title{font-size:1rem}
+#view-dashboard .dsec[id] .dsec-title{cursor:pointer;user-select:none;display:flex;align-items:center;gap:7px}
+#view-dashboard .dsec[id] .dsec-title::after{content:'▾';font-size:.68rem;color:var(--muted);transition:transform .2s}
+#view-dashboard .dsec[id].clps .dsec-title::after{transform:rotate(90deg)}
+.dsec.clps>*:not(.dsec-hdr):not(.dsec-title){display:none!important}
+.dsec.clps .dsec-hdr{margin-bottom:0}
+.abtn.ink{background:#1a1a2e}.abtn.ink:hover{background:#32324e}
+.abtn.teal{background:#0e7490}.abtn.teal:hover{background:#155e75}
+.abtn.indigo{background:#3B4CCA}.abtn.indigo:hover{background:#2f3da3}
 
 /* SUGGESTIONS — אולי יעניין אותך */
 .sug-item{display:block;width:100%;text-align:right;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 10px;margin-bottom:6px;cursor:pointer;font-family:inherit;transition:background .15s}
@@ -345,7 +373,7 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .empty{text-align:center;padding:44px 18px;color:var(--muted);grid-column:1/-1}
 .empty .ei{font-size:2.6rem;margin-bottom:9px}.empty p{font-size:.88rem}
 @media print{.nav,.abtn,.cacts,.ib,.cho-btn,.act-btn,.phase-bar,.trip-sw{display:none!important}.pcard{break-inside:avoid}}
-@media(max-width:560px){.main{padding:12px 14px}.hdr{padding:12px 14px}.fr,.pcgrid,.rgrid{grid-template-columns:1fr}.hdr h1{font-size:1.15rem}.phase-hint{display:none}.ntab{padding:14px 15px;font-size:.92rem}.ib{padding:7px 8px;font-size:.95rem}.abtn{padding:10px 18px}.now-btn{padding:9px 15px}}
+@media(max-width:560px){.main{padding:12px 14px}.sumrow{grid-template-columns:repeat(2,1fr)}.hdr{padding:12px 14px}.fr,.pcgrid,.rgrid{grid-template-columns:1fr}.hdr h1{font-size:1.15rem}.phase-hint{display:none}.ntab{padding:14px 15px;font-size:.92rem}.ib{padding:7px 8px;font-size:.95rem}.abtn{padding:10px 18px}.now-btn{padding:9px 15px}}
 </style>
 </head>
 <body>
@@ -447,10 +475,10 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
     </div>
 
     <!-- TRANSPORT / FLIGHTS -->
-    <div class="dsec">
+    <div class="dsec" id="dsec-transport">
       <div class="dsec-hdr">
         <div class="dsec-title">✈️ טיסות ותחבורה</div>
-        <button class="abtn sm" id="add-transport-btn" style="background:#1a1a2e">+ הוסף טיסה / תחבורה</button>
+        <button class="abtn sm ink" id="add-transport-btn">+ הוסף טיסה / תחבורה</button>
       </div>
       <div id="transport-section"></div>
     </div>
@@ -459,27 +487,27 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
     <div class="dsec" id="pokemon-dsec">
       <div class="dsec-hdr">
         <div class="dsec-title">🎮 Pokémon Centers</div>
-        <button class="abtn sm" id="add-pokemon-btn" style="background:#3B4CCA">+ הוסף Pokémon Center</button>
+        <button class="abtn sm indigo" id="add-pokemon-btn">+ הוסף Pokémon Center</button>
       </div>
       <div id="pokemon-section"></div>
     </div>
 
     <!-- HOTELS -->
-    <div class="dsec">
+    <div class="dsec" id="dsec-hotels">
       <div class="dsec-title">🏨 לינות</div>
       <div id="hotels-section"></div>
     </div>
     <!-- BUDGET TRACKER -->
-    <div class="dsec">
+    <div class="dsec" id="dsec-budget">
       <div class="dsec-hdr">
         <div class="dsec-title">🎯 תקציב הטיול</div>
-        <button class="abtn sm" id="edit-budget-btn" style="background:#0e7490">🎯 הגדר תקציב</button>
+        <button class="abtn sm teal" id="edit-budget-btn">🎯 הגדר תקציב</button>
       </div>
       <div id="budget-section"></div>
     </div>
 
     <!-- EXPENSES -->
-    <div class="dsec">
+    <div class="dsec" id="dsec-expenses">
       <div class="dsec-hdr">
         <div class="dsec-title">💰 סיכום הוצאות</div>
         <span id="exp-no-price-hint" style="font-size:.78rem;color:var(--muted)"></span>
@@ -487,8 +515,8 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
       <div id="expenses-section"></div>
     </div>
 
-    <div class="dsec"><div class="dsec-title">📍 מקומות מתוכננים</div><div id="dash-plan"></div></div>
-    <div class="dsec"><div class="dsec-title">✅ ביקרנו</div><div id="dash-vis"></div></div>
+    <div class="dsec" id="dsec-plan"><div class="dsec-title">📍 מקומות מתוכננים</div><div id="dash-plan"></div></div>
+    <div class="dsec" id="dsec-vis"><div class="dsec-title">✅ ביקרנו</div><div id="dash-vis"></div></div>
   </div>
 
   <!-- COUNTRY VIEWS (נבנות דינמית לפי יעדי הטיול) -->
@@ -543,6 +571,14 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
           <button type="button" class="abtn sm" id="sug-google" style="background:#4285F4">🌐 פתח בגוגל טיולים</button>
         </div>
         <div id="sug-results" style="margin-top:8px"></div>
+      </div>
+      <div class="fg">
+        <label>🏨 קישור מ-Booking.com (אופציונלי — ממלא פרטים אוטומטית)</label>
+        <div style="display:flex;gap:8px">
+          <input type="url" class="fc" id="bk-url" placeholder="https://www.booking.com/hotel/..." style="direction:ltr">
+          <button type="button" class="abtn sm teal" id="bk-import" style="flex-shrink:0">ייבא</button>
+        </div>
+        <div id="bk-status" style="font-size:.74rem;margin-top:5px;color:var(--muted)"></div>
       </div>
       <div class="fr">
         <div class="fg"><label>תאריך</label><input type="date" class="fc" id="f-date"></div>
@@ -1342,7 +1378,7 @@ function renderBudget(){
   if(s.daysLeft>0){
     const smart=s.free/s.daysLeft;
     const simple=(s.total-s.totalSpent)/s.daysLeft;
-    html+=`<div style="background:linear-gradient(135deg,#0e7490,#06b6d4);color:#fff;border-radius:12px;padding:13px 16px;margin-top:14px">
+    html+=`<div style="background:#0e7490;color:#fff;border-radius:12px;padding:13px 16px;margin-top:14px">
       <div style="font-weight:800;font-size:.95rem">✨ המחשבון החכם</div>
       <div style="font-size:.85rem;margin-top:6px;line-height:1.75">
         ${s.phaseD==='before'?`הטיול בן <strong>${s.totalDays}</strong> ימים.`:`נשארו <strong>${s.daysLeft}</strong> ימי טיול.`}
@@ -1633,8 +1669,8 @@ function makeCard(p,opts={}){
     ?`<button class="cho-btn unpick" data-act="unchose" data-gid="${gid}">↩ הסר מהתוכנית</button>`
     :`<button class="cho-btn pick" data-act="choose" data-gid="${gid}" data-pid="${p.id}">✅ בחר כמקום מתוכנן</button>`):'';
 
-  const hereBtn=tripPhase==='traveling'?`<button class="ib" title="אני כאן" data-act="here" data-id="${p.id}">📍</button>`:'';
-  const revBtn=p.visited?`<button class="ib" title="דרג / חוות דעת" data-act="review" data-id="${p.id}">⭐</button>`:'';
+  const hereBtn=tripPhase==='traveling'?`<button class="ib" title="אני כאן" aria-label="סמן שאני כאן עכשיו" data-act="here" data-id="${p.id}">📍</button>`:'';
+  const revBtn=p.visited?`<button class="ib" title="דרג / חוות דעת" aria-label="דרג וכתוב חוות דעת" data-act="review" data-id="${p.id}">⭐</button>`:'';
 
   const body=document.createElement('div');body.className='cbody';
   body.innerHTML=`
@@ -1642,9 +1678,9 @@ function makeCard(p,opts={}){
       <div><div class="cname">${esc(p.name)}</div><div class="ccity">${getCC(p.country).flag} ${esc(p.city)}</div></div>
       <div class="cacts">
         ${hereBtn}${revBtn}
-        <button class="ib" data-act="visit" data-id="${p.id}">${p.visited?'✅':'⬜'}</button>
-        <button class="ib" data-act="edit"  data-id="${p.id}">✏️</button>
-        <button class="ib" data-act="del"   data-id="${p.id}">🗑️</button>
+        <button class="ib" data-act="visit" data-id="${p.id}" aria-label="${p.visited?'בטל סימון ביקרנו':'סמן שביקרנו'}">${p.visited?'✅':'⬜'}</button>
+        <button class="ib" data-act="edit"  data-id="${p.id}" aria-label="ערוך מקום">✏️</button>
+        <button class="ib" data-act="del"   data-id="${p.id}" aria-label="מחק מקום">🗑️</button>
       </div>
     </div>
     <div class="cmeta">${chips}</div>
@@ -1688,7 +1724,7 @@ function renderAll(){
   if(ct().hasPokemon)renderPokemon();
   renderHotels();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
-  renderDilemmas();renderTimeline();renderSummary();updateDilBadge();updateActiveRouteBars();
+  renderDilemmas();renderTimeline();renderSummary();updateDilBadge();updateActiveRouteBars();applyClps();
 }
 
 function renderHeader(){
@@ -1740,6 +1776,8 @@ function setT(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
 //  PHASE BAR — שלושת שלבי הטיול
 // ══════════════════════════════
 function renderPhaseBar(){
+  document.body.classList.remove('phase-planning','phase-traveling','phase-done');
+  document.body.classList.add('phase-'+tripPhase);
   const idx=PHASES.indexOf(tripPhase);
   document.querySelectorAll('.phase-step').forEach(b=>{
     const i=PHASES.indexOf(b.dataset.phase);
@@ -1764,6 +1802,24 @@ function gotoView(v){
   const tab=document.querySelector(`.ntab[data-view="${v}"]`);if(tab)tab.classList.add('active');
   const vw=document.getElementById('view-'+v);if(vw)vw.classList.add('active');
 }
+
+// ── Progressive disclosure: קיפול מקטעים בדשבורד (נשמר בין ביקורים) ──
+let dashClps;
+try{dashClps=new Set(JSON.parse(localStorage.getItem('dash_clps'))||[]);}
+catch{dashClps=null;}
+if(!dashClps||!(dashClps instanceof Set))dashClps=new Set(['dsec-expenses','pokemon-dsec','dsec-vis']);
+if(localStorage.getItem('dash_clps')===null)localStorage.setItem('dash_clps',JSON.stringify([...dashClps]));
+function applyClps(){
+  document.querySelectorAll('#view-dashboard .dsec[id]').forEach(d=>d.classList.toggle('clps',dashClps.has(d.id)));
+}
+document.getElementById('view-dashboard').addEventListener('click',e=>{
+  if(e.target.closest('button'))return;
+  const t=e.target.closest('.dsec-title');if(!t)return;
+  const d=t.closest('.dsec');if(!d||!d.id)return;
+  dashClps.has(d.id)?dashClps.delete(d.id):dashClps.add(d.id);
+  localStorage.setItem('dash_clps',JSON.stringify([...dashClps]));
+  applyClps();
+});
 
 // ══════════════════════════════
 //  NOW PANEL — שלב "בטיול"
@@ -2007,9 +2063,9 @@ function renderTimeline(){
           <div class="tlsub">${esc(p.city)} · ${CAT[p.cat]||''}${p.rating?' · '+'★'.repeat(p.rating):''}</div>
         </div>
         ${p.startTime&&p.endTime?`<span class="tltim">🕐 ${p.startTime}–${p.endTime}</span>`:''}
-        ${tripPhase==='traveling'?`<button class="ib" data-act="here" data-id="${p.id}">📍</button>`:''}
-        <button class="ib" data-act="visit" data-id="${p.id}">${p.visited?'✅':'⬜'}</button>
-        <button class="ib" data-act="edit"  data-id="${p.id}">✏️</button>`;
+        ${tripPhase==='traveling'?`<button class="ib" data-act="here" data-id="${p.id}" aria-label="סמן שאני כאן">📍</button>`:''}
+        <button class="ib" data-act="visit" data-id="${p.id}" aria-label="${p.visited?'בטל סימון':'סמן שביקרנו'}">${p.visited?'✅':'⬜'}</button>
+        <button class="ib" data-act="edit"  data-id="${p.id}" aria-label="ערוך">✏️</button>`;
       line.appendChild(ti);
     });
     line.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const{act,id}=b.dataset;if(act==='visit')toggleVisit(id);if(act==='edit')openEdit(id);if(act==='here')setHere(id);});
@@ -2100,6 +2156,7 @@ function openModal(country,type='planned',dgid=''){
   document.getElementById('f-pri').value='medium';document.getElementById('f-cat').value='attraction';
   document.getElementById('f-currency').value=ct().defaultCurrency;
   document.getElementById('sug-results').innerHTML='';
+  document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';
   document.getElementById('pl-ov').classList.add('open');
 }
 function openEdit(id){
@@ -2117,6 +2174,7 @@ function openEdit(id){
   document.getElementById('f-notes').value=p.notes||'';
   document.getElementById('f-budget').value=p.budget||'';document.getElementById('f-actual').value=p.actual||'';document.getElementById('f-currency').value=p.currency||'ILS';
   document.getElementById('sug-results').innerHTML='';
+  document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';
   document.getElementById('pl-ov').classList.add('open');
 }
 function closePlModal(){document.getElementById('pl-ov').classList.remove('open');}
@@ -2138,6 +2196,66 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
   else places.push(data);
   persist();closePlModal();
 });
+
+// ══════════════════════════════
+//  ייבוא מ-Booking.com — ניתוח הקישור (ללא שרת, ללא CORS)
+// ══════════════════════════════
+function titleCaseSlug(s){
+  return s.split('-').filter(Boolean).map(w=>w?w[0].toUpperCase()+w.slice(1):w).join(' ');
+}
+const BK_CC_COUNTRY={jp:'japan',kr:'korea'};
+const BK_CC_CUR={jp:'JPY',kr:'KRW',us:'USD',il:'ILS'};
+
+function importBookingUrl(){
+  const raw=document.getElementById('bk-url').value.trim();
+  const st=document.getElementById('bk-status');
+  if(!raw){st.textContent='הדבק/י קודם קישור למלון';return;}
+  let u;try{u=new URL(raw);}catch{st.textContent='❌ הקישור לא תקין — העתק/י את הכתובת המלאה מהדפדפן';return;}
+  if(!u.hostname.includes('booking.com')){st.textContent='❌ זה לא נראה כמו קישור של Booking.com';return;}
+  if(/^\/Share-/i.test(u.pathname)){
+    st.textContent='⚠️ זה קישור שיתוף מקוצר מהאפליקציה — פתח/י אותו בדפדפן והעתק/י את הכתובת המלאה של דף המלון';
+    return;
+  }
+  const m=u.pathname.match(/\/hotel\/([a-z]{2})\/([^/.]+)/i);
+  if(!m){st.textContent='⚠️ לא זוהה דף מלון בקישור — צריך קישור לעמוד המלון עצמו (מכיל /hotel/)';return;}
+  const cc=m[1].toLowerCase();
+  const name=titleCaseSlug(m[2]);
+  const filled=['שם: '+name,'🏨 לינה'];
+
+  document.getElementById('f-name').value=name;
+  document.getElementById('f-cat').value='accommodation';
+
+  // מדינה — אם קיימת בטיול הנוכחי
+  const ccountry=BK_CC_COUNTRY[cc];
+  if(ccountry&&ct().countries.some(c=>c.id===ccountry)){
+    document.getElementById('f-country').value=ccountry;
+  }
+  // עיר — מפרמטר החיפוש אם קיים
+  const ss=u.searchParams.get('ss');
+  if(ss&&!document.getElementById('f-city').value.trim()){
+    document.getElementById('f-city').value=decodeURIComponent(ss.replace(/\+/g,' '));
+    filled.push('עיר');
+  }
+  // תאריכים — checkin/checkout אם קיימים בקישור
+  const ci=u.searchParams.get('checkin'),co=u.searchParams.get('checkout');
+  if(ci&&/^\d{4}-\d{2}-\d{2}$/.test(ci)){
+    document.getElementById('f-date').value=ci;filled.push('צ\'ק-אין '+fmtD(ci));
+    if(co&&/^\d{4}-\d{2}-\d{2}$/.test(co)){
+      const n=Math.round((new Date(co+'T12:00:00')-new Date(ci+'T12:00:00'))/864e5);
+      if(n>0){document.getElementById('f-nights').value=n;filled.push(n+' לילות');}
+    }
+  }
+  // מטבע לפי המדינה
+  document.getElementById('f-currency').value=BK_CC_CUR[cc]||ct().defaultCurrency;
+  // קישור נקי להערות
+  const clean=u.origin+u.pathname;
+  const nt=document.getElementById('f-notes');
+  if(!nt.value.includes('booking.com'))nt.value=(nt.value?nt.value+'\n':'')+'🔗 '+clean;
+
+  st.innerHTML='✅ יובא: '+esc(filled.join(' · '))+'<br>נשאר להשלים: מחיר'+(ci?'':' + תאריכים')+' 💰';
+}
+document.getElementById('bk-import').addEventListener('click',importBookingUrl);
+document.getElementById('bk-url').addEventListener('paste',()=>setTimeout(importBookingUrl,60));
 
 // ══════════════════════════════
 //  "אולי יעניין אותך" — הצעות אטרקציות (ויקיפדיה) + גוגל טיולים
