@@ -264,6 +264,7 @@ body.phase-traveling #dsec-food{order:14}
 body.phase-done #dsec-food{order:11}
 body.phase-done #dsec-expenses{order:12}
 body.phase-done #dsec-budget{order:13}
+body.phase-done #dsec-plan{display:none}
 
 /* SUGGESTIONS — אולי יעניין אותך */
 .sug-item{display:block;width:100%;text-align:right;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 10px;margin-bottom:6px;cursor:pointer;font-family:inherit;transition:background .15s}
@@ -772,6 +773,15 @@ body.phase-done #dsec-budget{order:13}
           <p style="color:var(--muted);font-size:.84rem">אין קבוצות התלבטות עדיין. צור קבוצות בלשונית "התלבטויות" תחילה.</p>
         </div>
       </div>
+      <div class="route-groups-section">
+        <h3>📍 מקומות מתוכננים במסלול</h3>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button type="button" class="abtn sm ink" id="rt-all">בחר הכל</button>
+          <button type="button" class="abtn sm" style="background:#6b7280" id="rt-none">נקה הכל</button>
+        </div>
+        <div id="rt-places" style="max-height:220px;overflow-y:auto"></div>
+        <p style="font-size:.7rem;color:var(--muted);margin-top:5px">כשהכל מסומן, מקומות חדשים שתוסיף ייכנסו למסלול אוטומטית.</p>
+      </div>
       <div class="conf-preview" id="rt-conf-preview">⚠️ <span id="rt-conf-text"></span></div>
       <div class="f-acts"><button type="button" class="bcncl" id="rt-cncl">ביטול</button><button type="submit" class="bsave rte-save">שמור מסלול</button></div>
     </form>
@@ -1051,7 +1061,7 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 //  STORAGE
 // ══════════════════════════════
 const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',...p,budget:p.budget??p.price??null});
-const RDEF=r=>({description:'',active:false,choices:{},...r});
+const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
 
 function seedFor(tid){
   if(tid==='kj2027')return seedKJ();
@@ -1144,9 +1154,10 @@ function placeOnDate(p,ds){
 // ══════════════════════════════
 //  CONFLICT DETECTION
 // ══════════════════════════════
-function apFromChoices(choicesMap){
+function apFromChoices(choicesMap,placeIds){
+  const idSet=Array.isArray(placeIds)?new Set(placeIds):null;
   return places.filter(p=>{
-    if(p.type==='planned')return true;
+    if(p.type==='planned')return !idSet||idSet.has(p.id);
     if(p.type==='dilemma')return choicesMap[p.dilemmaGroupId]===p.id;
     return false;
   });
@@ -1156,14 +1167,22 @@ function currentChoicesMap(){
   if(ar)return ar.choices;
   return Object.fromEntries(groups.map(g=>[g.id,g.chosenId]));
 }
-function activePlaces(){return apFromChoices(currentChoicesMap());}
+function activePlaces(){
+  const ar=routes.find(r=>r.active);
+  return apFromChoices(currentChoicesMap(),ar?ar.placeIds??null:null);
+}
+// לתצוגות דשבורד וציר-זמן: בשלב הסיכום — רק המקומות שבאמת ביקרנו בהם
+function displayPlaces(){
+  const base=activePlaces();
+  return tripPhase==='done'?base.filter(p=>p.visited):base;
+}
 function placeConflict(p,pool){
   if(!p.startTime||!p.endTime)return false;
   return pool.some(o=>o.id!==p.id&&o.date===p.date&&o.startTime&&o.endTime&&timesOverlap(p.startTime,p.endTime,o.startTime,o.endTime));
 }
 function hasConflict(p){return placeConflict(p,activePlaces());}
-function routeConflicts(choicesMap){
-  const pool=apFromChoices(choicesMap);
+function routeConflicts(choicesMap,placeIds){
+  const pool=apFromChoices(choicesMap,placeIds);
   return pool.filter(p=>placeConflict(p,pool));
 }
 function groupDateConflict(g){
@@ -1178,11 +1197,11 @@ function unresolvedGroups(){return groups.filter(g=>!g.chosenId);}
 //  ROUTE STATS
 // ══════════════════════════════
 function routeStats(r){
-  const pool=apFromChoices(r.choices);
+  const pool=apFromChoices(r.choices,r.placeIds??null);
   const c0=ct().countries[0]?.id, c1=ct().countries[1]?.id;
   const kr=pool.filter(p=>p.country===c0).length;
   const jp=c1?pool.filter(p=>p.country===c1).length:0;
-  const conf=routeConflicts(r.choices).length;
+  const conf=routeConflicts(r.choices,r.placeIds??null).length;
   const resolved=groups.filter(g=>r.choices[g.id]).length;
   const total=groups.length;
   return{kr,jp,total:pool.length,conf,resolved,totalGroups:total};
@@ -1212,7 +1231,7 @@ function formatTotals(totMap){
 function renderTransport(){
   const el=document.getElementById('transport-section');
   if(!el)return;
-  const items=[...activePlaces()].filter(p=>p.cat==='transport').sort((a,b)=>(a.date+' '+(a.startTime||'')).localeCompare(b.date+' '+(b.startTime||'')));
+  const items=[...displayPlaces()].filter(p=>p.cat==='transport').sort((a,b)=>(a.date+' '+(a.startTime||'')).localeCompare(b.date+' '+(b.startTime||'')));
 
   let html='<div class="journey-wrap"><div class="journey-strip">';
   if(!items.length){
@@ -1246,7 +1265,7 @@ function renderTransport(){
 // ══════════════════════════════
 function renderHotels(){
   const el=document.getElementById('hotels-section');
-  const hotels=[...activePlaces()].filter(p=>p.cat==='accommodation').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const hotels=[...displayPlaces()].filter(p=>p.cat==='accommodation').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!hotels.length){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">אין לינות מתוכננות. הוסף לינות עם קטגוריה 🏨 כדי שיופיעו כאן.</p>';return;}
 
   const totBudget=sumByCurrency(hotels,'budget');const totActual=sumByCurrency(hotels,'actual');
@@ -1286,7 +1305,7 @@ function renderExpenses(){
   const sel=document.getElementById('view-cur');if(sel&&sel.value!==D)sel.value=D;
   const F=v=>fmtPrice(Math.round(v),D);
   const cv=(amt,cur)=>convTo(parseFloat(amt),cur,D);
-  const act=activePlaces();
+  const act=displayPlaces();
   const noData=act.filter(p=>!p.budget&&!p.actual);
   if(hintEl)hintEl.textContent=noData.length>0?`(${noData.length} ללא מחיר)`:'';
 
@@ -1331,7 +1350,7 @@ function renderFood(){
   const el=document.getElementById('food-section');if(!el)return;
   const D=viewCur();
   const F=v=>fmtPrice(Math.round(v),D);
-  const foods=[...activePlaces()].filter(p=>p.cat==='food').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const foods=[...displayPlaces()].filter(p=>p.cat==='food').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   const hint=document.getElementById('food-hint');
   if(hint)hint.textContent=foods.length?`${foods.length} מקומות · ${foods.filter(p=>p.visited).length} אכלנו ✓`:'';
   if(!foods.length){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הוסף מקומות עם קטגוריה 🍜 אוכל — והם ירוכזו כאן עם הכי-טעים, הכי-זול והכי-יקר.</p>';return;}
@@ -1545,7 +1564,7 @@ document.getElementById('bg-form').addEventListener('submit',e=>{
 // ══════════════════════════════
 function renderPokemon(){
   const el=document.getElementById('pokemon-section');if(!el)return;
-  const pks=[...activePlaces()].filter(p=>p.cat==='pokemon').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const pks=[...displayPlaces()].filter(p=>p.cat==='pokemon').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!pks.length){
     el.innerHTML=`<div class="poke-wrap"><span class="poke-empty">אין Pokémon Centers עדיין. לחץ "+ הוסף Pokémon Center" להוספה!</span></div>`;return;
   }
@@ -1986,7 +2005,7 @@ function updateActiveRouteBars(){
 }
 
 function renderDash(){
-  const act=[...activePlaces()].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const act=[...displayPlaces()].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   fillSec('dash-plan',act.filter(p=>!p.visited),'🎌','הוסף מקומות לטיול!');
   fillSec('dash-vis', act.filter(p=> p.visited),'✈️','עוד לא ביקרנו — בהצלחה! 🍀');
 }
@@ -2040,6 +2059,7 @@ function renderRoutes(){
       <div class="rc-stats">
         ${r.active?'<span class="rc-st act">✓ פעיל</span>':''}
         <span class="rc-st rte-st">${st.total} מקומות</span>
+        ${r.placeIds?`<span class="rc-st" style="background:#fef3c7;color:#92400e">📍 ${r.placeIds.length} מתוך המתוכננים</span>`:''}
         <span class="rc-st">${flags[0]?flags[0].flag+' '+st.kr:''}</span>
         ${flags[1]?`<span class="rc-st">${flags[1].flag} ${st.jp}</span>`:''}
         <span class="rc-st ${st.conf>0?'err':'ok'}">${st.conf>0?`⚠️ ${st.conf} קונפליקטים`:'✅ ללא קונפליקטים'}</span>
@@ -2107,7 +2127,7 @@ function renderDilemmas(){
 
 function renderTimeline(){
   const tl=document.getElementById('tl-main');tl.innerHTML='';
-  const act=activePlaces();
+  const act=displayPlaces();
   const tripStart=ct().startDate, tripEnd=ct().endDate;
   const y=new Date(tripEnd+'T12:00:00').getFullYear();
   setT('tl-title',`📅 ציר זמן — ${fmtD(tripStart)} עד ${fmtD(tripEnd)} ${y}`);
@@ -2234,7 +2254,7 @@ function openModal(country,type='planned',dgid=''){
   document.getElementById('f-pri').value='medium';document.getElementById('f-cat').value='attraction';
   document.getElementById('f-currency').value=ct().defaultCurrency;
   document.getElementById('sug-results').innerHTML='';
-  document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';
+  document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';bkPhoto=null;
   document.getElementById('pl-ov').classList.add('open');
 }
 function openEdit(id){
@@ -2252,7 +2272,7 @@ function openEdit(id){
   document.getElementById('f-notes').value=p.notes||'';
   document.getElementById('f-budget').value=p.budget||'';document.getElementById('f-actual').value=p.actual||'';document.getElementById('f-currency').value=p.currency||'ILS';
   document.getElementById('sug-results').innerHTML='';
-  document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';
+  document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';bkPhoto=null;
   document.getElementById('pl-ov').classList.add('open');
 }
 function closePlModal(){document.getElementById('pl-ov').classList.remove('open');}
@@ -2272,6 +2292,8 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
     currency:document.getElementById('f-currency').value||'ILS'});
   if(id){const old=places.find(p=>p.id===id);if(old){data.visited=old.visited;data.refPhoto=old.refPhoto;data.myPhoto=old.myPhoto;data.rating=old.rating;data.verdict=old.verdict;data.review=old.review;}const i=places.findIndex(p=>p.id===id);places[i]=data;}
   else places.push(data);
+  if(bkPhoto&&!data.refPhoto)data.refPhoto=bkPhoto;   // תמונת המלון מ-Booking
+  bkPhoto=null;
   persist();closePlModal();
 });
 
@@ -2284,7 +2306,62 @@ function titleCaseSlug(s){
 const BK_CC_COUNTRY={jp:'japan',kr:'korea'};
 const BK_CC_CUR={jp:'JPY',kr:'KRW',us:'USD',il:'ILS'};
 
-function importBookingUrl(){
+let bkPhoto=null;   // תמונת המלון שנמשכה — מוצמדת למקום בשמירה
+
+async function fetchTextViaProxy(url){
+  const proxies=[
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?url='
+  ];
+  for(const p of proxies){
+    try{
+      const ctl=new AbortController();
+      const to=setTimeout(()=>ctl.abort(),9000);
+      const r=await fetch(p+encodeURIComponent(url),{signal:ctl.signal});
+      clearTimeout(to);
+      if(!r.ok)continue;
+      const txt=await r.text();
+      if(txt&&txt.length>500)return txt;
+    }catch{}
+  }
+  return null;
+}
+
+function extractHotelMeta(htmlTxt){
+  const out={};
+  // JSON-LD — המקור האמין ביותר בעמודי Booking
+  const ldMatches=htmlTxt.match(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)||[];
+  for(const block of ldMatches){
+    try{
+      const j=JSON.parse(block.replace(/<script[^>]*>/i,'').replace(/<\/script>/i,''));
+      const arr=Array.isArray(j)?j:[j];
+      for(const o of arr){
+        if(o&&/hotel|lodging|apartment|hostel|resort/i.test(String(o['@type']||''))){
+          if(o.name&&!out.name)out.name=o.name;
+          if(o.image&&!out.image)out.image=Array.isArray(o.image)?o.image[0]:o.image;
+          if(o.address){
+            if(o.address.addressLocality&&!out.city)out.city=o.address.addressLocality;
+            if(o.address.addressCountry&&!out.country)out.country=o.address.addressCountry;
+          }
+        }
+      }
+    }catch{}
+  }
+  // fallback: og meta tags
+  if(!out.image){
+    const m=htmlTxt.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i)||htmlTxt.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:image"/i);
+    if(m)out.image=m[1];
+  }
+  if(!out.name){
+    const m=htmlTxt.match(/<meta[^>]+property="og:title"[^>]+content="([^"]+)"/i);
+    if(m)out.name=m[1].split('–')[0].split(' - ')[0].replace(/,\s*$/,'').trim();
+  }
+  if(out.image&&out.image.startsWith('//'))out.image='https:'+out.image;
+  if(out.image&&!/^https?:/.test(out.image))delete out.image;
+  return out;
+}
+
+async function importBookingUrl(){
   const raw=document.getElementById('bk-url').value.trim();
   const st=document.getElementById('bk-status');
   if(!raw){st.textContent='הדבק/י קודם קישור למלון';return;}
@@ -2298,23 +2375,20 @@ function importBookingUrl(){
   if(!m){st.textContent='⚠️ לא זוהה דף מלון בקישור — צריך קישור לעמוד המלון עצמו (מכיל /hotel/)';return;}
   const cc=m[1].toLowerCase();
   const name=titleCaseSlug(m[2]);
-  const filled=['שם: '+name,'🏨 לינה'];
+  const filled=['🏨 לינה','שם: '+name];
 
   document.getElementById('f-name').value=name;
   document.getElementById('f-cat').value='accommodation';
 
-  // מדינה — אם קיימת בטיול הנוכחי
   const ccountry=BK_CC_COUNTRY[cc];
   if(ccountry&&ct().countries.some(c=>c.id===ccountry)){
     document.getElementById('f-country').value=ccountry;
+    filled.push('מדינה');
   }
-  // עיר — מפרמטר החיפוש אם קיים
   const ss=u.searchParams.get('ss');
   if(ss&&!document.getElementById('f-city').value.trim()){
     document.getElementById('f-city').value=decodeURIComponent(ss.replace(/\+/g,' '));
-    filled.push('עיר');
   }
-  // תאריכים — checkin/checkout אם קיימים בקישור
   const ci=u.searchParams.get('checkin'),co=u.searchParams.get('checkout');
   if(ci&&/^\d{4}-\d{2}-\d{2}$/.test(ci)){
     document.getElementById('f-date').value=ci;filled.push('צ\'ק-אין '+fmtD(ci));
@@ -2323,14 +2397,29 @@ function importBookingUrl(){
       if(n>0){document.getElementById('f-nights').value=n;filled.push(n+' לילות');}
     }
   }
-  // מטבע לפי המדינה
   document.getElementById('f-currency').value=BK_CC_CUR[cc]||ct().defaultCurrency;
-  // קישור נקי להערות
   const clean=u.origin+u.pathname;
   const nt=document.getElementById('f-notes');
   if(!nt.value.includes('booking.com'))nt.value=(nt.value?nt.value+'\n':'')+'🔗 '+clean;
 
-  st.innerHTML='✅ יובא: '+esc(filled.join(' · '))+'<br>נשאר להשלים: מחיר'+(ci?'':' + תאריכים')+' 💰';
+  // ── שלב 2: משיכת תמונה, שם מדויק ועיר מהעמוד עצמו ──
+  st.innerHTML='✅ יובא מהקישור: '+esc(filled.join(' · '))+'<br>⏳ מושך תמונה, שם מדויק ועיר מהעמוד…';
+  bkPhoto=null;
+  const txt=await fetchTextViaProxy(clean);
+  const extra=[];
+  if(txt){
+    const meta=extractHotelMeta(txt);
+    if(meta.name){document.getElementById('f-name').value=meta.name;extra.push('שם מדויק ✒️');}
+    if(meta.city){document.getElementById('f-city').value=meta.city;extra.push('עיר: '+meta.city);}
+    if(meta.image){bkPhoto=meta.image;extra.push('תמונה 📸');}
+  }
+  if(extra.length){
+    st.innerHTML='✅ '+esc(filled.concat(extra).join(' · '))+' — נשאר להשלים מחיר'+(ci?'':' ותאריכים')+' 💰'
+      +(bkPhoto?`<br><img src="${bkPhoto}" alt="תמונת המלון" style="height:64px;border-radius:8px;margin-top:6px;box-shadow:var(--shadow)">`:'');
+  } else {
+    st.innerHTML='✅ יובא מהקישור: '+esc(filled.join(' · '))+' — נשאר להשלים מחיר'+(ci?'':' ותאריכים')
+      +'<br><span style="color:var(--dil)">⚠️ לא הצלחתי למשוך תמונה מהעמוד (הפרוקסי חסום כרגע) — שאר הפרטים תקינים</span>';
+  }
 }
 document.getElementById('bk-import').addEventListener('click',importBookingUrl);
 document.getElementById('bk-url').addEventListener('paste',()=>setTimeout(importBookingUrl,60));
@@ -2596,12 +2685,30 @@ function buildRouteGroups(routeData){
     container.appendChild(div);
   });
 }
+function buildRoutePlaces(routeData){
+  const c=document.getElementById('rt-places');c.innerHTML='';
+  const planned=[...places].filter(p=>p.type==='planned').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(!planned.length){c.innerHTML='<p style="color:var(--muted);font-size:.82rem">אין עדיין מקומות מתוכננים — הוסף בלשוניות היעדים.</p>';return;}
+  const ids=routeData?.placeIds;   // null = הכל
+  c.innerHTML=planned.map(p=>`<label class="mx-opt" style="padding:4px 2px">
+    <input type="checkbox" class="rt-pl" value="${p.id}" ${(!ids||ids.includes(p.id))?'checked':''} onchange="previewRouteConflicts()">
+    <div><div class="mx-opt-name">${getCC(p.country).flag} ${esc(p.name)}</div>
+    <div style="font-size:.68rem;color:var(--muted)">${fmtD(p.date)}${p.startTime?' · '+p.startTime:''} · ${CAT[p.cat]||''}</div></div>
+  </label>`).join('');
+}
+function rtSelectedPlaceIds(){
+  const boxes=[...document.querySelectorAll('.rt-pl')];
+  if(!boxes.length)return null;
+  const checked=boxes.filter(b=>b.checked).map(b=>b.value);
+  return checked.length===boxes.length?null:checked;   // הכל מסומן = כולל גם עתידיים
+}
+
 function previewRouteConflicts(){
   const choicesMap={};
   document.querySelectorAll('#rt-groups [data-gid]').forEach(sel=>{
     if(sel.value)choicesMap[sel.dataset.gid]=sel.value;
   });
-  const conf=routeConflicts(choicesMap);
+  const conf=routeConflicts(choicesMap,rtSelectedPlaceIds());
   const prev=document.getElementById('rt-conf-preview');
   if(conf.length>0){
     document.getElementById('rt-conf-text').textContent=`${conf.length} קונפליקטים בזמנים: ${conf.map(p=>p.name).join(', ')}`;
@@ -2616,9 +2723,12 @@ function openRouteModal(id=null){
   document.getElementById('rt-desc').value=routeData?.description||'';
   document.getElementById('rt-conf-preview').classList.remove('show');
   buildRouteGroups(routeData);
+  buildRoutePlaces(routeData);
   document.getElementById('rt-ov').classList.add('open');
 }
 function closeRouteModal(){document.getElementById('rt-ov').classList.remove('open');}
+document.getElementById('rt-all').addEventListener('click',()=>{document.querySelectorAll('.rt-pl').forEach(b=>b.checked=true);previewRouteConflicts();});
+document.getElementById('rt-none').addEventListener('click',()=>{document.querySelectorAll('.rt-pl').forEach(b=>b.checked=false);previewRouteConflicts();});
 document.getElementById('rt-cncl').addEventListener('click',closeRouteModal);
 document.getElementById('rt-ov').addEventListener('click',e=>{if(e.target===document.getElementById('rt-ov'))closeRouteModal();});
 document.getElementById('rt-form').addEventListener('submit',e=>{
@@ -2628,8 +2738,9 @@ document.getElementById('rt-form').addEventListener('submit',e=>{
   const desc=document.getElementById('rt-desc').value.trim();
   const choices={};
   document.querySelectorAll('#rt-groups [data-gid]').forEach(sel=>{if(sel.value)choices[sel.dataset.gid]=sel.value;});
-  if(id){const r=routes.find(x=>x.id===id);if(r){r.name=name;r.description=desc;r.choices=choices;}}
-  else routes.push({id:uid(),name,description:desc,choices,active:false});
+  const placeIds=rtSelectedPlaceIds();
+  if(id){const r=routes.find(x=>x.id===id);if(r){r.name=name;r.description=desc;r.choices=choices;r.placeIds=placeIds;}}
+  else routes.push({id:uid(),name,description:desc,choices,placeIds,active:false});
   persist();closeRouteModal();
 });
 
@@ -2686,7 +2797,7 @@ document.getElementById('mx-ov').addEventListener('click',e=>{if(e.target===docu
 document.getElementById('mx-save').addEventListener('click',()=>{
   const name=document.getElementById('mx-name').value.trim()||'מסלול מאוחד';
   const choices=getMixerChoices();
-  routes.push({id:uid(),name,description:'מסלול מאוחד',choices,active:false});
+  routes.push({id:uid(),name,description:'מסלול מאוחד',choices,placeIds:null,active:false});
   persist();closeMixerModal();
 });
 
