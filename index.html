@@ -258,6 +258,12 @@ body.phase-done #routes-dsec{order:18}
 .abtn.ink{background:#1a1a2e}.abtn.ink:hover{background:#32324e}
 .abtn.teal{background:#0e7490}.abtn.teal:hover{background:#155e75}
 .abtn.indigo{background:#3B4CCA}.abtn.indigo:hover{background:#2f3da3}
+#dsec-food{order:14}
+#pokemon-dsec{order:15}#dsec-expenses{order:16}#dsec-plan{order:17}#dsec-vis{order:18}
+body.phase-traveling #dsec-food{order:14}
+body.phase-done #dsec-food{order:11}
+body.phase-done #dsec-expenses{order:12}
+body.phase-done #dsec-budget{order:13}
 
 /* SUGGESTIONS — אולי יעניין אותך */
 .sug-item{display:block;width:100%;text-align:right;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 10px;margin-bottom:6px;cursor:pointer;font-family:inherit;transition:background .15s}
@@ -497,6 +503,15 @@ body.phase-done #routes-dsec{order:18}
       <div class="dsec-title">🏨 לינות</div>
       <div id="hotels-section"></div>
     </div>
+    <!-- FOOD -->
+    <div class="dsec" id="dsec-food">
+      <div class="dsec-hdr">
+        <div class="dsec-title">🍜 אוכל</div>
+        <span id="food-hint" style="font-size:.75rem;color:var(--muted)"></span>
+      </div>
+      <div id="food-section"></div>
+    </div>
+
     <!-- BUDGET TRACKER -->
     <div class="dsec" id="dsec-budget">
       <div class="dsec-hdr">
@@ -510,7 +525,13 @@ body.phase-done #routes-dsec{order:18}
     <div class="dsec" id="dsec-expenses">
       <div class="dsec-hdr">
         <div class="dsec-title">💰 סיכום הוצאות</div>
-        <span id="exp-no-price-hint" style="font-size:.78rem;color:var(--muted)"></span>
+        <div style="display:flex;align-items:center;gap:9px">
+          <span id="exp-no-price-hint" style="font-size:.75rem;color:var(--muted)"></span>
+          <select class="fc" id="view-cur" style="width:auto;padding:5px 9px;font-size:.78rem" title="מטבע תצוגה — הכל מומר לשער אחד">
+            <option value="ILS">₪ שקל</option><option value="USD">$ דולר</option>
+            <option value="EUR">€ יורו</option><option value="JPY">¥ ין</option><option value="KRW">₩ וון</option>
+          </select>
+        </div>
       </div>
       <div id="expenses-section"></div>
     </div>
@@ -1261,49 +1282,92 @@ function renderHotels(){
 function renderExpenses(){
   const hintEl=document.getElementById('exp-no-price-hint');
   const el=document.getElementById('expenses-section');
+  const D=viewCur();
+  const sel=document.getElementById('view-cur');if(sel&&sel.value!==D)sel.value=D;
+  const F=v=>fmtPrice(Math.round(v),D);
+  const cv=(amt,cur)=>convTo(parseFloat(amt),cur,D);
   const act=activePlaces();
-  const withBudget=act.filter(p=>p.budget&&parseFloat(p.budget)>0);
-  const withActual=act.filter(p=>p.actual&&parseFloat(p.actual)>0);
   const noData=act.filter(p=>!p.budget&&!p.actual);
-
-  if(hintEl)hintEl.textContent=noData.length>0?`(${noData.length} מקומות ללא מחיר)`:'';
-  if(!withBudget.length&&!withActual.length){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הוסף תקציב ו/או בפועל למקומות כדי לעקוב אחר ההוצאות.</p>';return;}
+  if(hintEl)hintEl.textContent=noData.length>0?`(${noData.length} ללא מחיר)`:'';
 
   const catDef={accommodation:{lbl:CAT.accommodation,cls:'acc'},attraction:{lbl:CAT.attraction,cls:'att'},food:{lbl:CAT.food,cls:'food'},transport:{lbl:CAT.transport,cls:'trans'},pokemon:{lbl:CAT.pokemon,cls:'oth'},other:{lbl:CAT.other,cls:'oth'}};
-  const byCat={};
+  const byCat={};let gB=0,gA=0,any=false;
   act.forEach(p=>{
-    if(!p.budget&&!p.actual)return;
-    const cat=p.cat||'other';const cur=p.currency||'ILS';
-    if(!byCat[cat])byCat[cat]={b:{},a:{}};
-    if(p.budget)byCat[cat].b[cur]=(byCat[cat].b[cur]||0)+parseFloat(p.budget);
-    if(p.actual)byCat[cat].a[cur]=(byCat[cat].a[cur]||0)+parseFloat(p.actual);
+    const b=parseFloat(p.budget)||0,a=parseFloat(p.actual)||0;
+    if(!b&&!a)return;any=true;
+    const cat=p.cat||'other';
+    if(!byCat[cat])byCat[cat]={b:0,a:0};
+    if(b){const v=cv(b,p.currency);byCat[cat].b+=v;gB+=v;}
+    if(a){const v=cv(a,p.currency);byCat[cat].a+=v;gA+=v;}
   });
-  const grandB=sumByCurrency(act,'budget'),grandA=sumByCurrency(act,'actual');
+  if(!any){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הוסף תקציב ו/או בפועל למקומות כדי לעקוב אחר ההוצאות.</p>';return;}
 
-  function diffLine(budMap,actMap){
-    const curs=[...new Set([...Object.keys(budMap),...Object.keys(actMap)])];
-    return curs.map(c=>{
-      const b=budMap[c]||0,a=actMap[c]||0;
-      if(!b||!a)return'';
-      const diff=a-b;
-      return`<span class="exp-diff ${diff>0?'over':'save'}">${diff>0?'חריגה':'חיסכון'}: ${fmtPrice(Math.abs(diff),c)}</span>`;
-    }).join('');
-  }
-
+  const diffChip=(b,a)=>{
+    if(!b||!a)return'';
+    const d=a-b;
+    return`<span class="exp-diff ${d>0?'over':'save'}">${d>0?'חריגה':'חיסכון'}: ${F(Math.abs(d))}</span>`;
+  };
   let html='<div class="exp-grid">';
   Object.entries(byCat).forEach(([cat,{b,a}])=>{
     const def=catDef[cat]||{lbl:cat,cls:'oth'};
-    const curs=[...new Set([...Object.keys(b),...Object.keys(a)])];
-    const rows=curs.map(c=>`
-      <div class="exp-row">${b[c]?`<span>${fmtPrice(b[c],c)}</span><span class="exp-row-lbl">תקציב</span>`:''}${a[c]?`<span>${fmtPrice(a[c],c)}</span><span class="exp-row-lbl">בפועל</span>`:''}</div>`).join('');
-    html+=`<div class="exp-card ${def.cls}"><div class="exp-lbl">${def.lbl}</div><div class="exp-amt">${rows}</div>${diffLine(b,a)}</div>`;
+    html+=`<div class="exp-card ${def.cls}"><div class="exp-lbl">${def.lbl}</div><div class="exp-amt">
+      ${b?`<div class="exp-row"><span>${F(b)}</span><span class="exp-row-lbl">תקציב</span></div>`:''}
+      ${a?`<div class="exp-row"><span>${F(a)}</span><span class="exp-row-lbl">בפועל</span></div>`:''}
+    </div>${diffChip(b,a)}</div>`;
   });
-
-  const gcurs=[...new Set([...Object.keys(grandB),...Object.keys(grandA)])];
-  const gRows=gcurs.map(c=>`
-    <div class="exp-row">${grandB[c]?`<span>${fmtPrice(grandB[c],c)}</span><span class="exp-row-lbl">תקציב</span>`:''}${grandA[c]?`<span>${fmtPrice(grandA[c],c)}</span><span class="exp-row-lbl">בפועל</span>`:''}</div>`).join('');
-  html+=`<div class="exp-card grand"><div class="exp-lbl">💰 סה"כ הוצאות</div><div class="exp-amt">${gRows}</div>${diffLine(grandB,grandA)}</div>`;
+  html+=`<div class="exp-card grand"><div class="exp-lbl">💰 סה"כ (${D})</div><div class="exp-amt">
+    ${gB?`<div class="exp-row"><span>${F(gB)}</span><span class="exp-row-lbl">תקציב</span></div>`:''}
+    ${gA?`<div class="exp-row"><span>${F(gA)}</span><span class="exp-row-lbl">בפועל</span></div>`:''}
+  </div>${diffChip(gB,gA)}</div>`;
   html+='</div>';
+  html+=`<p style="font-size:.72rem;color:var(--muted);margin-top:7px">הכל מומר ל-${CURR_SYM[D]||D} לפי שערי ההמרה של התקציב${ct()?.rates&&Object.keys(ct().rates).length?'':' (שערי ברירת מחדל — עדכן ב"ערוך תקציב")'}.</p>`;
+  el.innerHTML=html;
+}
+
+// ══════════════════════════════
+//  FOOD — ריכוז מקומות אוכל: הכי טעים, הכי זול, הכי יקר
+// ══════════════════════════════
+function renderFood(){
+  const el=document.getElementById('food-section');if(!el)return;
+  const D=viewCur();
+  const F=v=>fmtPrice(Math.round(v),D);
+  const foods=[...activePlaces()].filter(p=>p.cat==='food').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const hint=document.getElementById('food-hint');
+  if(hint)hint.textContent=foods.length?`${foods.length} מקומות · ${foods.filter(p=>p.visited).length} אכלנו ✓`:'';
+  if(!foods.length){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הוסף מקומות עם קטגוריה 🍜 אוכל — והם ירוכזו כאן עם הכי-טעים, הכי-זול והכי-יקר.</p>';return;}
+
+  const priceOf=p=>{
+    const amt=parseFloat(p.actual)||parseFloat(p.budget)||0;
+    return amt>0?convTo(amt,p.currency,D):null;
+  };
+  const withPrice=foods.map(p=>({p,v:priceOf(p)})).filter(x=>x.v);
+  const rated=foods.filter(p=>p.rating);
+  const tasty=rated.length?[...rated].sort((a,b)=>b.rating-a.rating||(b.verdict==='good')-(a.verdict==='good'))[0]:null;
+  const cheap=withPrice.length?withPrice.reduce((m,x)=>x.v<m.v?x:m):null;
+  const pricey=withPrice.length>1?withPrice.reduce((m,x)=>x.v>m.v?x:m):null;
+  const spentFood=foods.reduce((s,p)=>{const a=parseFloat(p.actual)||0;return s+(a>0?convTo(a,p.currency,D):0);},0);
+
+  let html='';
+  const medals=[];
+  if(tasty)medals.push(`<div class="exp-card" style="border-top-color:#f59e0b"><div class="exp-lbl">🏆 הכי טעים</div><div class="exp-amt" style="font-size:.85rem">${esc(tasty.name)}</div><div class="exp-sub">${'★'.repeat(tasty.rating)} · ${esc(tasty.city)}</div></div>`);
+  if(cheap)medals.push(`<div class="exp-card" style="border-top-color:#16a34a"><div class="exp-lbl">🪙 הכי זול</div><div class="exp-amt" style="font-size:.85rem">${esc(cheap.p.name)}</div><div class="exp-sub">${F(cheap.v)} · ${esc(cheap.p.city)}</div></div>`);
+  if(pricey&&pricey.p.id!==cheap?.p.id)medals.push(`<div class="exp-card" style="border-top-color:#7e22ce"><div class="exp-lbl">💎 הכי יקר</div><div class="exp-amt" style="font-size:.85rem">${esc(pricey.p.name)}</div><div class="exp-sub">${F(pricey.v)} · ${esc(pricey.p.city)}</div></div>`);
+  if(spentFood>0)medals.push(`<div class="exp-card food"><div class="exp-lbl">💸 הוצאנו על אוכל</div><div class="exp-amt">${F(spentFood)}</div></div>`);
+  if(medals.length)html+='<div class="exp-grid">'+medals.join('')+'</div>';
+
+  html+=`<div style="overflow-x:auto"><table class="htable" style="margin-top:${medals.length?'12':'4'}px"><thead><tr><th>מקום</th><th>עיר</th><th>תאריך</th><th>מחיר (${D})</th><th>דירוג</th><th></th></tr></thead><tbody>`;
+  foods.forEach(p=>{
+    const v=priceOf(p);
+    html+=`<tr>
+      <td><strong>${esc(p.name)}</strong>${p.review?`<div style="font-size:.7rem;color:var(--muted);margin-top:2px">📝 ${esc(p.review.split('\n')[0])}</div>`:''}</td>
+      <td>${getCC(p.country).flag} ${esc(p.city)}</td>
+      <td>${fmtD(p.date)}</td>
+      <td class="${v?'pc':'no-price'}">${v?F(v):'—'}${v&&!parseFloat(p.actual)?' <span style="font-size:.66rem;color:var(--muted)">(תקציב)</span>':''}</td>
+      <td>${p.rating?'<span style="color:#f59e0b">'+'★'.repeat(p.rating)+'</span>':'—'}</td>
+      <td>${p.visited?'✅':''}${p.verdict&&VERDICT[p.verdict]?' '+VERDICT[p.verdict].split(' ')[0]:''}</td>
+    </tr>`;
+  });
+  html+='</tbody></table></div>';
   el.innerHTML=html;
 }
 
@@ -1312,6 +1376,20 @@ function renderExpenses(){
 // ══════════════════════════════
 const DEF_ILS={ILS:1,USD:3.4,EUR:3.9,JPY:0.023,KRW:0.0025};
 function defRate(from,to){const a=DEF_ILS[from],b=DEF_ILS[to];if(!a||!b)return 1;return +(a/b).toPrecision(4);}
+
+// המרה אוניברסלית בין כל שני מטבעות: קודם לפי שערי התקציב של הטיול, אחרת שערי ברירת מחדל
+function convTo(amount,from,to){
+  from=from||'ILS';to=to||'ILS';
+  if(from===to)return amount;
+  const t=ct();
+  const B=t?.budgetCurrency;const rates=t?.rates||{};
+  const r=c=>c===B?1:(parseFloat(rates[c])>0?parseFloat(rates[c]):null);
+  if(B){const rf=r(from),rt=r(to);if(rf!=null&&rt!=null)return amount*rf/rt;}
+  const a=DEF_ILS[from],b=DEF_ILS[to];
+  if(a&&b)return amount*a/b;
+  return amount;
+}
+function viewCur(){const t=ct();return t?.viewCurrency||t?.budgetCurrency||'ILS';}
 
 function budgetSnapshot(){
   const t=ct();if(!t||!t.budgetTotal)return null;
@@ -1722,7 +1800,7 @@ function renderAll(){
   renderHeader();renderPhaseBar();
   renderStats();renderNowPanel();renderDoneBanner();renderDash();renderTransport();
   if(ct().hasPokemon)renderPokemon();
-  renderHotels();renderExpenses();renderBudget();renderRoutes();
+  renderHotels();renderFood();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
   renderDilemmas();renderTimeline();renderSummary();updateDilBadge();updateActiveRouteBars();applyClps();
 }
@@ -2949,6 +3027,10 @@ document.getElementById('clear-route-btn').addEventListener('click',()=>{routes.
 document.getElementById('tl-clear-btn').addEventListener('click',()=>{routes.forEach(r=>r.active=false);persist();});
 document.getElementById('export-summary-btn').addEventListener('click',exportSummary);
 document.getElementById('edit-budget-btn').addEventListener('click',()=>{if(!ct()){alert('צור טיול קודם 🙂');return;}openBudgetModal();});
+document.getElementById('view-cur').addEventListener('change',e=>{
+  const t=TRIPS[currentTripId];if(!t)return;
+  t.viewCurrency=e.target.value;saveTrips();renderAll();
+});
 
 // ══════════════════════════════
 //  BOOT
