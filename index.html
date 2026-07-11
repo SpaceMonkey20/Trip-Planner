@@ -424,6 +424,7 @@ body.phase-done #dsec-plan{display:none}
   <span id="country-tabs" style="display:contents"></span>
   <button class="ntab" data-view="dilemmas" id="dil-tab">🤔 התלבטויות</button>
   <button class="ntab" data-view="timeline">📅 ציר זמן</button>
+  <button class="ntab" data-view="perpax">👥 לנוסע</button>
   <button class="ntab" data-view="summary">🏁 סיכום</button>
   <div class="nav-tools">
     <button class="tbtn" style="border-color:#7c3aed;color:#7c3aed" onclick="shareAppLink()">📣 שתף קישור</button>
@@ -563,6 +564,15 @@ body.phase-done #dsec-plan{display:none}
     <div class="tl" id="tl-main"></div>
   </div>
 
+  <!-- PER TRAVELER -->
+  <div class="view" id="view-perpax">
+    <div class="sec-hdr">
+      <div class="sec-title">👥 ממוצע לנוסע</div>
+      <button class="abtn sm ink" id="pp-edit-trav">⚙️ ערוך הרכב נוסעים</button>
+    </div>
+    <div id="perpax-main"></div>
+  </div>
+
   <!-- SUMMARY -->
   <div class="view" id="view-summary">
     <div class="sec-hdr">
@@ -680,6 +690,10 @@ body.phase-done #dsec-plan{display:none}
         <div class="fg"><label>תאריך סיום</label><input type="date" class="fc" id="tp-end" required></div>
       </div>
       <div class="fg"><label>צבע ראשי (לכותרת ולכרטיסים)</label><input type="color" class="fc" id="tp-color" value="#C9243F" style="height:38px;padding:3px"></div>
+      <div class="fr">
+        <div class="fg"><label>👥 מבוגרים</label><input type="number" class="fc" id="tp-adults" min="1" max="20" value="2"></div>
+        <div class="fg"><label>👶 גילאי ילדים (בפסיקים)</label><input type="text" class="fc" id="tp-kids" placeholder="4, 7" style="direction:ltr"></div>
+      </div>
       <div class="route-groups-section">
         <h3>יעדים בטיול (מדינה / עיר)</h3>
         <div id="tp-dests"></div>
@@ -1821,7 +1835,7 @@ function renderAll(){
   if(ct().hasPokemon)renderPokemon();
   renderHotels();renderFood();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
-  renderDilemmas();renderTimeline();renderSummary();updateDilBadge();updateActiveRouteBars();applyClps();
+  renderDilemmas();renderTimeline();renderPerPax();renderSummary();updateDilBadge();updateActiveRouteBars();applyClps();
 }
 
 function renderHeader(){
@@ -2169,6 +2183,95 @@ function renderTimeline(){
     line.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const{act,id}=b.dataset;if(act==='visit')toggleVisit(id);if(act==='edit')openEdit(id);if(act==='here')setHere(id);});
     row.appendChild(dc);row.appendChild(line);tl.appendChild(row);
   }
+}
+
+// ══════════════════════════════
+//  PER TRAVELER — ממוצע הוצאות לנוסע לפי הרכב וגילאים
+// ══════════════════════════════
+function travWeight(age){
+  if(age==null||isNaN(age))return 1;
+  if(age<2)return .1;if(age<6)return .4;if(age<12)return .6;if(age<18)return .8;return 1;
+}
+function tripTravelers(t){
+  const adults=Math.max(1,parseInt(t?.adults)||2);
+  const kids=(t?.childAges||[]).map(Number).filter(n=>!isNaN(n)&&n>=0&&n<18);
+  return{adults,kids,heads:adults+kids.length,weighted:adults+kids.reduce((s,a)=>s+travWeight(a),0)};
+}
+function compLabel(tr){
+  if(tr.adults===1&&!tr.kids.length)return '🧍 נוסע יחיד';
+  if(tr.adults===2&&!tr.kids.length)return '👫 זוג';
+  return `👨‍👩‍👧 ${tr.adults} מבוגרים${tr.kids.length?` + ${tr.kids.length} ילדים (גילאי ${tr.kids.join(', ')})`:''}`;
+}
+function tripDays(t){
+  try{const s=new Date(t.startDate+'T12:00:00'),e=new Date(t.endDate+'T12:00:00');return Math.max(1,Math.round((e-s)/864e5)+1);}catch{return 1;}
+}
+
+function renderPerPax(){
+  const el=document.getElementById('perpax-main');if(!el)return;
+  const t=ct();if(!t){el.innerHTML='';return;}
+  const D=viewCur();const F=v=>fmtPrice(Math.round(v),D);
+  const tr=tripTravelers(t);
+  const act=activePlaces();
+  let totA=0,totB=0;
+  act.forEach(p=>{
+    const a=parseFloat(p.actual)||0,b=parseFloat(p.budget)||0;
+    if(a)totA+=convTo(a,p.currency,D);
+    if(b)totB+=convTo(b,p.currency,D);
+  });
+  const useA=totA>0;const tot=useA?totA:totB;const lbl=useA?'בפועל':'לפי תקציב';
+  const days=tripDays(t);
+
+  let html=`<div style="background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span style="font-size:1.5rem">👥</span>
+    <div>
+      <div style="font-weight:800">${compLabel(tr)}</div>
+      <div style="font-size:.76rem;color:var(--muted)">${tr.heads} נוסעים · משקל משוקלל: ${tr.weighted.toFixed(1)} "מבוגרים" · ${days} ימים</div>
+    </div>
+  </div>`;
+
+  if(!tot){el.innerHTML=html+'<p style="color:var(--muted);font-size:.86rem">הוסף מחירים (תקציב או בפועל) למקומות — והממוצע לנוסע יחושב כאן 💡</p>';return;}
+
+  const per=tot/tr.heads, perW=tot/tr.weighted, perDay=per/days;
+  html+=`<div class="sum-hero">
+    <div class="scard ctot"><div class="big" style="font-size:1.25rem;line-height:2.3">${F(tot)}</div><div class="lbl">💰 סה"כ (${lbl})</div></div>
+    <div class="scard" style="border-top:4px solid #0e7490"><div class="big" style="font-size:1.25rem;line-height:2.3">${F(per)}</div><div class="lbl">לנוסע — חלוקה שווה</div></div>
+    <div class="scard" style="border-top:4px solid #7c3aed"><div class="big" style="font-size:1.25rem;line-height:2.3">${F(perW)}</div><div class="lbl">למבוגר — משוקלל גיל*</div></div>
+    <div class="scard" style="border-top:4px solid var(--ok)"><div class="big" style="font-size:1.25rem;line-height:2.3">${F(perDay)}</div><div class="lbl">לנוסע · ליום</div></div>
+  </div>
+  <p style="font-size:.72rem;color:var(--muted);margin:-8px 0 20px">* שקלול גיל: עד שנתיים ×0.1 · 2–5 ×0.4 · 6–11 ×0.6 · 12–17 ×0.8 · מבוגר ×1 — כי ילדים עולים פחות בכניסות, אוכל וטיסות. המספר "למבוגר" עונה על "כמה זה יעלה לזוג בלי ילדים".</p>`;
+
+  // פירוק לפי קטגוריה
+  const byCat={};
+  act.forEach(p=>{const a=parseFloat(p.actual)||parseFloat(p.budget)||0;if(!a)return;const v=convTo(a,p.currency,D);const c=p.cat||'other';byCat[c]=(byCat[c]||0)+v;});
+  html+=`<div class="dsec-title" style="margin-bottom:8px">פירוק לפי קטגוריה (${D})</div>
+  <div style="overflow-x:auto"><table class="htable"><thead><tr><th>קטגוריה</th><th>סה"כ</th><th>לנוסע</th><th>לנוסע · ליום</th></tr></thead><tbody>
+  ${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<tr><td>${CAT[c]||c}</td><td class="pc">${F(v)}</td><td class="pc">${F(v/tr.heads)}</td><td>${F(v/tr.heads/days)}</td></tr>`).join('')}
+  </tbody></table></div>`;
+
+  // השוואה בין טיולים — לפי הוצאות בפועל
+  const rows=[];
+  Object.values(TRIPS).forEach(tp=>{
+    const d=allData[tp.id];if(!d)return;
+    let ta=0;
+    (d.places||[]).forEach(p=>{
+      const a=parseFloat(p.actual)||0;
+      if(a){const x=DEF_ILS[p.currency||'ILS'],y=DEF_ILS[D];if(x&&y)ta+=a*x/y;}
+    });
+    if(!ta)return;
+    const trr=tripTravelers(tp);
+    const dd=tripDays(tp);
+    rows.push({name:(tp.flag||'')+' '+tp.name,comp:compLabel(trr),ta,per:ta/trr.heads,perDay:ta/trr.heads/dd,cur:tp.id===currentTripId});
+  });
+  if(rows.length>1){
+    html+=`<div class="dsec-title" style="margin:24px 0 8px">📊 השוואה בין הטיולים — לתכנון הטיול הבא</div>
+    <div style="overflow-x:auto"><table class="htable"><thead><tr><th>טיול</th><th>הרכב</th><th>סה"כ בפועל</th><th>לנוסע</th><th>לנוסע · ליום</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr${r.cur?' style="background:#eff6ff"':''}><td><strong>${esc(r.name)}</strong>${r.cur?' <span style="font-size:.68rem;color:#1d4ed8">· נוכחי</span>':''}</td><td style="font-size:.78rem">${r.comp}</td><td class="pc">${F(r.ta)}</td><td class="pc">${F(r.per)}</td><td>${F(r.perDay)}</td></tr>`).join('')}
+    </tbody></table></div>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:5px">ההשוואה בין טיולים משתמשת בשערי המרה כלליים כדי שהכל יהיה על סקאלה אחת.</p>`;
+  } else {
+    html+=`<p style="font-size:.76rem;color:var(--muted);margin-top:20px">📊 כשיהיו הוצאות בפועל ביותר מטיול אחד — תופיע כאן השוואה בין הטיולים לפי הרכב הנוסעים.</p>`;
+  }
+  el.innerHTML=html;
 }
 
 // ══════════════════════════════
@@ -2568,6 +2671,8 @@ function openTripModal(id=null){
   let col='#C9243F';
   if(t?.gradient){const m=t.gradient.match(/#[0-9a-fA-F]{6}/g);if(m&&m[1])col=m[1];}
   document.getElementById('tp-color').value=col;
+  document.getElementById('tp-adults').value=t?.adults??2;
+  document.getElementById('tp-kids').value=(t?.childAges||[]).join(', ');
   const dw=document.getElementById('tp-dests');dw.innerHTML='';
   (t?.countries||[null]).forEach(c=>dw.appendChild(tpDestRow(c)));
   document.getElementById('tp-del').style.display=(t&&Object.keys(TRIPS).length>1)?'':'none';
@@ -2607,6 +2712,8 @@ document.getElementById('tp-form').addEventListener('submit',e=>{
   if(!name||!start||!end)return;
   if(end<start){alert('תאריך הסיום חייב להיות אחרי תאריך ההתחלה');return;}
   const color=document.getElementById('tp-color').value;
+  const adults=Math.max(1,parseInt(document.getElementById('tp-adults').value)||2);
+  const childAges=document.getElementById('tp-kids').value.split(/[,\s]+/).map(Number).filter(n=>!isNaN(n)&&n>=0&&n<18);
   const countries=[...document.querySelectorAll('.tp-dest')].map(row=>({
     id:row.dataset.cid,
     flag:row.querySelector('.tp-d-flag').value.trim()||'🏳',
@@ -2626,6 +2733,7 @@ document.getElementById('tp-form').addEventListener('submit',e=>{
     subtitle:`${fmtD(start)} — ${fmtD(end)} ${y} · ${nights} לילות`,
     startDate:start,endDate:end,
     countries,
+    adults,childAges,
     defaultCurrency:countries[0].currency,
     hasPokemon:old?.hasPokemon||false,
     gradient:`linear-gradient(135deg,#1a1a2e 0%,${color} 55%,${shade(color,-30)} 100%)`,
@@ -3142,6 +3250,7 @@ document.getElementById('view-cur').addEventListener('change',e=>{
   const t=TRIPS[currentTripId];if(!t)return;
   t.viewCurrency=e.target.value;saveTrips();renderAll();
 });
+document.getElementById('pp-edit-trav').addEventListener('click',()=>{if(!ct())return;openTripModal(currentTripId);});
 
 // ══════════════════════════════
 //  BOOT
