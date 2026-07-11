@@ -234,7 +234,11 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 /* DASHBOARD — phase-aware ordering + progressive disclosure */
 #view-dashboard.active{display:flex;flex-direction:column}
 #view-dashboard>*{order:50}
-#now-panel-wrap{order:0}#done-banner-wrap{order:1}
+#now-panel-wrap{order:0}#done-banner-wrap{order:1}#conflicts-wrap{order:2}
+.conf-panel{background:#fff5f5;border:1.5px solid #fca5a5;border-radius:14px;padding:14px 16px;margin-bottom:18px}
+.conf-panel h4{color:var(--err);font-size:.95rem;margin-bottom:8px;display:flex;gap:7px;align-items:center}
+.conf-row{background:#fff;border-radius:9px;padding:8px 12px;margin-bottom:6px;font-size:.83rem;display:flex;flex-wrap:wrap;gap:7px;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.conf-dil{background:#fef3c7;color:#92400e;font-size:.7rem;font-weight:700;border-radius:20px;padding:2px 9px}
 #view-dashboard>.sumrow{order:2}#view-dashboard>.progwrap{order:3}
 #routes-dsec{order:10}#dsec-budget{order:11}#dsec-transport{order:12}#dsec-hotels{order:13}
 #pokemon-dsec{order:14}#dsec-expenses{order:15}#dsec-plan{order:16}#dsec-vis{order:17}
@@ -432,6 +436,8 @@ body.phase-done #dsec-plan{display:none}
     <button class="tbtn" style="border-color:#16a34a;color:#16a34a" onclick="openShareModal()">📤 שתף</button>
     <button class="tbtn exp" onclick="exportData()">⬇️ ייצוא</button>
     <button class="tbtn imp" onclick="importData()">⬆️ ייבוא</button>
+    <button class="tbtn" style="border-color:#0e7490;color:#0e7490" onclick="exportExcel()">📊 Excel</button>
+    <button class="tbtn" style="border-color:#6b7280;color:#374151" onclick="exportPDF()">🖨️ PDF</button>
   </div>
 </nav>
 
@@ -455,6 +461,7 @@ body.phase-done #dsec-plan{display:none}
   <div class="view active" id="view-dashboard">
     <div id="now-panel-wrap"></div>
     <div id="done-banner-wrap"></div>
+    <div id="conflicts-wrap"></div>
     <div class="sumrow">
       <div class="scard ctot"><div class="big" id="d-tot">0</div><div class="lbl">מקומות</div></div>
       <div id="d-country-cards" style="display:contents"></div>
@@ -597,6 +604,7 @@ body.phase-done #dsec-plan{display:none}
         <div class="fg"><label>עיר</label><input type="text" class="fc" id="f-city" placeholder="סיאול" required></div>
         <div class="fg"><label>שם המקום</label><input type="text" class="fc" id="f-name" placeholder="Gyeongbokgung" required></div>
       </div>
+      <div class="fg"><label>כתובת (אופציונלי)</label><input type="text" class="fc" id="f-address" placeholder="161 Sajik-ro, Jongno-gu"></div>
       <div class="fg">
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="abtn sm" id="sug-btn" style="background:#0e7490">💡 אולי יעניין אותך</button>
@@ -892,7 +900,7 @@ body.phase-done #dsec-plan{display:none}
       <summary style="font-size:.8rem;color:var(--muted);cursor:pointer;padding:4px 0">אפשרויות נוספות ▾</summary>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
         <button class="bsave" id="share-copy-btn" style="background:#2563eb;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">📋 העתק קוד בלבד</button>
-        <button class="bsave" id="share-dl-btn" style="background:#475569;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">📁 הורד קובץ JSON</button>
+        <button class="bsave" id="share-dl-btn" style="background:#475569;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.84rem">📁 הורד JSON (אפשר כולל תמונות)</button>
       </div>
     </details>
     <div style="border-top:1px solid #eee;padding-top:14px">
@@ -1074,7 +1082,7 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 // ══════════════════════════════
 //  STORAGE
 // ══════════════════════════════
-const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',...p,budget:p.budget??p.price??null});
+const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',...p,budget:p.budget??p.price??null});
 const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
 
 function seedFor(tid){
@@ -1786,7 +1794,7 @@ function makeCard(p,opts={}){
   const body=document.createElement('div');body.className='cbody';
   body.innerHTML=`
     <div class="ctop">
-      <div><div class="cname">${esc(p.name)}</div><div class="ccity">${getCC(p.country).flag} ${esc(p.city)}</div></div>
+      <div><div class="cname">${esc(p.name)}</div><div class="ccity">${getCC(p.country).flag} ${esc(p.city)}</div>${p.address?`<a class="ccity" style="color:#1d4ed8;text-decoration:none;display:block;margin-top:2px" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.address+' '+p.city)}">📍 ${esc(p.address)}</a>`:''}</div>
       <div class="cacts">
         ${hereBtn}${revBtn}
         <button class="ib" data-act="visit" data-id="${p.id}" aria-label="${p.visited?'בטל סימון ביקרנו':'סמן שביקרנו'}">${p.visited?'✅':'⬜'}</button>
@@ -1831,7 +1839,7 @@ function renderAll(){
     return;
   }
   renderHeader();renderPhaseBar();
-  renderStats();renderNowPanel();renderDoneBanner();renderDash();renderTransport();
+  renderStats();renderNowPanel();renderDoneBanner();renderConflicts();renderDash();renderTransport();
   if(ct().hasPokemon)renderPokemon();
   renderHotels();renderFood();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
@@ -1971,6 +1979,42 @@ function renderNowPanel(){
 
   html+=`</div></div>`;
   wrap.innerHTML=html;
+}
+
+// ══════════════════════════════
+//  CONFLICTS PANEL — התנגשויות זמן + ההתלבטויות שמאחוריהן
+// ══════════════════════════════
+function renderConflicts(){
+  const wrap=document.getElementById('conflicts-wrap');if(!wrap)return;
+  const pool=displayPlaces();
+  const conf=pool.filter(p=>placeConflict(p,pool));
+  const dateConfGroups=tripPhase==='done'?[]:groups.filter(g=>groupDateConflict(g));
+  if(!conf.length&&!dateConfGroups.length){wrap.innerHTML='';return;}
+  const byDate={};
+  conf.forEach(p=>{(byDate[p.date]=byDate[p.date]||[]).push(p);});
+  let html='<div class="conf-panel"><h4>⚠️ התנגשויות זמן — צריך להכריע</h4>';
+  Object.keys(byDate).sort().forEach(ds=>{
+    html+=`<div style="font-size:.76rem;font-weight:700;color:#991b1b;margin:7px 0 4px">📅 ${fmtD(ds)}</div>`;
+    byDate[ds].sort((a,b)=>(a.startTime||'').localeCompare(b.startTime||'')).forEach(p=>{
+      const g=p.dilemmaGroupId?groups.find(x=>x.id===p.dilemmaGroupId):null;
+      html+=`<div class="conf-row">
+        <span>${getCC(p.country).flag}</span><strong>${esc(p.name)}</strong>
+        <span class="tltim">🕐 ${p.startTime}–${p.endTime}</span>
+        ${g?`<span class="conf-dil">🔀 מההתלבטות: ${esc(g.name)}</span>`:''}
+        <button class="ib" data-act="edit" data-id="${p.id}" aria-label="ערוך זמנים">✏️</button>
+      </div>`;
+    });
+  });
+  if(dateConfGroups.length){
+    html+=`<div style="font-size:.76rem;font-weight:700;color:#92400e;margin:10px 0 4px">⏳ התלבטויות פתוחות שחופפות לתוכנית:</div>`;
+    dateConfGroups.forEach(g=>{
+      const n=places.filter(p=>p.dilemmaGroupId===g.id).length;
+      html+=`<div class="conf-row" style="border-right:3px solid var(--dil)"><strong>🤔 ${esc(g.name)}</strong><span style="font-size:.74rem;color:var(--muted)">${n} אופציות ממתינות להחלטה</span></div>`;
+    });
+  }
+  html+=`<button class="abtn sm dil" style="margin-top:6px" onclick="gotoView('dilemmas')">🤔 פתח התלבטויות להכרעה</button></div>`;
+  wrap.innerHTML=html;
+  wrap.onclick=e=>{const b=e.target.closest('[data-act]');if(b&&b.dataset.act==='edit')openEdit(b.dataset.id);};
 }
 
 // ══════════════════════════════
@@ -2369,6 +2413,7 @@ function openEdit(id){
   fce.value=p.country;
   setDateBounds();
   document.getElementById('f-city').value=p.city;document.getElementById('f-name').value=p.name;
+  document.getElementById('f-address').value=p.address||'';
   document.getElementById('f-date').value=p.date||ct().startDate;document.getElementById('f-nights').value=p.nights??1;
   document.getElementById('f-st').value=p.startTime||'';document.getElementById('f-et').value=p.endTime||'';
   document.getElementById('f-cat').value=p.cat||'attraction';document.getElementById('f-pri').value=p.pri||'medium';
@@ -2385,6 +2430,7 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
   e.preventDefault();const id=document.getElementById('f-id').value;
   const data=PDEF({id:id||uid(),country:document.getElementById('f-country').value,
     city:document.getElementById('f-city').value.trim(),name:document.getElementById('f-name').value.trim(),
+    address:document.getElementById('f-address').value.trim(),
     date:document.getElementById('f-date').value,nights:parseInt(document.getElementById('f-nights').value)||0,
     startTime:document.getElementById('f-st').value,endTime:document.getElementById('f-et').value,
     cat:document.getElementById('f-cat').value,pri:document.getElementById('f-pri').value,
@@ -2445,6 +2491,7 @@ function extractHotelMeta(htmlTxt){
           if(o.address){
             if(o.address.addressLocality&&!out.city)out.city=o.address.addressLocality;
             if(o.address.addressCountry&&!out.country)out.country=o.address.addressCountry;
+            if(o.address.streetAddress&&!out.street)out.street=o.address.streetAddress;
           }
         }
       }
@@ -2514,6 +2561,7 @@ async function importBookingUrl(){
     const meta=extractHotelMeta(txt);
     if(meta.name){document.getElementById('f-name').value=meta.name;extra.push('שם מדויק ✒️');}
     if(meta.city){document.getElementById('f-city').value=meta.city;extra.push('עיר: '+meta.city);}
+    if(meta.street&&!document.getElementById('f-address').value.trim()){document.getElementById('f-address').value=meta.street;extra.push('כתובת 📍');}
     if(meta.image){bkPhoto=meta.image;extra.push('תמונה 📸');}
   }
   if(extra.length){
@@ -2974,6 +3022,140 @@ function delRoute(rid){
 }
 
 // ══════════════════════════════
+//  EXCEL & PDF — ייצוא וייבוא ציר הזמן
+// ══════════════════════════════
+let _xlsxReady=null;
+function loadXLSX(){
+  if(window.XLSX)return Promise.resolve();
+  if(_xlsxReady)return _xlsxReady;
+  _xlsxReady=new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=res;s.onerror=()=>{_xlsxReady=null;rej(new Error('טעינת ספריית האקסל נכשלה — בדוק חיבור לאינטרנט'));};
+    document.head.appendChild(s);
+  });
+  return _xlsxReady;
+}
+const XL_HEADERS=['תאריך','שעת התחלה','שעת סיום','שם המקום','עיר','מדינה','קטגוריה','עדיפות','לילות','כתובת','תקציב','בפועל','מטבע','הערות','ביקרנו','דירוג'];
+const CAT_HE={accommodation:'לינה',attraction:'אטרקציה',food:'אוכל',transport:'תחבורה',pokemon:'פוקימון',other:'אחר'};
+const CAT_HE_REV=Object.fromEntries(Object.entries(CAT_HE).map(([k,v])=>[v,k]));
+const PRI_HE={high:'חייבים',medium:'רוצים',low:'אם יש זמן'};
+const PRI_HE_REV=Object.fromEntries(Object.entries(PRI_HE).map(([k,v])=>[v,k]));
+
+async function exportExcel(){
+  if(!ct()){alert('צור טיול קודם 🙂');return;}
+  try{await loadXLSX();}catch(e){alert(e.message);return;}
+  const rows=[...activePlaces()].sort((a,b)=>((a.date||'')+(a.startTime||'')).localeCompare((b.date||'')+(b.startTime||'')));
+  const aoa=[XL_HEADERS];
+  rows.forEach(p=>aoa.push([
+    p.date||'',p.startTime||'',p.endTime||'',p.name||'',p.city||'',
+    getCC(p.country).name,CAT_HE[p.cat]||p.cat||'',PRI_HE[p.pri]||'',
+    p.nights||0,p.address||'',p.budget??'',p.actual??'',p.currency||'',
+    p.notes||'',p.visited?'כן':'',p.rating||''
+  ]));
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols']=[{wch:11},{wch:9},{wch:9},{wch:28},{wch:13},{wch:10},{wch:10},{wch:11},{wch:6},{wch:26},{wch:9},{wch:9},{wch:7},{wch:32},{wch:7},{wch:6}];
+  const wb=XLSX.utils.book_new();
+  wb.Workbook={Views:[{RTL:true}]};
+  XLSX.utils.book_append_sheet(wb,ws,'ציר זמן');
+  XLSX.writeFile(wb,'trip_'+currentTripId+'.xlsx');
+}
+
+function exportPDF(){
+  if(!ct()){alert('צור טיול קודם 🙂');return;}
+  const t=ct();
+  const rows=[...activePlaces()].sort((a,b)=>((a.date||'')+(a.startTime||'')).localeCompare((b.date||'')+(b.startTime||'')));
+  let body='',lastDate=null;
+  rows.forEach(p=>{
+    if(p.date!==lastDate){
+      lastDate=p.date;
+      body+=`<tr class="day"><td colspan="6">📅 ${fmtD(p.date)} · ${p.date?dayN(p.date):''}</td></tr>`;
+    }
+    const price=fmtPrice(p.actual,p.currency)||fmtPrice(p.budget,p.currency)||'';
+    body+=`<tr>
+      <td>${p.startTime?p.startTime+(p.endTime?'–'+p.endTime:''):''}</td>
+      <td><strong>${esc(p.name)}</strong>${p.address?'<br><span class="ad">📍 '+esc(p.address)+'</span>':''}</td>
+      <td>${getCC(p.country).flag} ${esc(p.city)}</td>
+      <td>${CAT_HE[p.cat]||''}</td>
+      <td>${price}</td>
+      <td>${p.visited?'✓':''}${p.rating?' '+'★'.repeat(p.rating):''}</td>
+    </tr>`;
+  });
+  const w=window.open('','_blank');
+  if(!w){alert('הדפדפן חסם את החלון — אפשר חלונות קופצים לאתר');return;}
+  w.document.write(`<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="UTF-8"><title>${esc(t.name)} — ציר זמן</title>
+  <style>
+  body{font-family:'Assistant','Segoe UI',Arial,sans-serif;direction:rtl;padding:24px;color:#1a1a2e}
+  h1{font-size:1.3rem;margin:0 0 4px}.sub{color:#666;font-size:.85rem;margin-bottom:18px}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  th{text-align:right;background:#f0f0f0;padding:7px 9px;border-bottom:2px solid #ccc}
+  td{padding:6px 9px;border-bottom:1px solid #eee;vertical-align:top}
+  tr.day td{background:#1a1a2e;color:#fff;font-weight:700;padding:7px 10px}
+  .ad{font-size:.72rem;color:#555}
+  @media print{body{padding:0}}
+  </style></head><body>
+  <h1>${t.flag} ${esc(t.name)} — ציר זמן</h1>
+  <div class="sub">${esc(t.subtitle||'')} · הופק מ-מתכנן הטיולים</div>
+  <table><thead><tr><th>שעה</th><th>מקום</th><th>עיר</th><th>קטגוריה</th><th>מחיר</th><th>✓</th></tr></thead>
+  <tbody>${body}</tbody></table>
+  <script>window.onload=()=>setTimeout(()=>window.print(),300);<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+async function importExcelFile(f){
+  try{await loadXLSX();}catch(e){alert(e.message);return;}
+  const buf=await f.arrayBuffer();
+  let wb;try{wb=XLSX.read(buf);}catch{alert('❌ לא הצלחתי לקרוא את הקובץ');return;}
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:false});
+  if(!aoa.length){alert('הקובץ ריק');return;}
+  const head=(aoa[0]||[]).map(h=>String(h||'').trim());
+  const idx=n=>head.indexOf(n);
+  const iDate=idx('תאריך'),iName=idx('שם המקום');
+  if(iDate<0||iName<0){alert('❌ פורמט לא מזוהה — הקובץ חייב עמודות "תאריך" ו"שם המקום".\nהורד תבנית מוכנה דרך כפתור 📊 Excel (ייצוא) ומלא אותה.');return;}
+  const col={st:idx('שעת התחלה'),et:idx('שעת סיום'),city:idx('עיר'),country:idx('מדינה'),cat:idx('קטגוריה'),pri:idx('עדיפות'),n:idx('לילות'),addr:idx('כתובת'),b:idx('תקציב'),a:idx('בפועל'),cur:idx('מטבע'),notes:idx('הערות'),vis:idx('ביקרנו'),rate:idx('דירוג')};
+  const get=(row,i)=>i>=0?String(row[i]??'').trim():'';
+  const fixTime=s=>{const m=s.match(/^(\d{1,2}):(\d{2})/);return m?m[1].padStart(2,'0')+':'+m[2]:'';};
+  const newPlaces=[];
+  for(let r=1;r<aoa.length;r++){
+    const row=aoa[r];if(!row)continue;
+    const name=get(row,iName);if(!name)continue;
+    let date=get(row,iDate);
+    const dm=date.match(/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})$/);
+    if(dm)date=`${dm[3]}-${dm[2].padStart(2,'0')}-${dm[1].padStart(2,'0')}`;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date))date='';
+    const cName=get(row,col.country);
+    const country=(ct().countries.find(c=>c.name===cName||c.id===cName)||ct().countries[0]).id;
+    const curr=get(row,col.cur).toUpperCase();
+    newPlaces.push(PDEF({
+      id:uid(),country,
+      city:get(row,col.city)||getCC(country).name,
+      name,date,
+      nights:parseInt(get(row,col.n))||0,
+      startTime:fixTime(get(row,col.st)),endTime:fixTime(get(row,col.et)),
+      cat:CAT_HE_REV[get(row,col.cat)]||'attraction',
+      pri:PRI_HE_REV[get(row,col.pri)]||'medium',
+      address:get(row,col.addr),
+      budget:parseFloat(get(row,col.b))||null,
+      actual:parseFloat(get(row,col.a))||null,
+      currency:CURR_SYM[curr]?curr:ct().defaultCurrency,
+      notes:get(row,col.notes),
+      visited:/^(כן|v|yes|true|✓|1)$/i.test(get(row,col.vis)),
+      rating:Math.min(5,parseInt(get(row,col.rate))||0)||null,
+      type:'planned'
+    }));
+  }
+  if(!newPlaces.length){alert('לא נמצאו שורות עם "שם המקום"');return;}
+  const noDate=newPlaces.filter(p=>!p.date).length;
+  if(confirm(`נמצאו ${newPlaces.length} מקומות באקסל${noDate?` (${noDate} בלי תאריך תקין — ייכנסו בלי תאריך)`:''}.\nלהוסיף אותם לטיול הנוכחי? הם יתווספו לציר הזמן בלי למחוק כלום.`)){
+    places=places.concat(newPlaces);
+    persist();
+    alert('✅ '+newPlaces.length+' מקומות נוספו לציר הזמן!');
+  }
+}
+
+// ══════════════════════════════
 //  EXPORT / IMPORT
 // ══════════════════════════════
 function exportData(){
@@ -2984,8 +3166,9 @@ function exportData(){
   a.href=url;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 function importData(){
-  const inp=document.createElement('input');inp.type='file';inp.accept='.json';
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json,.xlsx,.xls,.csv';
   inp.onchange=e=>{const f=e.target.files[0];if(!f)return;
+    if(/\.(xlsx|xls|csv)$/i.test(f.name)){importExcelFile(f);return;}
     const r=new FileReader();r.onload=ev=>{
       try{
         const d=JSON.parse(ev.target.result);
@@ -3014,11 +3197,11 @@ function importData(){
 // ══════════════════════════════
 //  SHARE — קישור/קוד: שיתוף עם אשתי + סנכרון בין המכשירים שלי
 // ══════════════════════════════
-function buildSharePayload(){
+function buildSharePayload(includePhotos=false){
   return{
     tripId:currentTripId,
     tripConfig:ct(),
-    places:places.map(p=>({...p,refPhoto:null,myPhoto:null})),
+    places:includePhotos?places.map(p=>({...p})):places.map(p=>({...p,refPhoto:null,myPhoto:null})),
     groups,routes,phase:tripPhase,hereId
   };
 }
@@ -3145,7 +3328,8 @@ document.getElementById('share-clean-btn').addEventListener('click',async()=>{
 
 document.getElementById('share-dl-btn').addEventListener('click',()=>{
   if(!ct()){alert('אין עדיין טיול לייצא');return;}
-  const blob=new Blob([JSON.stringify(buildSharePayload(),null,2)],{type:'application/json'});
+  const withPhotos=confirm('לכלול את התמונות בקובץ?\nאישור = כן (הקובץ יהיה גדול יותר, והתמונות יעברו בייבוא) · ביטול = בלי תמונות');
+  const blob=new Blob([JSON.stringify(buildSharePayload(withPhotos),null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
   a.href=url;a.download=`share_${currentTripId}.json`;a.click();URL.revokeObjectURL(url);
 });
