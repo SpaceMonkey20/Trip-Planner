@@ -317,8 +317,10 @@ body.phase-done #dsec-plan{display:none}
 .tl{margin-top:6px}
 .tl-route-bar{background:#ede9fe;border:1.5px solid var(--rte);border-radius:9px;padding:8px 14px;margin-bottom:12px;font-size:.83rem;color:#4c1d95;font-weight:600;display:flex;align-items:center;gap:8px}
 .tlday{display:flex;gap:12px;margin-bottom:2px}
-.tldate{min-width:78px;text-align:left;direction:ltr;padding-top:4px;flex-shrink:0}
+.tldate{min-width:90px;max-width:112px;text-align:left;direction:ltr;padding-top:4px;flex-shrink:0}
 .tldate .dn{font-weight:700;font-size:.88rem}.tldate .dd{font-size:.68rem;color:var(--muted)}
+.tldate .dh{margin-top:5px;font-size:.63rem;font-weight:600;color:#1d4ed8;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:3px 6px;direction:rtl;text-align:center;line-height:1.35;word-break:break-word;white-space:normal}
+.tldate .dh.miss{color:#b91c1c;background:#fef2f2;border:1px dashed #fca5a5}
 .tlline{flex:1;border-right:3px solid #ddd;padding-right:14px;padding-bottom:14px;min-height:40px;position:relative}
 .tlline::before{content:'';width:10px;height:10px;background:#ddd;border-radius:50%;position:absolute;right:-7px;top:5px}
 .tlline.kr{border-right-color:var(--kr)}.tlline.kr::before{background:var(--kr)}
@@ -2182,7 +2184,6 @@ function renderDilemmas(){
     c.appendChild(el);
   });
 }
-
 function renderTimeline(){
   const tl=document.getElementById('tl-main');tl.innerHTML='';
   const act=displayPlaces();
@@ -2190,6 +2191,7 @@ function renderTimeline(){
   const y=new Date(tripEnd+'T12:00:00').getFullYear();
   setT('tl-title',`📅 ציר זמן — ${fmtD(tripStart)} עד ${fmtD(tripEnd)} ${y}`);
   const countries=ct().countries.map(c=>c.id);
+  const stays=act.filter(p=>p.cat==='accommodation'&&p.date);
   for(let d=new Date(tripStart+'T12:00:00');d<=new Date(tripEnd+'T12:00:00');d.setDate(d.getDate()+1)){
     const ds=d.toISOString().slice(0,10);
     let items=act.filter(p=>placeOnDate(p,ds)&&p.cat!=='accommodation'&&p.cat!=='transport');
@@ -2202,6 +2204,10 @@ function renderTimeline(){
     const row=document.createElement('div');row.className='tlday';
     const dc=document.createElement('div');dc.className='tldate';
     dc.innerHTML=`<div class="dn">${d.getDate()} ${MONTHS[d.getMonth()]}</div><div class="dd">${dayN(ds)}</div>`;
+    // 🏨 המלון של הלילה — מוצג מתחת לתאריך (בצד ימין של הציר)
+    const stay=stays.find(h=>placeOnDate(h,ds));
+    if(stay)dc.innerHTML+=`<div class="dh" title="${esc(stay.city||'')}">🏨 ${esc(stay.name)}</div>`;
+    else if(ds!==tripEnd)dc.innerHTML+=`<div class="dh miss">⚠️ חסר מקום לינה</div>`;
     const line=document.createElement('div');line.className=`tlline ${lc}`;
     if(ds===tripStart)line.innerHTML+=`<div class="tl-sp">${ct().arrivalNote}</div>`;
     if(ds===tripEnd)line.innerHTML+=`<div class="tl-sp">${ct().departureNote}</div>`;
@@ -2578,7 +2584,7 @@ document.getElementById('bk-url').addEventListener('paste',()=>setTimeout(import
 // ══════════════════════════════
 //  "אולי יעניין אותך" — הצעות אטרקציות (ויקיפדיה) + גוגל טיולים
 // ══════════════════════════════
-function hasHebrew(s){return /[\u0590-\u05FF]/.test(s);}
+function hasHebrew(s){return /[֐-׿]/.test(s);}
 async function wikiApi(lang,params){
   const q=new URLSearchParams({format:'json',origin:'*',action:'query',...params});
   const r=await fetch(`https://${lang}.wikipedia.org/w/api.php?`+q.toString());
