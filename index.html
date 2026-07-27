@@ -13,7 +13,6 @@
   --shadow:0 1px 3px rgba(26,26,46,.06),0 8px 24px rgba(26,26,46,.08);--r:16px
 }
 body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
-
 /* TRIP SWITCHER */
 .trip-sw{background:#111827;padding:7px 22px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .trip-sw-label{color:rgba(255,255,255,.45);font-size:.72rem;margin-left:4px}
@@ -21,7 +20,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .trip-btn.active{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.55);font-weight:700}
 .trip-btn:hover:not(.active){background:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
 .abtn.bp{background:var(--bp)}.abtn.bp:hover{background:#a30000}
-
 /* HEADER */
 .hdr{background:linear-gradient(135deg,#1a1a2e 0%,#C9243F 50%,#BC002D 100%);color:#fff;padding:16px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 .hdr-left{display:flex;align-items:center;gap:12px}
@@ -30,7 +28,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .hdr-stats{display:flex;gap:10px;flex-wrap:wrap}
 .sbox{text-align:center;background:rgba(255,255,255,.15);border-radius:8px;padding:6px 14px;min-width:58px}
 .sbox .n{font-size:1.35rem;font-weight:800}.sbox .l{font-size:.66rem;opacity:.85}
-
 /* PHASE BAR */
 .phase-bar{background:#fff;border-bottom:1px solid var(--brd);padding:9px 22px;display:flex;gap:2px;align-items:center;overflow-x:auto}
 .phase-step{display:flex;align-items:center;gap:7px;padding:8px 16px;border:1.5px solid transparent;background:none;cursor:pointer;font-family:inherit;font-size:.83rem;color:var(--muted);white-space:nowrap;border-radius:999px;transition:all .2s}
@@ -42,7 +39,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .phase-step.done-step .pnum{background:var(--ok);color:#fff}
 .phase-arrow{color:#ccc;font-size:1rem;padding:0 2px;flex-shrink:0}
 .phase-hint{margin-right:auto;font-size:.74rem;color:var(--muted);white-space:nowrap;padding-right:10px}
-
 /* NAV */
 .nav{background:#fff;border-bottom:1px solid var(--brd);padding:0 22px;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.06);overflow-x:auto}
 .ntab{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:.88rem;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap;direction:rtl;position:relative}
@@ -53,16 +49,13 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .tbtn{display:inline-flex;align-items:center;gap:4px;padding:6px 13px;border-radius:999px;border:1.5px solid var(--brd);background:#fff;font-size:.78rem;font-family:inherit;cursor:pointer;color:var(--text);transition:all .15s;white-space:nowrap}
 .tbtn:hover{background:#f5f5f5}.tbtn.exp{border-color:var(--ok);color:var(--ok)}.tbtn.exp:hover{background:#f0fdf4}
 .tbtn.imp{border-color:#2563eb;color:#2563eb}.tbtn.imp:hover{background:#eff6ff}
-
 /* MAIN */
 .main{padding:20px 26px;max-width:1400px;margin:0 auto}
 .view{display:none}.view.active{display:block}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
 .sec-title{font-size:1.15rem;font-weight:700;display:flex;align-items:center;gap:7px}
-
 /* PLACE GRID */
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:13px}
-
 /* PLACE CARD */
 .pcard{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border-right:4px solid var(--kr);transition:transform .18s,box-shadow .18s;overflow:hidden;display:flex;flex-direction:column}
 .pcard:hover{transform:translateY(-3px);box-shadow:0 4px 8px rgba(26,26,46,.08),0 16px 36px rgba(26,26,46,.14)}
@@ -96,7 +89,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .chip.v-bad{background:#fee2e2;color:var(--err);font-weight:700}
 .chip.here-chip{background:#d1fae5;color:#065f46;font-weight:800}
 .crev{font-size:.78rem;color:#78350f;background:#fffbeb;border-radius:8px;padding:7px 10px;margin-top:6px;line-height:1.5;white-space:pre-wrap}
-
 /* POKEMON SECTION */
 .poke-wrap{background:#27317e;border-radius:14px;padding:16px 18px;margin-top:4px}
 .poke-wrap .sec-label{color:rgba(255,255,255,.75);font-size:.75rem;font-weight:600;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
@@ -116,7 +108,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .poke-total{margin-top:10px;color:rgba(255,255,255,.85);font-size:.8rem;display:flex;gap:16px;flex-wrap:wrap}
 .poke-total span{font-weight:600}
 .poke-empty{color:rgba(255,255,255,.55);font-size:.84rem;padding:4px 0}
-
 /* JOURNEY STRIP */
 .journey-wrap{background:#1f2937;border-radius:14px;padding:16px 18px;margin-top:4px}
 .journey-strip{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -134,7 +125,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .journey-add-btn{background:rgba(255,255,255,.15);border:1px dashed rgba(255,255,255,.35);color:rgba(255,255,255,.8);border-radius:9px;padding:9px 14px;cursor:pointer;font-size:.8rem;font-family:inherit;white-space:nowrap;transition:background .2s}
 .journey-add-btn:hover{background:rgba(255,255,255,.25)}
 .journey-empty{color:rgba(255,255,255,.55);font-size:.84rem;padding:8px 0}
-
 /* HOTELS TABLE */
 .htable{width:100%;border-collapse:collapse;font-size:.83rem;margin-top:6px}
 .htable th{text-align:right;padding:8px 10px;background:#f5f5f5;font-weight:700;border-bottom:2px solid var(--brd);white-space:nowrap}
@@ -143,7 +133,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .htable .pc{font-weight:700;color:#7e22ce;white-space:nowrap}
 .htable .tot-row td{background:#f0fdf4;font-weight:700;border-top:2px solid var(--ok);color:#065f46}
 .htable .no-price{color:#ccc}
-
 /* EXPENSES */
 .exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px;margin-top:8px}
 .exp-card{background:#fff;border-radius:10px;padding:12px 14px;box-shadow:var(--shadow);border-top:3px solid #e5e7eb}
@@ -164,17 +153,40 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .cho-btn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:7px;border-radius:7px;border:none;cursor:pointer;font-size:.8rem;font-weight:700;font-family:inherit;margin-top:7px;transition:all .2s}
 .cho-btn.pick{background:var(--ok);color:#fff}.cho-btn.pick:hover{background:#15803d}
 .cho-btn.unpick{background:#f0fdf4;color:var(--ok);border:1.5px solid var(--ok)}.cho-btn.unpick:hover{background:#dcfce7}
-
 /* ADD BUTTONS */
 .abtn{display:inline-flex;align-items:center;gap:6px;background:var(--kr);color:#fff;border:none;padding:8px 17px;border-radius:999px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit;white-space:nowrap;transition:background .2s}
 .abtn:hover{background:#a01d30}.abtn.jp{background:var(--jp)}.abtn.jp:hover{background:#8a0020}
 .abtn.dil{background:var(--dil)}.abtn.dil:hover{background:#b45309}
 .abtn.rte{background:var(--rte)}.abtn.rte:hover{background:#5b21b6}
 .abtn.sm{padding:6px 11px;font-size:.78rem}
-
 /* DASHBOARD */
 .sumrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px}
 .scard{background:#fff;border-radius:var(--r);padding:15px 14px;text-align:center;box-shadow:var(--shadow)}
+.scard.clickable,.exp-card.clickable{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.scard.clickable:hover,.exp-card.clickable:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.scard.clickable:active,.exp-card.clickable:active{transform:translateY(0)}
+.tap-hint{font-size:.6rem;opacity:.55;margin-top:2px;font-weight:600}
+.exp-card.clickable .exp-lbl::after{content:' 🔍';font-size:.7rem;opacity:.7}
+/* DETAIL MODALS (places list + budget breakdown) */
+.dv-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.dv-hdr h2{margin:0;font-size:1.12rem}
+.dv-sub{font-size:.8rem;color:var(--muted);margin-bottom:12px}
+.dv-close{border:none;background:#f1f1f4;border-radius:999px;padding:6px 13px;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:700;color:#374151;flex-shrink:0}
+.dv-close:hover{background:#e5e5ea}
+.dv-group-title{font-weight:800;font-size:.9rem;margin:16px 0 8px;display:flex;align-items:center;gap:7px;color:#1a1a2e}
+.bd-comp{display:flex;align-items:center;gap:9px;padding:9px 2px;font-size:.9rem;border-bottom:1px solid #f0f0f3}
+.bd-comp .dot{width:13px;height:13px;border-radius:3px;flex-shrink:0}
+.bd-comp .bd-amt{margin-right:auto;font-weight:800;white-space:nowrap}
+.bd-cat{margin-top:14px}
+.bd-catrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;font-size:.9rem;color:#1a1a2e;background:#f7f7fa;border-radius:8px;padding:8px 11px}
+.bd-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 11px;font-size:.84rem;color:#374151;border-bottom:1px solid #f4f4f6}
+.bd-item:last-child{border-bottom:none}
+.bd-item .bd-iamt{font-weight:700;color:#111;white-space:nowrap}
+.bd-item .bd-est{font-size:.68rem;color:var(--dil);font-weight:700}
+.bd-formula{background:#f7f7fa;border-radius:10px;padding:13px 15px;font-size:.9rem;line-height:2}
+.bd-formula .row{display:flex;justify-content:space-between;gap:10px}
+.bd-formula .tot{border-top:2px solid #d1d5db;margin-top:6px;padding-top:8px;font-weight:800}
+.bd-empty{color:var(--muted);font-size:.85rem;padding:14px 2px}
 .scard .big{font-size:2rem;font-weight:800}.scard .lbl{font-size:.76rem;color:var(--muted);margin-top:3px}
 .scard.ctot{border-top:4px solid #1a1a2e}.scard.ckr{border-top:4px solid var(--kr)}
 .scard.cjp{border-top:4px solid var(--jp)}.scard.cvis{border-top:4px solid var(--ok)}.scard.cdil{border-top:4px solid var(--dil)}
@@ -184,7 +196,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .pfill{height:100%;background:linear-gradient(90deg,var(--ok),#22c55e);border-radius:10px;transition:width .5s}
 .dsec{margin-top:22px}.dsec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
 .dsec-title{font-weight:700;font-size:.97rem}
-
 /* NOW PANEL (traveling phase) */
 .now-panel{background:linear-gradient(135deg,#064e3b 0%,#059669 100%);border-radius:14px;padding:16px 18px;margin-bottom:18px;color:#fff}
 .now-title{font-weight:800;font-size:1.02rem;display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
@@ -197,12 +208,10 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .now-btn{border:none;border-radius:999px;padding:6px 12px;font-size:.78rem;font-weight:700;font-family:inherit;cursor:pointer;background:#fff;color:#065f46;transition:opacity .15s}
 .now-btn:hover{opacity:.88}
 .now-btn.ghost{background:rgba(255,255,255,.18);color:#fff}
-
 /* DONE BANNER */
 .done-banner{background:linear-gradient(135deg,#1a1a2e,#374151);color:#fff;border-radius:14px;padding:16px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .done-banner .db-t{font-weight:800;font-size:1rem}
 .done-banner .db-s{font-size:.78rem;opacity:.75;margin-top:3px}
-
 /* REVIEW MODAL */
 .rv-stars{display:flex;gap:8px;font-size:1.9rem;cursor:pointer;direction:ltr;justify-content:center;margin:6px 0 4px;user-select:none}
 .rv-star{filter:grayscale(1);opacity:.35;transition:all .12s}
@@ -214,7 +223,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .vxbtn.sel-good{background:#dcfce7;border-color:var(--ok);font-weight:700}
 .vxbtn.sel-meh{background:#fef3c7;border-color:#f59e0b;font-weight:700}
 .vxbtn.sel-bad{background:#fee2e2;border-color:var(--err);font-weight:700}
-
 /* SUMMARY VIEW */
 .sum-hero{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px}
 .hl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:11px}
@@ -230,7 +238,6 @@ body{font-family:'Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);co
 .next-list{display:flex;flex-direction:column;gap:7px}
 .next-item{background:#fff;border-radius:9px;box-shadow:var(--shadow);padding:9px 13px;display:flex;align-items:center;gap:9px;font-size:.85rem;border-right:3px solid var(--dil)}
 .next-item .ni-sub{font-size:.72rem;color:var(--muted)}
-
 /* DASHBOARD — phase-aware ordering + progressive disclosure */
 #view-dashboard.active{display:flex;flex-direction:column}
 #view-dashboard>*{order:50}
@@ -269,13 +276,11 @@ body.phase-done #dsec-food{order:11}
 body.phase-done #dsec-expenses{order:12}
 body.phase-done #dsec-budget{order:13}
 body.phase-done #dsec-plan{display:none}
-
 /* SUGGESTIONS — אולי יעניין אותך */
 .sug-item{display:block;width:100%;text-align:right;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:7px 10px;margin-bottom:6px;cursor:pointer;font-family:inherit;transition:background .15s}
 .sug-item:hover{background:#ccfbf1}
 .sug-name{font-size:.82rem;font-weight:700;color:#0f766e;display:block}
 .sug-desc{font-size:.72rem;color:var(--muted);display:block;margin-top:2px}
-
 /* ROUTES */
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(305px,1fr));gap:13px;margin-top:2px}
 .rcard{background:#fff;border-radius:12px;box-shadow:var(--shadow);border-top:4px solid var(--rte);overflow:hidden;transition:box-shadow .2s}
@@ -300,7 +305,6 @@ body.phase-done #dsec-plan{display:none}
 .act-btn.on{background:var(--ok);color:#fff}.act-btn.on:hover{background:#15803d}
 .act-btn.off{background:#f0fdf4;color:var(--ok);border:1.5px solid var(--ok)}.act-btn.off:hover{background:#dcfce7}
 .active-route-bar{background:#d1fae5;border:1.5px solid var(--ok);border-radius:9px;padding:9px 14px;margin-bottom:12px;font-size:.84rem;color:#065f46;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:10px}
-
 /* DILEMMA VIEW */
 .dgcard{background:#fff;border-radius:14px;margin-bottom:18px;box-shadow:var(--shadow);border:1.5px solid var(--brd);overflow:hidden}
 .dgcard.unresolved{border-color:var(--dil)}.dgcard.resolved{border-color:var(--ok)}.dgcard.has-conflict{border-color:var(--err)}
@@ -312,7 +316,6 @@ body.phase-done #dsec-plan{display:none}
 .bdg-ok{display:inline-flex;align-items:center;gap:3px;background:#dcfce7;color:#15803d;font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:20px}
 .bdg-warn{display:inline-flex;align-items:center;gap:3px;background:#fef3c7;color:#b45309;font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:20px}
 .bdg-err{display:inline-flex;align-items:center;gap:3px;background:#fee2e2;color:var(--err);font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:20px}
-
 /* TIMELINE */
 .tl{margin-top:6px}
 .tl-route-bar{background:#ede9fe;border:1.5px solid var(--rte);border-radius:9px;padding:8px 14px;margin-bottom:12px;font-size:.83rem;color:#4c1d95;font-weight:600;display:flex;align-items:center;gap:8px}
@@ -335,7 +338,6 @@ body.phase-done #dsec-plan{display:none}
 .tlname{font-weight:600;font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tlsub{font-size:.71rem;color:var(--muted)}
 .tltim{font-size:.76rem;color:#1d4ed8;font-weight:600;background:#eff6ff;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0}
-
 /* MODALS */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:1000;align-items:center;justify-content:center;padding:18px}
 .overlay.open{display:flex}
@@ -390,7 +392,6 @@ body.phase-done #dsec-plan{display:none}
 </style>
 </head>
 <body>
-
 <!-- TRIP SWITCHER -->
 <div class="trip-sw" id="trip-sw">
   <span class="trip-sw-label">טיול:</span>
@@ -398,7 +399,6 @@ body.phase-done #dsec-plan{display:none}
   <button class="trip-btn" id="add-trip-btn" style="border-style:dashed" title="הוסף טיול חדש">＋ טיול חדש</button>
   <button class="trip-btn" id="edit-trip-btn" title="ערוך את הטיול הנוכחי">⚙️</button>
 </div>
-
 <div class="hdr" id="main-hdr" style="background:linear-gradient(135deg,#1a1a2e 0%,#C9243F 50%,#BC002D 100%)">
   <div class="hdr-left">
     <span class="flag" id="hdr-flag">🇰🇷🇯🇵</span>
@@ -414,7 +414,6 @@ body.phase-done #dsec-plan{display:none}
     <div class="sbox"><div class="n" id="h-dil">0</div><div class="l">🤔 פתוחות</div></div>
   </div>
 </div>
-
 <!-- PHASE BAR — 3 שלבי הטיול -->
 <div class="phase-bar" id="phase-bar">
   <button class="phase-step" data-phase="planning"><span class="pnum">1</span>🤔 תכנון והתלבטויות</button>
@@ -424,7 +423,6 @@ body.phase-done #dsec-plan{display:none}
   <button class="phase-step" data-phase="done"><span class="pnum">3</span>🏁 סיכום הטיול</button>
   <span class="phase-hint" id="phase-hint"></span>
 </div>
-
 <nav class="nav">
   <button class="ntab active" data-view="dashboard">🏠 דשבורד</button>
   <span id="country-tabs" style="display:contents"></span>
@@ -442,7 +440,6 @@ body.phase-done #dsec-plan{display:none}
     <button class="tbtn" style="border-color:#6b7280;color:#374151" onclick="exportPDF()">🖨️ PDF</button>
   </div>
 </nav>
-
 <!-- WELCOME — מוצג כשאין עדיין טיולים -->
 <div id="welcome-wrap" style="display:none;padding:64px 20px;text-align:center;max-width:520px;margin:0 auto">
   <div style="font-size:3.4rem;margin-bottom:10px">🎒</div>
@@ -456,25 +453,22 @@ body.phase-done #dsec-plan{display:none}
     <button class="bsave" style="font-size:1rem;padding:14px;background:#2563eb" onclick="openShareModal()">📥 ייבא טיול (קישור / קוד / קובץ)</button>
   </div>
 </div>
-
 <div class="main">
-
   <!-- DASHBOARD -->
   <div class="view active" id="view-dashboard">
     <div id="now-panel-wrap"></div>
     <div id="done-banner-wrap"></div>
     <div id="conflicts-wrap"></div>
     <div class="sumrow">
-      <div class="scard ctot"><div class="big" id="d-tot">0</div><div class="lbl">מקומות</div></div>
+      <div class="scard ctot clickable" onclick="openPlacesList('all')" title="לחץ לרשימת כל המקומות"><div class="big" id="d-tot">0</div><div class="lbl">מקומות</div><div class="tap-hint">👆 לחץ לרשימה</div></div>
       <div id="d-country-cards" style="display:contents"></div>
-      <div class="scard cvis"><div class="big" id="d-vis">0</div><div class="lbl">✅ ביקרנו</div></div>
-      <div class="scard cdil"><div class="big" id="d-dil">0</div><div class="lbl">🤔 לא הוחלט</div></div>
+      <div class="scard cvis clickable" onclick="openPlacesList('vis')" title="לחץ לרשימת המקומות שביקרנו"><div class="big" id="d-vis">0</div><div class="lbl">✅ ביקרנו</div><div class="tap-hint">👆 לחץ לרשימה</div></div>
+      <div class="scard cdil clickable" onclick="openPlacesList('dil')" title="לחץ לרשימת ההתלבטויות שלא הוחלטו"><div class="big" id="d-dil">0</div><div class="lbl">🤔 לא הוחלט</div><div class="tap-hint">👆 לחץ לרשימה</div></div>
     </div>
     <div class="progwrap">
       <div class="plbl"><span>התקדמות הטיול</span><span id="d-pct">0%</span></div>
       <div class="pbar"><div class="pfill" id="d-prog" style="width:0%"></div></div>
     </div>
-
     <!-- ROUTES SECTION -->
     <div class="dsec" id="routes-dsec">
       <div class="dsec-hdr">
@@ -490,7 +484,6 @@ body.phase-done #dsec-plan{display:none}
       </div>
       <div class="rgrid" id="routes-container"></div>
     </div>
-
     <!-- TRANSPORT / FLIGHTS -->
     <div class="dsec" id="dsec-transport">
       <div class="dsec-hdr">
@@ -499,7 +492,6 @@ body.phase-done #dsec-plan{display:none}
       </div>
       <div id="transport-section"></div>
     </div>
-
     <!-- POKEMON -->
     <div class="dsec" id="pokemon-dsec">
       <div class="dsec-hdr">
@@ -508,7 +500,6 @@ body.phase-done #dsec-plan{display:none}
       </div>
       <div id="pokemon-section"></div>
     </div>
-
     <!-- HOTELS -->
     <div class="dsec" id="dsec-hotels">
       <div class="dsec-title">🏨 לינות</div>
@@ -522,7 +513,6 @@ body.phase-done #dsec-plan{display:none}
       </div>
       <div id="food-section"></div>
     </div>
-
     <!-- BUDGET TRACKER -->
     <div class="dsec" id="dsec-budget">
       <div class="dsec-hdr">
@@ -531,7 +521,6 @@ body.phase-done #dsec-plan{display:none}
       </div>
       <div id="budget-section"></div>
     </div>
-
     <!-- EXPENSES -->
     <div class="dsec" id="dsec-expenses">
       <div class="dsec-hdr">
@@ -546,14 +535,11 @@ body.phase-done #dsec-plan{display:none}
       </div>
       <div id="expenses-section"></div>
     </div>
-
     <div class="dsec" id="dsec-plan"><div class="dsec-title">📍 מקומות מתוכננים</div><div id="dash-plan"></div></div>
     <div class="dsec" id="dsec-vis"><div class="dsec-title">✅ ביקרנו</div><div id="dash-vis"></div></div>
   </div>
-
   <!-- COUNTRY VIEWS (נבנות דינמית לפי יעדי הטיול) -->
   <div id="country-views" style="display:contents"></div>
-
   <!-- DILEMMAS -->
   <div class="view" id="view-dilemmas">
     <div class="sec-hdr">
@@ -562,7 +548,6 @@ body.phase-done #dsec-plan{display:none}
     </div>
     <div id="dg-container"></div>
   </div>
-
   <!-- TIMELINE -->
   <div class="view" id="view-timeline">
     <div id="tl-route-bar" class="tl-route-bar" style="display:none">
@@ -572,7 +557,6 @@ body.phase-done #dsec-plan{display:none}
     <div class="sec-title" style="margin-bottom:14px" id="tl-title">📅 ציר זמן</div>
     <div class="tl" id="tl-main"></div>
   </div>
-
   <!-- PER TRAVELER -->
   <div class="view" id="view-perpax">
     <div class="sec-hdr">
@@ -581,7 +565,6 @@ body.phase-done #dsec-plan{display:none}
     </div>
     <div id="perpax-main"></div>
   </div>
-
   <!-- SUMMARY -->
   <div class="view" id="view-summary">
     <div class="sec-hdr">
@@ -590,9 +573,7 @@ body.phase-done #dsec-plan{display:none}
     </div>
     <div id="sum-main"></div>
   </div>
-
 </div>
-
 <!-- PLACE MODAL -->
 <div class="overlay" id="pl-ov">
   <div class="modal">
@@ -662,7 +643,22 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
-
+<!-- PLACES LIST MODAL — נפתח מהקוביות בדשבורד -->
+<div class="overlay" id="pll-ov" style="z-index:990">
+  <div class="modal" style="max-width:720px">
+    <div class="dv-hdr"><h2 id="pll-title">מקומות</h2><button type="button" class="dv-close" id="pll-close">✕ סגור</button></div>
+    <div class="dv-sub" id="pll-sub"></div>
+    <div id="pll-body"></div>
+  </div>
+</div>
+<!-- BUDGET DETAIL MODAL — נפתח מקוביות התקציב (תצוגה בלבד) -->
+<div class="overlay" id="bd-ov" style="z-index:990">
+  <div class="modal" style="max-width:640px">
+    <div class="dv-hdr"><h2 id="bd-title">פירוט תקציב</h2><button type="button" class="dv-close" id="bd-close">✕ סגור</button></div>
+    <div class="dv-sub" id="bd-sub"></div>
+    <div id="bd-body"></div>
+  </div>
+</div>
 <!-- REVIEW MODAL — איך היה? -->
 <div class="overlay" id="rv-ov">
   <div class="modal" style="max-width:440px;border-top:5px solid #f59e0b">
@@ -684,7 +680,6 @@ body.phase-done #dsec-plan{display:none}
     </div>
   </div>
 </div>
-
 <!-- TRIP MODAL — הוספה / עריכה של טיול -->
 <div class="overlay" id="tp-ov">
   <div class="modal" style="max-width:530px">
@@ -719,7 +714,6 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
-
 <!-- SHARE APP LINK MODAL -->
 <div class="overlay" id="sa-ov">
   <div class="modal" style="max-width:360px;text-align:center">
@@ -735,7 +729,6 @@ body.phase-done #dsec-plan{display:none}
     </div>
   </div>
 </div>
-
 <!-- BUDGET MODAL -->
 <div class="overlay" id="bg-ov">
   <div class="modal" style="max-width:440px;border-top:5px solid #0e7490">
@@ -765,7 +758,6 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
-
 <!-- DILEMMA GROUP MODAL -->
 <div class="overlay" id="dg-ov">
   <div class="modal" style="max-width:400px">
@@ -780,7 +772,6 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
-
 <!-- ROUTE MODAL -->
 <div class="overlay" id="rt-ov">
   <div class="modal" style="max-width:560px">
@@ -811,7 +802,6 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
-
 <!-- MIXER MODAL -->
 <div class="overlay" id="mx-ov">
   <div class="modal mixer-modal">
@@ -830,7 +820,6 @@ body.phase-done #dsec-plan{display:none}
     <div class="f-acts"><button type="button" class="bcncl" id="mx-cncl">ביטול</button><button type="button" class="bsave rte-save" id="mx-save">שמור מסלול מאוחד</button></div>
   </div>
 </div>
-
 <!-- POKEMON CENTER MODAL -->
 <div class="overlay" id="pk-ov">
   <div class="modal" style="max-width:520px;border-top:5px solid #3B4CCA">
@@ -881,7 +870,6 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
-
 <!-- SHARE MODAL -->
 <div class="overlay" id="share-ov">
   <div class="modal" style="max-width:440px">
@@ -915,7 +903,6 @@ body.phase-done #dsec-plan{display:none}
     </div>
   </div>
 </div>
-
 <!-- PHOTO MODAL -->
 <div class="overlay" id="ph-ov">
   <div class="pmodal">
@@ -937,7 +924,6 @@ body.phase-done #dsec-plan{display:none}
     </div>
   </div>
 </div>
-
 <script>
 // ══════════════════════════════
 //  CONSTANTS
@@ -953,7 +939,6 @@ const PHASE_HINTS={
   traveling:'מסמן ✓ איפה היינו ו-📍 איפה אני עכשיו — ההתלבטויות נשארות כגיבוי',
   done:'מסכם — דירוגים, חוות דעת ומה נשאר לפעם הבאה'
 };
-
 // ══════════════════════════════
 //  POKÉMON CENTER DATABASE
 // ══════════════════════════════
@@ -1017,7 +1002,6 @@ const POKEMON_DB={
 };
 const DAYS=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
 const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
-
 // ══════════════════════════════
 //  TRIP CONFIG — טיולי ברירת מחדל; הרשימה המלאה נשמרת ב-localStorage וניתנת להרחבה
 // ══════════════════════════════
@@ -1048,7 +1032,6 @@ const BUILTIN_TRIPS={
     departureNote:'✈️ המראה — Budapest Airport (BUD)',
   }
 };
-
 const TRIPS_KEY='trips_config_v1';
 let TRIPS={};
 function loadTrips(){
@@ -1066,7 +1049,6 @@ function loadTrips(){
   }
 }
 function saveTrips(){try{localStorage.setItem(TRIPS_KEY,JSON.stringify(TRIPS));}catch{}}
-
 // ══════════════════════════════
 //  STATE
 // ══════════════════════════════
@@ -1076,23 +1058,19 @@ let allData={};
 let places=[], groups=[], routes=[];
 let tripPhase='planning';   // 'planning' | 'traveling' | 'done' — נשמר לכל טיול בנפרד
 let hereId=null;            // המקום שבו אני נמצא עכשיו (שלב "בטיול")
-
 // helpers
 function ct(){return TRIPS[currentTripId];}
 function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countries)if(c.id===cid)return c;return{id:cid,flag:'🏳',name:cid,color:'#666',currency:'USD'};}
-
 // ══════════════════════════════
 //  STORAGE
 // ══════════════════════════════
 const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',...p,budget:p.budget??p.price??null});
 const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
-
 function seedFor(tid){
   if(tid==='kj2027')return seedKJ();
   if(tid==='budapest2026')return seedBP();
   return[];
 }
-
 function load(){
   loadTrips();
   if(!TRIPS[currentTripId])currentTripId=Object.keys(TRIPS)[0]||null;
@@ -1115,7 +1093,6 @@ function load(){
   loadTripData();
   persist(false);
 }
-
 function loadTripData(){
   if(!currentTripId||!TRIPS[currentTripId]){places=[];groups=[];routes=[];tripPhase='planning';hereId=null;return;}
   const d=allData[currentTripId]||{};
@@ -1125,14 +1102,12 @@ function loadTripData(){
   tripPhase=PHASES.includes(d.phase)?d.phase:'planning';
   hereId=d.hereId||null;
 }
-
 function persist(render=true){
   if(currentTripId&&TRIPS[currentTripId])allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
   try{localStorage.setItem(APP_KEY,JSON.stringify(allData));}
   catch{alert('⚠️ שגיאה בשמירה — אין מספיק מקום (נסה למחוק תמונות)');}
   if(render)renderAll();
 }
-
 function switchTrip(newId){
   if(currentTripId===newId)return;
   if(currentTripId&&TRIPS[currentTripId])allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
@@ -1142,7 +1117,6 @@ function switchTrip(newId){
   renderAll();
   if(!document.querySelector('.view.active'))gotoView('dashboard');
 }
-
 function seedKJ(){
   return[
     {id:uid(),country:'korea',city:'סיאול',name:'Incheon Airport — נחיתה',date:'2027-01-15',nights:0,startTime:'',endTime:'',cat:'transport',pri:'high',notes:'הגעה ✈️  •  T-money ו-SIM',visited:false,type:'planned',dilemmaGroupId:null,refPhoto:null,myPhoto:null,budget:null,actual:null,currency:'KRW'},
@@ -1156,7 +1130,6 @@ function seedBP(){
   ];
 }
 function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36);}
-
 // ══════════════════════════════
 //  HELPERS
 // ══════════════════════════════
@@ -1174,7 +1147,6 @@ function placeOnDate(p,ds){
   if(!p.date)return false;const st=new Date(p.date+'T12:00:00'),n=Math.max(parseInt(p.nights)||0,1);
   const en=new Date(st);en.setDate(en.getDate()+n-1);const cur=new Date(ds+'T12:00:00');return cur>=st&&cur<=en;
 }
-
 // ══════════════════════════════
 //  CONFLICT DETECTION
 // ══════════════════════════════
@@ -1216,7 +1188,6 @@ function groupDateConflict(g){
   return opts.some(o=>planned.some(ap=>datesTouch(o,ap)));
 }
 function unresolvedGroups(){return groups.filter(g=>!g.chosenId);}
-
 // ══════════════════════════════
 //  ROUTE STATS
 // ══════════════════════════════
@@ -1230,7 +1201,6 @@ function routeStats(r){
   const total=groups.length;
   return{kr,jp,total:pool.length,conf,resolved,totalGroups:total};
 }
-
 // ══════════════════════════════
 //  PRICE HELPERS
 // ══════════════════════════════
@@ -1248,7 +1218,6 @@ function sumByCurrency(arr,field='budget'){
 function formatTotals(totMap){
   return Object.entries(totMap).map(([c,a])=>fmtPrice(a,c)).join(' + ')||null;
 }
-
 // ══════════════════════════════
 //  RENDER TRANSPORT (תוקן: getCC + כפילות מאזינים)
 // ══════════════════════════════
@@ -1256,7 +1225,6 @@ function renderTransport(){
   const el=document.getElementById('transport-section');
   if(!el)return;
   const items=[...displayPlaces()].filter(p=>p.cat==='transport').sort((a,b)=>(a.date+' '+(a.startTime||'')).localeCompare(b.date+' '+(b.startTime||'')));
-
   let html='<div class="journey-wrap"><div class="journey-strip">';
   if(!items.length){
     html+=`<span class="journey-empty">אין טיסות / תחבורה. לחץ "+ הוסף טיסה / תחבורה" כדי להוסיף.</span>`;
@@ -1283,7 +1251,6 @@ function renderTransport(){
     if(b.dataset.act==='edit')openEdit(b.dataset.id);
   };
 }
-
 // ══════════════════════════════
 //  RENDER HOTELS (תוקן: getCC)
 // ══════════════════════════════
@@ -1291,10 +1258,8 @@ function renderHotels(){
   const el=document.getElementById('hotels-section');
   const hotels=[...displayPlaces()].filter(p=>p.cat==='accommodation').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!hotels.length){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">אין לינות מתוכננות. הוסף לינות עם קטגוריה 🏨 כדי שיופיעו כאן.</p>';return;}
-
   const totBudget=sumByCurrency(hotels,'budget');const totActual=sumByCurrency(hotels,'actual');
   let html='<div style="overflow-x:auto"><table class="htable"><thead><tr><th>שם המלון</th><th>עיר</th><th></th><th>כניסה</th><th>יציאה</th><th>לילות</th><th>תקציב</th><th>בפועל</th></tr></thead><tbody>';
-
   hotels.forEach(h=>{
     const n=Math.max(parseInt(h.nights)||1,1);
     const cout=(()=>{if(!h.date)return'';const d=new Date(h.date+'T12:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);})();
@@ -1309,16 +1274,13 @@ function renderHotels(){
       <td class="${as_?'pc':'no-price'}"${isOver?' style="color:var(--err)"':''}>${as_||'—'}${isOver?' ⚠️':''}</td>
     </tr>`;
   });
-
   const bStr=formatTotals(totBudget);const aStr=formatTotals(totActual);
   if(bStr||aStr)html+=`<tr class="tot-row"><td colspan="6">סה"כ לינות</td><td class="pc">${bStr||'—'}</td><td class="pc">${aStr||'—'}</td></tr>`;
   html+='</tbody></table></div>';
-
   const nights=hotels.reduce((s,h)=>s+Math.max(parseInt(h.nights)||1,1),0);
   html+=`<p style="font-size:.77rem;color:var(--muted);margin-top:6px">${hotels.length} מלונות · ${nights} לילות סה"כ</p>`;
   el.innerHTML=html;
 }
-
 // ══════════════════════════════
 //  RENDER EXPENSES
 // ══════════════════════════════
@@ -1332,7 +1294,6 @@ function renderExpenses(){
   const act=displayPlaces();
   const noData=act.filter(p=>!p.budget&&!p.actual);
   if(hintEl)hintEl.textContent=noData.length>0?`(${noData.length} ללא מחיר)`:'';
-
   const catDef={accommodation:{lbl:CAT.accommodation,cls:'acc'},attraction:{lbl:CAT.attraction,cls:'att'},food:{lbl:CAT.food,cls:'food'},transport:{lbl:CAT.transport,cls:'trans'},pokemon:{lbl:CAT.pokemon,cls:'oth'},other:{lbl:CAT.other,cls:'oth'}};
   const byCat={};let gB=0,gA=0,any=false;
   act.forEach(p=>{
@@ -1344,7 +1305,6 @@ function renderExpenses(){
     if(a){const v=cv(a,p.currency);byCat[cat].a+=v;gA+=v;}
   });
   if(!any){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הוסף תקציב ו/או בפועל למקומות כדי לעקוב אחר ההוצאות.</p>';return;}
-
   const diffChip=(b,a)=>{
     if(!b||!a)return'';
     const d=a-b;
@@ -1366,7 +1326,6 @@ function renderExpenses(){
   html+=`<p style="font-size:.72rem;color:var(--muted);margin-top:7px">הכל מומר ל-${CURR_SYM[D]||D} לפי שערי ההמרה של התקציב${ct()?.rates&&Object.keys(ct().rates).length?'':' (שערי ברירת מחדל — עדכן ב"ערוך תקציב")'}.</p>`;
   el.innerHTML=html;
 }
-
 // ══════════════════════════════
 //  FOOD — ריכוז מקומות אוכל: הכי טעים, הכי זול, הכי יקר
 // ══════════════════════════════
@@ -1378,7 +1337,6 @@ function renderFood(){
   const hint=document.getElementById('food-hint');
   if(hint)hint.textContent=foods.length?`${foods.length} מקומות · ${foods.filter(p=>p.visited).length} אכלנו ✓`:'';
   if(!foods.length){el.innerHTML='<p style="color:var(--muted);font-size:.84rem;padding:6px 0">הוסף מקומות עם קטגוריה 🍜 אוכל — והם ירוכזו כאן עם הכי-טעים, הכי-זול והכי-יקר.</p>';return;}
-
   const priceOf=p=>{
     const amt=parseFloat(p.actual)||parseFloat(p.budget)||0;
     return amt>0?convTo(amt,p.currency,D):null;
@@ -1389,7 +1347,6 @@ function renderFood(){
   const cheap=withPrice.length?withPrice.reduce((m,x)=>x.v<m.v?x:m):null;
   const pricey=withPrice.length>1?withPrice.reduce((m,x)=>x.v>m.v?x:m):null;
   const spentFood=foods.reduce((s,p)=>{const a=parseFloat(p.actual)||0;return s+(a>0?convTo(a,p.currency,D):0);},0);
-
   let html='';
   const medals=[];
   if(tasty)medals.push(`<div class="exp-card" style="border-top-color:#f59e0b"><div class="exp-lbl">🏆 הכי טעים</div><div class="exp-amt" style="font-size:.85rem">${esc(tasty.name)}</div><div class="exp-sub">${'★'.repeat(tasty.rating)} · ${esc(tasty.city)}</div></div>`);
@@ -1397,7 +1354,6 @@ function renderFood(){
   if(pricey&&pricey.p.id!==cheap?.p.id)medals.push(`<div class="exp-card" style="border-top-color:#7e22ce"><div class="exp-lbl">💎 הכי יקר</div><div class="exp-amt" style="font-size:.85rem">${esc(pricey.p.name)}</div><div class="exp-sub">${F(pricey.v)} · ${esc(pricey.p.city)}</div></div>`);
   if(spentFood>0)medals.push(`<div class="exp-card food"><div class="exp-lbl">💸 הוצאנו על אוכל</div><div class="exp-amt">${F(spentFood)}</div></div>`);
   if(medals.length)html+='<div class="exp-grid">'+medals.join('')+'</div>';
-
   html+=`<div style="overflow-x:auto"><table class="htable" style="margin-top:${medals.length?'12':'4'}px"><thead><tr><th>מקום</th><th>עיר</th><th>תאריך</th><th>מחיר (${D})</th><th>דירוג</th><th></th></tr></thead><tbody>`;
   foods.forEach(p=>{
     const v=priceOf(p);
@@ -1413,13 +1369,11 @@ function renderFood(){
   html+='</tbody></table></div>';
   el.innerHTML=html;
 }
-
 // ══════════════════════════════
 //  BUDGET — תקציב כולל, המרות מטבע, מחשבון חכם
 // ══════════════════════════════
 const DEF_ILS={ILS:1,USD:3.4,EUR:3.9,JPY:0.023,KRW:0.0025};
 function defRate(from,to){const a=DEF_ILS[from],b=DEF_ILS[to];if(!a||!b)return 1;return +(a/b).toPrecision(4);}
-
 // המרה אוניברסלית בין כל שני מטבעות: קודם לפי שערי התקציב של הטיול, אחרת שערי ברירת מחדל
 function convTo(amount,from,to){
   from=from||'ILS';to=to||'ILS';
@@ -1433,7 +1387,6 @@ function convTo(amount,from,to){
   return amount;
 }
 function viewCur(){const t=ct();return t?.viewCurrency||t?.budgetCurrency||'ILS';}
-
 function budgetSnapshot(){
   const t=ct();if(!t||!t.budgetTotal)return null;
   const B=t.budgetCurrency||'ILS';const rates=t.rates||{};
@@ -1465,7 +1418,6 @@ function budgetSnapshot(){
   }
   return{B,total:t.budgetTotal,spent,estSpent,totalSpent,plannedFuture,free,unconv:[...unconv],daysLeft,totalDays,phaseD,todaySpent,conv};
 }
-
 function renderBudget(){
   const el=document.getElementById('budget-section');if(!el)return;
   const btn=document.getElementById('edit-budget-btn');
@@ -1480,12 +1432,11 @@ function renderBudget(){
   const pctS=Math.min(100,s.totalSpent/s.total*100);
   const pctP=Math.max(0,Math.min(100-pctS,s.plannedFuture/s.total*100));
   const over=s.free<0;
-
   let html=`
   <div class="exp-grid">
-    <div class="exp-card grand"><div class="exp-lbl">🎯 תקציב כולל</div><div class="exp-amt">${F(s.total)}</div></div>
-    <div class="exp-card att"><div class="exp-lbl">💸 הוצאנו${s.estSpent?' (כולל הערכות*)':''}</div><div class="exp-amt">${F(s.totalSpent)}</div>${s.estSpent?`<div class="exp-sub">* ${F(s.estSpent)} לפי תקציב, למקומות שסומנו ✓ בלי "בפועל"</div>`:''}</div>
-    <div class="exp-card acc"><div class="exp-lbl">📌 מתוכנן קדימה</div><div class="exp-amt">${F(s.plannedFuture)}</div></div>
+    <div class="exp-card grand clickable" onclick="openBudgetDetail('total')" title="לחץ לפירוט"><div class="exp-lbl">🎯 תקציב כולל</div><div class="exp-amt">${F(s.total)}</div></div>
+    <div class="exp-card att clickable" onclick="openBudgetDetail('spent')" title="לחץ לפירוט על מה הוצאנו"><div class="exp-lbl">💸 הוצאנו${s.estSpent?' (כולל הערכות*)':''}</div><div class="exp-amt">${F(s.totalSpent)}</div>${s.estSpent?`<div class="exp-sub">* ${F(s.estSpent)} לפי תקציב, למקומות שסומנו ✓ בלי "בפועל"</div>`:''}</div>
+    <div class="exp-card acc clickable" onclick="openBudgetDetail('planned')" title="לחץ לפירוט מה מתוכנן"><div class="exp-lbl">📌 מתוכנן קדימה</div><div class="exp-amt">${F(s.plannedFuture)}</div></div>
     <div class="exp-card" style="border-top-color:${over?'var(--err)':'var(--ok)'}"><div class="exp-lbl">${over?'⚠️ חריגה צפויה':'✨ נשאר חופשי'}</div><div class="exp-amt" style="color:${over?'var(--err)':'#15803d'}">${F(Math.abs(s.free))}</div></div>
   </div>
   <div class="pbar" style="margin-top:12px;height:14px;display:flex;overflow:hidden">
@@ -1495,7 +1446,6 @@ function renderBudget(){
   <div style="display:flex;gap:14px;font-size:.72rem;color:var(--muted);margin-top:4px;flex-wrap:wrap">
     <span>🟩 הוצאנו ${Math.round(pctS)}%</span><span>🟦 מתוכנן ${Math.round(pctP)}%</span><span>⬜ פנוי ${Math.max(0,Math.round(100-pctS-pctP))}%</span>
   </div>`;
-
   if(s.daysLeft>0){
     const smart=s.free/s.daysLeft;
     const simple=(s.total-s.totalSpent)/s.daysLeft;
@@ -1510,7 +1460,6 @@ function renderBudget(){
   } else if(s.phaseD==='after'){
     html+=`<div style="font-size:.82rem;color:var(--muted);margin-top:10px">הטיול הסתיים — ${over?`חרגתם ב-${F(Math.abs(s.free))}`:`נשארתם בתקציב עם עודף של ${F(s.free)}`} 🏁</div>`;
   }
-
   const t=ct();const rows=[];const act=activePlaces();
   for(let d=new Date(t.startDate+'T12:00:00');d<=new Date(t.endDate+'T12:00:00');d.setDate(d.getDate()+1)){
     const ds=d.toISOString().slice(0,10);
@@ -1533,11 +1482,82 @@ function renderBudget(){
     return`<tr${isT?' style="background:#ecfeff"':''}><td>${fmtD(r.ds)}${isT?' <strong>· היום</strong>':''}</td><td class="${r.pb?'pc':'no-price'}">${r.pb?F(r.pb):'—'}</td><td class="${r.pa?'pc':'no-price'}">${r.pa?F(r.pa):'—'}</td><td style="font-size:.72rem">${spentD?(overD?'🔺 מעל הממוצע':'🟢 בתקציב'):''}</td></tr>`;
   }).join('')}
   </tbody></table></div></details>`;
-
   if(s.unconv.length)html+=`<div style="margin-top:10px;font-size:.76rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:7px 11px;color:#92400e">⚠️ חסר שער המרה עבור: ${s.unconv.join(', ')} — סכומים במטבעות אלה לא נכללים בחישוב. הוסף שערים דרך "ערוך תקציב".</div>`;
   el.innerHTML=html;
 }
-
+// ══════════════════════════════
+//  BUDGET DETAIL MODAL — פירוט קוביות התקציב (תצוגה בלבד)
+// ══════════════════════════════
+let _bdKind=null;
+function openBudgetDetail(kind){
+  if(!budgetSnapshot()){alert('הגדר תקציב כדי לראות פירוט 🙂');return;}
+  _bdKind=kind;
+  document.getElementById('bd-ov').classList.add('open');
+  renderBudgetDetail();
+}
+function closeBudgetDetail(){document.getElementById('bd-ov').classList.remove('open');_bdKind=null;}
+function budgetItems(s){
+  const B=s.B,conv=s.conv,act=activePlaces();
+  const spent=[],planned=[];
+  act.forEach(p=>{
+    const a=parseFloat(p.actual)||0,b=parseFloat(p.budget)||0,cur=p.currency||B;
+    if(a>0){const v=conv(a,cur);if(v!=null)spent.push({p,amt:v,est:false});}
+    else if(b>0){const v=conv(b,cur);if(v==null)return;
+      if(p.visited)spent.push({p,amt:v,est:true});else planned.push({p,amt:v});}
+  });
+  return {spent,planned};
+}
+function bdCatGroups(items){
+  const m={};
+  items.forEach(it=>{const c=it.p.cat||'other';(m[c]=m[c]||{sum:0,items:[]});m[c].sum+=it.amt;m[c].items.push(it);});
+  return Object.entries(m).sort((x,y)=>y[1].sum-x[1].sum);
+}
+function renderBudgetDetail(){
+  if(!_bdKind)return;
+  const ov=document.getElementById('bd-ov');if(!ov.classList.contains('open'))return;
+  const s=budgetSnapshot();const body=document.getElementById('bd-body');
+  if(!s){closeBudgetDetail();return;}
+  const F=v=>fmtPrice(Math.round(v),s.B);
+  const {spent,planned}=budgetItems(s);
+  const kind=_bdKind;
+  const catHTML=items=>bdCatGroups(items).map(([c,o])=>`
+    <div class="bd-cat">
+      <div class="bd-catrow"><span>${CAT[c]||c}</span><span>${F(o.sum)}</span></div>
+      ${o.items.slice().sort((a,b)=>b.amt-a.amt).map(it=>`<div class="bd-item"><span>${esc(it.p.name)} <span style="color:var(--muted)">· ${getCC(it.p.country).flag} ${esc(it.p.city||'')}</span> ${it.est?'<span class="bd-est">הערכה</span>':''}</span><span class="bd-iamt">${F(it.amt)}</span></div>`).join('')}
+    </div>`).join('');
+  if(kind==='total'){
+    setT('bd-title','🎯 תקציב כולל — מתוך מה');
+    setT('bd-sub',`התקציב שהגדרת: ${F(s.total)} — כך הוא מתחלק:`);
+    const free=s.free;
+    body.innerHTML=`
+      <div class="bd-comp"><span class="dot" style="background:#22c55e"></span><span>💸 הוצאנו</span><span class="bd-amt">${F(s.totalSpent)}</span></div>
+      <div class="bd-comp"><span class="dot" style="background:#93c5fd"></span><span>📌 מתוכנן קדימה</span><span class="bd-amt">${F(s.plannedFuture)}</span></div>
+      <div class="bd-comp"><span class="dot" style="background:${free<0?'#dc2626':'#e5e7eb'}"></span><span>${free<0?'⚠️ חריגה צפויה':'✨ נשאר חופשי'}</span><span class="bd-amt" style="color:${free<0?'#dc2626':'#15803d'}">${F(Math.abs(free))}</span></div>
+      <div class="bd-formula" style="margin-top:14px">
+        <div class="row"><span>💸 הוצאנו</span><span>${F(s.totalSpent)}</span></div>
+        <div class="row"><span>➕ מתוכנן קדימה</span><span>${F(s.plannedFuture)}</span></div>
+        <div class="row"><span>➕ ${free<0?'חריגה':'נשאר חופשי'}</span><span>${(free<0?'−':'')+F(Math.abs(free))}</span></div>
+        <div class="row tot"><span>= תקציב כולל</span><span>${F(s.total)}</span></div>
+      </div>
+      <div style="font-size:.8rem;color:var(--muted);margin:16px 0 2px;font-weight:700">על מה — לפי קטגוריה (הוצאנו + מתוכנן):</div>
+      ${catHTML([...spent,...planned])||'<div class="bd-empty">אין עדיין מחירים על מקומות.</div>'}`;
+    return;
+  }
+  if(kind==='spent'){
+    setT('bd-title','💸 הוצאנו — על מה');
+    setT('bd-sub',`סה"כ ${F(s.totalSpent)}${s.estSpent?` (כולל ${F(s.estSpent)} הערכות למקומות שסומנו ✓ בלי "בפועל")`:''}`);
+    body.innerHTML=spent.length?catHTML(spent):'<div class="bd-empty">עוד לא הוצאתם — אין מקומות עם סכום "בפועל" או ביקור מסומן עם תקציב.</div>';
+    return;
+  }
+  if(kind==='planned'){
+    setT('bd-title','📌 מתוכנן קדימה — על מה');
+    setT('bd-sub',`סה"כ ${F(s.plannedFuture)} — מקומות שעוד לא ביקרתם, לפי התקציב שהוגדר`);
+    body.innerHTML=planned.length?catHTML(planned):'<div class="bd-empty">אין הוצאות מתוכננות — כל המקומות שתוקצבו כבר סומנו כביקור.</div>';
+    return;
+  }
+}
+document.getElementById('bd-close').addEventListener('click',closeBudgetDetail);
+document.getElementById('bd-ov').addEventListener('click',e=>{if(e.target===document.getElementById('bd-ov'))closeBudgetDetail();});
 // ── מודל תקציב ──
 function bgRateRows(){
   const B=document.getElementById('bg-currency').value;
@@ -1582,7 +1602,6 @@ document.getElementById('bg-form').addEventListener('submit',e=>{
   t.rates=rates;
   saveTrips();closeBudgetModal();renderAll();
 });
-
 // ══════════════════════════════
 //  RENDER POKEMON (תוקן: getCC + כפילות מאזינים)
 // ══════════════════════════════
@@ -1629,7 +1648,6 @@ function renderPokemon(){
     if(act==='visit')toggleVisit(id);if(act==='pkedit')openPkModal(id);if(act==='del')delPlace(id);
   };
 }
-
 // ══════════════════════════════
 //  POKEMON MODAL
 // ══════════════════════════════
@@ -1704,7 +1722,6 @@ document.getElementById('pk-ov').addEventListener('click',e=>{if(e.target===docu
 document.getElementById('pk-country').addEventListener('change',pkPopulateCities);
 document.getElementById('pk-city').addEventListener('change',pkPopulateStores);
 document.getElementById('pk-store').addEventListener('change',pkOnStoreChange);
-
 document.getElementById('pk-form').addEventListener('submit',e=>{
   e.preventDefault();
   const id=document.getElementById('pk-id').value;
@@ -1731,7 +1748,6 @@ document.getElementById('pk-form').addEventListener('submit',e=>{
   else places.push(data);
   persist();closePkModal();
 });
-
 // ══════════════════════════════
 //  PHOTO HELPERS
 // ══════════════════════════════
@@ -1748,7 +1764,6 @@ function pickImg(cb){
   const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
   inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{cb(await compressImg(f));}catch{alert('שגיאה בטעינת תמונה');}};inp.click();
 }
-
 // ══════════════════════════════
 //  CARD FACTORY — כולל דירוג, חוות דעת, 📍 אני כאן
 // ══════════════════════════════
@@ -1760,7 +1775,6 @@ function makeCard(p,opts={}){
   const isHere=hereId===p.id;
   const el=document.createElement('div');
   el.className=`pcard ${p.country} ${p.visited?'visited':''} ${con?'conflict':''} ${isHere?'here-card':''}`;
-
   const ph=document.createElement('div');
   ph.className=`cphoto${p.refPhoto?' has-photo':''}`;
   const shown=p.myPhoto||p.refPhoto;
@@ -1768,7 +1782,6 @@ function makeCard(p,opts={}){
   if(p.visited)ph.innerHTML+=`<div class="vbdg">✓ ביקרנו</div>`;
   if(p.myPhoto)ph.innerHTML+=`<div class="mpbdg">📸 יש תמונה שלנו</div>`;
   ph.addEventListener('click',()=>openPhotoModal(p.id));
-
   const nl=!p.nights||p.nights==0?'יום':p.nights==1?'לילה':`${p.nights} לילות`;
   let chips=`<span class="chip">📅 ${fmtD(p.date)} · ${nl}</span>
     <span class="chip cat-${p.cat}">${CAT[p.cat]||p.cat}</span>
@@ -1785,14 +1798,11 @@ function makeCard(p,opts={}){
   if(isHere)chips+=`<span class="chip here-chip">📍 אני כאן עכשיו</span>`;
   if(con)chips+=`<span class="chip con">⚠️ התנגשות שעות</span>`;
   if(isDil&&isChosen)chips+=`<span class="chip cho">✅ נבחר לתוכנית</span>`;
-
   const choBtn=isDil?(isChosen
     ?`<button class="cho-btn unpick" data-act="unchose" data-gid="${gid}">↩ הסר מהתוכנית</button>`
     :`<button class="cho-btn pick" data-act="choose" data-gid="${gid}" data-pid="${p.id}">✅ בחר כמקום מתוכנן</button>`):'';
-
   const hereBtn=tripPhase==='traveling'?`<button class="ib" title="אני כאן" aria-label="סמן שאני כאן עכשיו" data-act="here" data-id="${p.id}">📍</button>`:'';
   const revBtn=p.visited?`<button class="ib" title="דרג / חוות דעת" aria-label="דרג וכתוב חוות דעת" data-act="review" data-id="${p.id}">⭐</button>`:'';
-
   const body=document.createElement('div');body.className='cbody';
   body.innerHTML=`
     <div class="ctop">
@@ -1818,7 +1828,57 @@ function makeCard(p,opts={}){
   });
   return el;
 }
-
+// ══════════════════════════════
+//  PLACES LIST MODAL — נפתח מהקוביות בדשבורד (מקומות / מדינה / ביקרנו / לא הוחלט)
+// ══════════════════════════════
+let _pllState=null;
+function openPlacesList(kind,arg){
+  if(!ct())return;
+  _pllState={kind,arg:arg||null};
+  document.getElementById('pll-ov').classList.add('open');
+  renderPlacesList();
+}
+function closePlacesList(){document.getElementById('pll-ov').classList.remove('open');_pllState=null;}
+function renderPlacesList(){
+  if(!_pllState)return;
+  const ov=document.getElementById('pll-ov');if(!ov.classList.contains('open'))return;
+  const body=document.getElementById('pll-body');body.innerHTML='';
+  const {kind,arg}=_pllState;
+  const act=activePlaces();
+  const buildGrid=arr=>{const g=document.createElement('div');g.className='pgrid';
+    arr.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(p=>g.appendChild(makeCard(p)));return g;};
+  if(kind==='dil'){
+    const gs=unresolvedGroups();
+    setT('pll-title','🤔 התלבטויות שלא הוחלטו');
+    setT('pll-sub',`${gs.length} התלבטויות פתוחות · לחץ ✏️ לעריכה, או ✅ לבחירת אפשרות לתוכנית`);
+    if(!gs.length){body.innerHTML='<div class="bd-empty">אין התלבטויות פתוחות — הכל הוחלט! 🎉</div>';return;}
+    gs.forEach(g=>{
+      const opts=places.filter(p=>p.dilemmaGroupId===g.id);
+      const h=document.createElement('div');h.className='dv-group-title';
+      h.innerHTML=`🔀 ${esc(g.name)} <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(${opts.length} אפשרויות)</span>`;
+      body.appendChild(h);
+      if(!opts.length){const e=document.createElement('div');e.className='bd-empty';e.textContent='אין אפשרויות בקבוצה זו';body.appendChild(e);return;}
+      const gg=document.createElement('div');gg.className='pgrid';
+      opts.forEach(p=>gg.appendChild(makeCard(p,{isDil:true,gid:g.id})));
+      body.appendChild(gg);
+    });
+    return;
+  }
+  let title,arr;
+  if(kind==='vis'){title='✅ מקומות שביקרנו';arr=act.filter(p=>p.visited);}
+  else if(kind==='country'){const c=getCC(arg);title=`${c.flag} מקומות ב${c.name}`;arr=act.filter(p=>p.country===arg);}
+  else{title='📍 כל המקומות';arr=act;}
+  setT('pll-title',title);
+  setT('pll-sub',`${arr.length} מקומות · לחץ ✏️ לעריכה, ⬜/✅ לסימון ביקור, 🗑️ למחיקה`);
+  if(!arr.length){body.innerHTML='<div class="bd-empty">אין מקומות להצגה כאן עדיין.</div>';return;}
+  body.appendChild(buildGrid(arr));
+}
+document.getElementById('pll-close').addEventListener('click',closePlacesList);
+document.getElementById('pll-ov').addEventListener('click',e=>{if(e.target===document.getElementById('pll-ov'))closePlacesList();});
+function refreshOpenLists(){
+  if(document.getElementById('pll-ov')?.classList.contains('open'))renderPlacesList();
+  if(document.getElementById('bd-ov')?.classList.contains('open'))renderBudgetDetail();
+}
 // ══════════════════════════════
 //  RENDER ALL
 // ══════════════════════════════
@@ -1846,8 +1906,8 @@ function renderAll(){
   renderHotels();renderFood();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
   renderDilemmas();renderTimeline();renderPerPax();renderSummary();updateDilBadge();updateActiveRouteBars();applyClps();
+  refreshOpenLists();
 }
-
 function renderHeader(){
   const trip=ct();
   document.getElementById('hdr-flag').textContent=trip.flag;
@@ -1861,7 +1921,6 @@ function renderHeader(){
   const cs=document.getElementById('h-country-stats');
   cs.innerHTML=trip.countries.map(c=>`<div class="sbox"><div class="n" id="h-${c.id}">0</div><div class="l">${c.flag}</div></div>`).join('');
 }
-
 // ══════════════════════════════
 //  TRIP SWITCHER + לשוניות יעדים דינמיות
 // ══════════════════════════════
@@ -1869,7 +1928,6 @@ function renderTripSwitcher(){
   const wrap=document.getElementById('trip-btns');if(!wrap)return;
   wrap.innerHTML=Object.values(TRIPS).map(t=>`<button class="trip-btn ${t.id===currentTripId?'active':''}" data-trip="${t.id}">${t.flag} ${esc(t.name)}</button>`).join('');
 }
-
 let _ctKey='';
 function renderCountryUI(){
   const key=currentTripId+':'+ct().countries.map(c=>c.id).join(',');
@@ -1890,9 +1948,7 @@ function renderCountryUI(){
   // אם התצוגה שהייתה פעילה נמחקה (לשונית יעד של טיול אחר) — חזרה לדשבורד
   if(wasActive.startsWith('view-c-')&&!document.getElementById(wasActive))gotoView('dashboard');
 }
-
 function setT(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
-
 // ══════════════════════════════
 //  PHASE BAR — שלושת שלבי הטיול
 // ══════════════════════════════
@@ -1909,21 +1965,18 @@ function renderPhaseBar(){
   const hint=document.getElementById('dil-backup-hint');
   if(hint)hint.style.display=tripPhase==='traveling'?'':'none';
 }
-
 function setPhase(ph){
   if(tripPhase===ph||!PHASES.includes(ph))return;
   tripPhase=ph;persist();
   if(ph==='done')gotoView('summary');
   else if(ph==='traveling')gotoView('dashboard');
 }
-
 function gotoView(v){
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   const tab=document.querySelector(`.ntab[data-view="${v}"]`);if(tab)tab.classList.add('active');
   const vw=document.getElementById('view-'+v);if(vw)vw.classList.add('active');
 }
-
 // ── Progressive disclosure: קיפול מקטעים בדשבורד (נשמר בין ביקורים) ──
 let dashClps;
 try{dashClps=new Set(JSON.parse(localStorage.getItem('dash_clps'))||[]);}
@@ -1941,7 +1994,6 @@ document.getElementById('view-dashboard').addEventListener('click',e=>{
   localStorage.setItem('dash_clps',JSON.stringify([...dashClps]));
   applyClps();
 });
-
 // ══════════════════════════════
 //  NOW PANEL — שלב "בטיול"
 // ══════════════════════════════
@@ -1959,7 +2011,6 @@ function renderNowPanel(){
     moneyChip=`<span style="font-weight:700;font-size:.8rem;background:rgba(255,255,255,.18);padding:3px 11px;border-radius:20px">💰 עוד ~${fmtPrice(Math.round(per),bsn.B)} ליום</span>`;
   }
   let html=`<div class="now-panel"><div class="now-title">✈️ אנחנו בטיול! <span style="font-weight:400;font-size:.8rem;opacity:.85">${vis}/${act.length} מקומות סומנו ✓</span>${moneyChip}</div><div class="now-grid">`;
-
   html+=`<div class="now-card"><div class="now-lbl">📍 אני נמצא עכשיו</div>`;
   if(here){
     html+=`<div class="now-name">${esc(here.name)}</div><div class="now-sub">${getCC(here.country).flag} ${esc(here.city)}${here.startTime?' · 🕐 '+here.startTime:''}</div><div class="now-acts">${!here.visited?`<button class="now-btn" onclick="toggleVisit('${here.id}')">✅ היינו — דרג וכתוב</button>`:`<button class="now-btn" onclick="openReviewModal('${here.id}')">⭐ ערוך חוות דעת</button>`}<button class="now-btn ghost" onclick="setHere(null)">✕ נקה</button></div>`;
@@ -1967,7 +2018,6 @@ function renderNowPanel(){
     html+=`<div class="now-sub">לחץ על 📍 בכרטיס של מקום כדי לסמן איפה אתה עכשיו</div>`;
   }
   html+=`</div>`;
-
   html+=`<div class="now-card"><div class="now-lbl">⏭️ הבא בתור</div>`;
   if(next){
     html+=`<div class="now-name">${esc(next.name)}</div><div class="now-sub">${getCC(next.country).flag} ${esc(next.city)} · ${fmtD(next.date)}${next.startTime?' · 🕐 '+next.startTime:''}</div><div class="now-acts"><button class="now-btn" onclick="setHere('${next.id}')">📍 הגעתי לכאן</button><button class="now-btn ghost" onclick="toggleVisit('${next.id}')">✅ סמן שהיינו</button></div>`;
@@ -1975,14 +2025,11 @@ function renderNowPanel(){
     html+=`<div class="now-sub">הכל סומן — כל הכבוד! 🎉 אולי הגיע הזמן לעבור לשלב הסיכום 🏁</div>`;
   }
   html+=`</div>`;
-
   const openDil=unresolvedGroups().length;
   html+=`<div class="now-card"><div class="now-lbl">🤔 גיבוי — התלבטויות</div><div class="now-name">${openDil>0?openDil+' התלבטויות פתוחות':'כל האופציות שמורות'}</div><div class="now-sub">ירד גשם? משהו סגור? האופציות ששמרת מחכות שם כתוכנית ב'</div><div class="now-acts"><button class="now-btn ghost" onclick="gotoView('dilemmas')">🎒 פתח התלבטויות</button></div></div>`;
-
   html+=`</div></div>`;
   wrap.innerHTML=html;
 }
-
 // ══════════════════════════════
 //  CONFLICTS PANEL — התנגשויות זמן + ההתלבטויות שמאחוריהן
 // ══════════════════════════════
@@ -2018,7 +2065,6 @@ function renderConflicts(){
   wrap.innerHTML=html;
   wrap.onclick=e=>{const b=e.target.closest('[data-act]');if(b&&b.dataset.act==='edit')openEdit(b.dataset.id);};
 }
-
 // ══════════════════════════════
 //  DONE BANNER — שלב "סיכום"
 // ══════════════════════════════
@@ -2028,7 +2074,6 @@ function renderDoneBanner(){
   const act=activePlaces();const vis=act.filter(p=>p.visited).length;
   wrap.innerHTML=`<div class="done-banner"><div><div class="db-t">🏁 הטיול הסתיים!</div><div class="db-s">ביקרתם ב-${vis} מתוך ${act.length} מקומות — עברו לסיכום לדירוגים, חוות דעת ומה נשאר לפעם הבאה</div></div><button class="abtn" style="background:#fff;color:#1a1a2e" onclick="gotoView('summary')">🏁 פתח סיכום</button></div>`;
 }
-
 function renderStats(){
   const act=activePlaces();
   const tot=act.length,vis=act.filter(p=>p.visited).length;
@@ -2036,7 +2081,7 @@ function renderStats(){
   setT('h-tot',tot);setT('h-vis',vis);setT('h-dil',dil);
   setT('d-tot',tot);setT('d-vis',vis);setT('d-dil',dil);
   const dcc=document.getElementById('d-country-cards');
-  if(dcc)dcc.innerHTML=ct().countries.map(c=>`<div class="scard" style="border-top:4px solid ${c.color}"><div class="big" id="d-${c.id}">${act.filter(p=>p.country===c.id).length}</div><div class="lbl">${c.flag} ${c.name}</div></div>`).join('');
+  if(dcc)dcc.innerHTML=ct().countries.map(c=>`<div class="scard clickable" style="border-top:4px solid ${c.color}" onclick="openPlacesList('country','${c.id}')" title="לחץ לרשימת המקומות ב${esc(c.name)}"><div class="big" id="d-${c.id}">${act.filter(p=>p.country===c.id).length}</div><div class="lbl">${c.flag} ${esc(c.name)}</div><div class="tap-hint">👆 לחץ לרשימה</div></div>`).join('');
   ct().countries.forEach(c=>{
     const n=act.filter(p=>p.country===c.id).length;
     setT('h-'+c.id,n);setT('d-'+c.id,n);
@@ -2044,13 +2089,11 @@ function renderStats(){
   const pct=tot>0?Math.round(vis/tot*100):0;
   setT('d-pct',pct+'%');document.getElementById('d-prog').style.width=pct+'%';
 }
-
 function updateDilBadge(){
   const tab=document.getElementById('dil-tab');tab.querySelector('.bdg')?.remove();
   const n=unresolvedGroups().length;
   if(n>0){const b=document.createElement('span');b.className='bdg';b.textContent=n;tab.appendChild(b);}
 }
-
 function updateActiveRouteBars(){
   const ar=routes.find(r=>r.active);
   const bar=document.getElementById('active-route-bar');
@@ -2063,19 +2106,16 @@ function updateActiveRouteBars(){
     bar.style.display='none';tlBar.style.display='none';
   }
 }
-
 function renderDash(){
   const act=[...displayPlaces()].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   fillSec('dash-plan',act.filter(p=>!p.visited),'🎌','הוסף מקומות לטיול!');
   fillSec('dash-vis', act.filter(p=> p.visited),'✈️','עוד לא ביקרנו — בהצלחה! 🍀');
 }
-
 function fillSec(id,arr,icon,msg){
   const el=document.getElementById(id);el.innerHTML='';
   if(!arr.length){el.innerHTML=`<div class="empty"><div class="ei">${icon}</div><p>${msg}</p></div>`;return;}
   const g=document.createElement('div');g.className='pgrid';arr.forEach(p=>g.appendChild(makeCard(p)));el.appendChild(g);
 }
-
 // ══════════════════════════════
 //  RENDER ROUTES
 // ══════════════════════════════
@@ -2141,14 +2181,12 @@ function renderRoutes(){
     c.appendChild(card);
   });
 }
-
 function renderGrid(country,gridId){
   const grid=document.getElementById(gridId);if(!grid)return;grid.innerHTML='';
   const sorted=[...places].filter(p=>p.country===country&&p.type==='planned').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!sorted.length){grid.innerHTML=`<div class="empty"><div class="ei">${getCC(country).flag}</div><p>לחץ "הוסף מקום"</p></div>`;return;}
   sorted.forEach(p=>grid.appendChild(makeCard(p)));
 }
-
 function renderDilemmas(){
   const c=document.getElementById('dg-container');c.innerHTML='';
   if(!groups.length){c.innerHTML=`<div class="empty"><div class="ei">🤔</div><p>לחץ "קבוצת התלבטות חדשה"</p></div>`;return;}
@@ -2234,7 +2272,6 @@ function renderTimeline(){
     row.appendChild(dc);row.appendChild(line);tl.appendChild(row);
   }
 }
-
 // ══════════════════════════════
 //  PER TRAVELER — ממוצע הוצאות לנוסע לפי הרכב וגילאים
 // ══════════════════════════════
@@ -2255,7 +2292,6 @@ function compLabel(tr){
 function tripDays(t){
   try{const s=new Date(t.startDate+'T12:00:00'),e=new Date(t.endDate+'T12:00:00');return Math.max(1,Math.round((e-s)/864e5)+1);}catch{return 1;}
 }
-
 function renderPerPax(){
   const el=document.getElementById('perpax-main');if(!el)return;
   const t=ct();if(!t){el.innerHTML='';return;}
@@ -2270,7 +2306,6 @@ function renderPerPax(){
   });
   const useA=totA>0;const tot=useA?totA:totB;const lbl=useA?'בפועל':'לפי תקציב';
   const days=tripDays(t);
-
   let html=`<div style="background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
     <span style="font-size:1.5rem">👥</span>
     <div>
@@ -2278,9 +2313,7 @@ function renderPerPax(){
       <div style="font-size:.76rem;color:var(--muted)">${tr.heads} נוסעים · משקל משוקלל: ${tr.weighted.toFixed(1)} "מבוגרים" · ${days} ימים</div>
     </div>
   </div>`;
-
   if(!tot){el.innerHTML=html+'<p style="color:var(--muted);font-size:.86rem">הוסף מחירים (תקציב או בפועל) למקומות — והממוצע לנוסע יחושב כאן 💡</p>';return;}
-
   const per=tot/tr.heads, perW=tot/tr.weighted, perDay=per/days;
   html+=`<div class="sum-hero">
     <div class="scard ctot"><div class="big" style="font-size:1.25rem;line-height:2.3">${F(tot)}</div><div class="lbl">💰 סה"כ (${lbl})</div></div>
@@ -2289,7 +2322,6 @@ function renderPerPax(){
     <div class="scard" style="border-top:4px solid var(--ok)"><div class="big" style="font-size:1.25rem;line-height:2.3">${F(perDay)}</div><div class="lbl">לנוסע · ליום</div></div>
   </div>
   <p style="font-size:.72rem;color:var(--muted);margin:-8px 0 20px">* שקלול גיל: עד שנתיים ×0.1 · 2–5 ×0.4 · 6–11 ×0.6 · 12–17 ×0.8 · מבוגר ×1 — כי ילדים עולים פחות בכניסות, אוכל וטיסות. המספר "למבוגר" עונה על "כמה זה יעלה לזוג בלי ילדים".</p>`;
-
   // פירוק לפי קטגוריה
   const byCat={};
   act.forEach(p=>{const a=parseFloat(p.actual)||parseFloat(p.budget)||0;if(!a)return;const v=convTo(a,p.currency,D);const c=p.cat||'other';byCat[c]=(byCat[c]||0)+v;});
@@ -2297,7 +2329,6 @@ function renderPerPax(){
   <div style="overflow-x:auto"><table class="htable"><thead><tr><th>קטגוריה</th><th>סה"כ</th><th>לנוסע</th><th>לנוסע · ליום</th></tr></thead><tbody>
   ${Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<tr><td>${CAT[c]||c}</td><td class="pc">${F(v)}</td><td class="pc">${F(v/tr.heads)}</td><td>${F(v/tr.heads/days)}</td></tr>`).join('')}
   </tbody></table></div>`;
-
   // השוואה בין טיולים — לפי הוצאות בפועל
   const rows=[];
   Object.values(TRIPS).forEach(tp=>{
@@ -2323,7 +2354,6 @@ function renderPerPax(){
   }
   el.innerHTML=html;
 }
-
 // ══════════════════════════════
 //  SUMMARY VIEW — שלב 3
 // ══════════════════════════════
@@ -2343,7 +2373,6 @@ function renderSummary(){
   });
   const grandA=formatTotals(sumByCurrency(act,'actual'));
   const grandB=formatTotals(sumByCurrency(act,'budget'));
-
   let html=`<div class="sum-hero">
     <div class="scard cvis"><div class="big">${visited.length}<span style="font-size:1rem;color:var(--muted)">/${act.length}</span></div><div class="lbl">מקומות שביקרנו</div></div>
     <div class="scard" style="border-top:4px solid #f59e0b"><div class="big">${avg?avg.toFixed(1):'—'}</div><div class="lbl">⭐ דירוג ממוצע (${rated.length} דורגו)</div></div>
@@ -2351,19 +2380,14 @@ function renderSummary(){
     <div class="scard" style="border-top:4px solid var(--err)"><div class="big">${bad.length}</div><div class="lbl">👎 מאכזבים</div></div>
     <div class="scard ctot"><div class="big" style="font-size:1.05rem;line-height:2.6">${grandA||grandB||'—'}</div><div class="lbl">💰 ${grandA?'הוצאנו בפועל':'תקציב מתוכנן'}</div></div>
   </div>`;
-
   if(!visited.length){
     html+=`<div class="empty"><div class="ei">🏁</div><p>עוד לא סומנו מקומות כ"ביקרנו".<br>סמן ✓ על כרטיסים (בדשבורד או בציר הזמן) — ותתבקש לדרג ולכתוב חוות דעת.</p></div>`;
     el.innerHTML=html;return;
   }
-
   const hlCard=(p,isBad)=>{const photo=p.myPhoto||p.refPhoto;return`<div class="hl-card ${isBad?'bad-hl':''}">${photo?`<div class="hl-photo"><img src="${photo}"></div>`:''}<div class="hl-body"><div class="hl-name">${esc(p.name)}</div><div class="hl-sub">${getCC(p.country).flag} ${esc(p.city)} · ${fmtD(p.date)}</div>${p.rating?`<div class="hl-stars">${'★'.repeat(p.rating)}${'☆'.repeat(5-p.rating)}</div>`:''}${p.verdict?`<div style="margin-top:4px"><span class="chip ${VCLS[p.verdict]}">${VERDICT[p.verdict]}</span></div>`:''}${p.review?`<div class="hl-rev">📝 ${esc(p.review)}</div>`:''}</div></div>`;};
-
   if(good.length)html+=`<div class="dsec"><div class="dsec-title">⭐ השיאים של הטיול — ממליצים!</div><div class="hl-grid">${good.map(p=>hlCard(p,false)).join('')}</div></div>`;
   if(bad.length)html+=`<div class="dsec"><div class="dsec-title">👎 פחות מוצלח — שנדע לפעם הבאה</div><div class="hl-grid">${bad.map(p=>hlCard(p,true)).join('')}</div></div>`;
-
   html+=`<div class="dsec"><div class="dsec-title">✅ כל המקומות שביקרנו (${visited.length}) — הצ'ק ליסט המלא</div><div id="sum-visited-grid"></div></div>`;
-
   if(notVisited.length||unpicked.length){
     html+=`<div class="dsec"><div class="dsec-title">⏭️ נשאר לפעם הבאה</div><div class="next-list">`;
     notVisited.forEach(p=>{html+=`<div class="next-item"><span>${getCC(p.country).flag}</span><div style="flex:1"><div><strong>${esc(p.name)}</strong></div><div class="ni-sub">${esc(p.city)} · תוכנן ולא הספקנו</div></div></div>`;});
@@ -2374,7 +2398,6 @@ function renderSummary(){
   const vg=document.getElementById('sum-visited-grid');
   if(vg){const g=document.createElement('div');g.className='pgrid';visited.forEach(p=>g.appendChild(makeCard(p)));vg.appendChild(g);}
 }
-
 // ייצוא סיכום כקובץ HTML עצמאי — לשיתוף עם אחרים
 function exportSummary(){
   const act=activePlaces();const visited=act.filter(p=>p.visited);
@@ -2388,7 +2411,6 @@ function exportSummary(){
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
   a.href=url;a.download='summary_'+currentTripId+'.html';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
-
 // ══════════════════════════════
 //  PLACE MODAL
 // ══════════════════════════════
@@ -2451,7 +2473,6 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
   bkPhoto=null;
   persist();closePlModal();
 });
-
 // ══════════════════════════════
 //  ייבוא מ-Booking.com — ניתוח הקישור (ללא שרת, ללא CORS)
 // ══════════════════════════════
@@ -2460,9 +2481,7 @@ function titleCaseSlug(s){
 }
 const BK_CC_COUNTRY={jp:'japan',kr:'korea'};
 const BK_CC_CUR={jp:'JPY',kr:'KRW',us:'USD',il:'ILS'};
-
 let bkPhoto=null;   // תמונת המלון שנמשכה — מוצמדת למקום בשמירה
-
 async function fetchTextViaProxy(url){
   const proxies=[
     'https://api.allorigins.win/raw?url=',
@@ -2481,7 +2500,6 @@ async function fetchTextViaProxy(url){
   }
   return null;
 }
-
 function extractHotelMeta(htmlTxt){
   const out={};
   // JSON-LD — המקור האמין ביותר בעמודי Booking
@@ -2516,7 +2534,6 @@ function extractHotelMeta(htmlTxt){
   if(out.image&&!/^https?:/.test(out.image))delete out.image;
   return out;
 }
-
 async function importBookingUrl(){
   const raw=document.getElementById('bk-url').value.trim();
   const st=document.getElementById('bk-status');
@@ -2532,10 +2549,8 @@ async function importBookingUrl(){
   const cc=m[1].toLowerCase();
   const name=titleCaseSlug(m[2]);
   const filled=['🏨 לינה','שם: '+name];
-
   document.getElementById('f-name').value=name;
   document.getElementById('f-cat').value='accommodation';
-
   const ccountry=BK_CC_COUNTRY[cc];
   if(ccountry&&ct().countries.some(c=>c.id===ccountry)){
     document.getElementById('f-country').value=ccountry;
@@ -2557,7 +2572,6 @@ async function importBookingUrl(){
   const clean=u.origin+u.pathname;
   const nt=document.getElementById('f-notes');
   if(!nt.value.includes('booking.com'))nt.value=(nt.value?nt.value+'\n':'')+'🔗 '+clean;
-
   // ── שלב 2: משיכת תמונה, שם מדויק ועיר מהעמוד עצמו ──
   st.innerHTML='✅ יובא מהקישור: '+esc(filled.join(' · '))+'<br>⏳ מושך תמונה, שם מדויק ועיר מהעמוד…';
   bkPhoto=null;
@@ -2580,7 +2594,6 @@ async function importBookingUrl(){
 }
 document.getElementById('bk-import').addEventListener('click',importBookingUrl);
 document.getElementById('bk-url').addEventListener('paste',()=>setTimeout(importBookingUrl,60));
-
 // ══════════════════════════════
 //  "אולי יעניין אותך" — הצעות אטרקציות (ויקיפדיה) + גוגל טיולים
 // ══════════════════════════════
@@ -2592,7 +2605,6 @@ async function wikiApi(lang,params){
   return r.json();
 }
 const SUG_KEYWORDS=['museum','palace','temple','shrine','park','tower','market','garden','castle','bridge','square','zoo','aquarium','gallery','cathedral','church','monument','observatory','amusement','theme park','landmark','fortress','beach','waterfall','viewpoint','מוזיאון','ארמון','מקדש','פארק','מגדל','שוק','טירה','גשר','כיכר','גן חיות','אקווריום','גלריה','קתדרלה','כנסייה','אנדרטה','מבצר','חוף','מפל','תצפית','אתר'];
-
 async function fetchSuggestions(city){
   const lang=hasHebrew(city)?'he':'en';
   // 1) קואורדינטות של העיר
@@ -2615,7 +2627,6 @@ async function fetchSuggestions(city){
   });
   return out.slice(0,8);
 }
-
 document.getElementById('sug-btn').addEventListener('click',async()=>{
   const city=document.getElementById('f-city').value.trim();
   const box=document.getElementById('sug-results');
@@ -2644,7 +2655,6 @@ document.getElementById('sug-google').addEventListener('click',()=>{
   const q=encodeURIComponent([nm,city].filter(Boolean).join(' '));
   window.open('https://www.google.com/travel/search?q='+q,'_blank');
 });
-
 // ══════════════════════════════
 //  REVIEW MODAL — "איך היה?"
 // ══════════════════════════════
@@ -2686,7 +2696,6 @@ document.getElementById('rv-save').addEventListener('click',()=>{
   closeReviewModal();
 });
 document.getElementById('rv-ov').addEventListener('click',e=>{if(e.target===document.getElementById('rv-ov'))closeReviewModal();});
-
 // ══════════════════════════════
 //  TRIP MODAL — הוספה / עריכה / מחיקה של טיולים
 // ══════════════════════════════
@@ -2696,7 +2705,6 @@ function shade(hex,pct){
   const f=v=>Math.min(255,Math.max(0,Math.round(v*(100+pct)/100)));
   return'#'+((1<<24)+(f(r)<<16)+(f(g)<<8)+f(b)).toString(16).slice(1);
 }
-
 function tpDestRow(c){
   const cid=c?.id||('c'+uid());
   const div=document.createElement('div');
@@ -2713,7 +2721,6 @@ function tpDestRow(c){
   });
   return div;
 }
-
 function openTripModal(id=null){
   const t=id?TRIPS[id]:null;
   document.getElementById('tp-id').value=id||'';
@@ -2739,7 +2746,6 @@ document.getElementById('tp-add-dest').addEventListener('click',()=>{
   if(document.querySelectorAll('.tp-dest').length>=4){alert('עד 4 יעדים לטיול');return;}
   document.getElementById('tp-dests').appendChild(tpDestRow(null));
 });
-
 document.getElementById('tp-del').addEventListener('click',()=>{
   const id=document.getElementById('tp-id').value;if(!id||!TRIPS[id])return;
   const t=TRIPS[id];
@@ -2755,7 +2761,6 @@ document.getElementById('tp-del').addEventListener('click',()=>{
   _ctKey='';
   closeTripModal();renderAll();gotoView('dashboard');
 });
-
 document.getElementById('tp-form').addEventListener('submit',e=>{
   e.preventDefault();
   const id=document.getElementById('tp-id').value;
@@ -2806,7 +2811,6 @@ document.getElementById('tp-form').addEventListener('submit',e=>{
     } else switchTrip(tid);
   } else renderAll();
 });
-
 // ══════════════════════════════
 //  DILEMMA GROUP MODAL
 // ══════════════════════════════
@@ -2828,7 +2832,6 @@ document.getElementById('dg-form').addEventListener('submit',e=>{
   else groups.push({id:uid(),name,country,chosenId:null});
   persist();closeDgModal();
 });
-
 // ══════════════════════════════
 //  ROUTE MODAL
 // ══════════════════════════════
@@ -2864,7 +2867,6 @@ function rtSelectedPlaceIds(){
   const checked=boxes.filter(b=>b.checked).map(b=>b.value);
   return checked.length===boxes.length?null:checked;   // הכל מסומן = כולל גם עתידיים
 }
-
 function previewRouteConflicts(){
   const choicesMap={};
   document.querySelectorAll('#rt-groups [data-gid]').forEach(sel=>{
@@ -2905,7 +2907,6 @@ document.getElementById('rt-form').addEventListener('submit',e=>{
   else routes.push({id:uid(),name,description:desc,choices,placeIds,active:false});
   persist();closeRouteModal();
 });
-
 // ══════════════════════════════
 //  MIXER MODAL
 // ══════════════════════════════
@@ -2962,7 +2963,6 @@ document.getElementById('mx-save').addEventListener('click',()=>{
   routes.push({id:uid(),name,description:'מסלול מאוחד',choices,placeIds:null,active:false});
   persist();closeMixerModal();
 });
-
 // ══════════════════════════════
 //  PHOTO MODAL
 // ══════════════════════════════
@@ -2989,7 +2989,6 @@ document.getElementById('pm-ref-up').addEventListener('click',()=>{pickImg(b64=>
 document.getElementById('pm-mine-up').addEventListener('click',()=>{pickImg(b64=>{const p=places.find(x=>x.id===pmPid);if(!p)return;p.myPhoto=b64;refreshPhotoModal(p);persist();});});
 document.getElementById('pm-ref-del').addEventListener('click',()=>{if(!confirm('למחוק תמונת ייחוס?'))return;const p=places.find(x=>x.id===pmPid);if(!p)return;p.refPhoto=null;refreshPhotoModal(p);persist();});
 document.getElementById('pm-mine-del').addEventListener('click',()=>{if(!confirm('למחוק תמונה שלנו?'))return;const p=places.find(x=>x.id===pmPid);if(!p)return;p.myPhoto=null;refreshPhotoModal(p);persist();});
-
 // ══════════════════════════════
 //  ACTIONS
 // ══════════════════════════════
@@ -3026,7 +3025,6 @@ function delRoute(rid){
   if(!confirm(`למחוק את המסלול "${r.name}"?`))return;
   routes=routes.filter(x=>x.id!==rid);persist();
 }
-
 // ══════════════════════════════
 //  EXCEL & PDF — ייצוא וייבוא ציר הזמן
 // ══════════════════════════════
@@ -3047,7 +3045,6 @@ const CAT_HE={accommodation:'לינה',attraction:'אטרקציה',food:'אוכ�
 const CAT_HE_REV=Object.fromEntries(Object.entries(CAT_HE).map(([k,v])=>[v,k]));
 const PRI_HE={high:'חייבים',medium:'רוצים',low:'אם יש זמן'};
 const PRI_HE_REV=Object.fromEntries(Object.entries(PRI_HE).map(([k,v])=>[v,k]));
-
 async function exportExcel(){
   if(!ct()){alert('צור טיול קודם 🙂');return;}
   try{await loadXLSX();}catch(e){alert(e.message);return;}
@@ -3066,7 +3063,6 @@ async function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,'ציר זמן');
   XLSX.writeFile(wb,'trip_'+currentTripId+'.xlsx');
 }
-
 function exportPDF(){
   if(!ct()){alert('צור טיול קודם 🙂');return;}
   const t=ct();
@@ -3108,7 +3104,6 @@ function exportPDF(){
   </body></html>`);
   w.document.close();
 }
-
 async function importExcelFile(f){
   try{await loadXLSX();}catch(e){alert(e.message);return;}
   const buf=await f.arrayBuffer();
@@ -3160,7 +3155,6 @@ async function importExcelFile(f){
     alert('✅ '+newPlaces.length+' מקומות נוספו לציר הזמן!');
   }
 }
-
 // ══════════════════════════════
 //  EXPORT / IMPORT
 // ══════════════════════════════
@@ -3196,7 +3190,6 @@ function importData(){
       }catch{alert('❌ קובץ לא תקין');}
     };r.readAsText(f);};inp.click();
 }
-
 // ══════════════════════════════
 //  SHARE
 // ══════════════════════════════
@@ -3211,7 +3204,6 @@ function buildSharePayload(includePhotos=false){
     groups,routes,phase:tripPhase,hereId
   };
 }
-
 async function gzipB64(str){
   const cs=new CompressionStream('gzip');
   const ab=await new Response(new Blob([new TextEncoder().encode(str)]).stream().pipeThrough(cs)).arrayBuffer();
@@ -3227,7 +3219,6 @@ async function gunzipB64(b64){
   const ab=await new Response(new Blob([u8]).stream().pipeThrough(ds)).arrayBuffer();
   return new TextDecoder().decode(ab);
 }
-
 async function encodeShare(payload){
   const json=JSON.stringify(payload);
   if(typeof CompressionStream!=='undefined')return'v2.'+await gzipB64(json);
@@ -3241,7 +3232,6 @@ async function decodeShare(input){
   if(code.startsWith('v2.'))return JSON.parse(await gunzipB64(code.slice(3)));
   return JSON.parse(decodeURIComponent(escape(atob(code))));   // קוד מהגרסה הישנה
 }
-
 function applySharedData(d){
   if(!Array.isArray(d.places))throw new Error('bad payload');
   if(d.tripConfig&&d.tripConfig.id){
@@ -3258,13 +3248,11 @@ function applySharedData(d){
   hereId=d.hereId||null;
   persist();
 }
-
 async function makeShareLink(){
   const code=await encodeShare(buildSharePayload());
   const link=location.protocol==='file:'?null:location.origin+location.pathname+'#share='+code;
   return{code,link};
 }
-
 // כניסה דרך קישור שיתוף — הצעה לטעון את הטיול
 async function checkShareHash(){
   const m=location.hash.match(/#share=(.+)/);
@@ -3279,7 +3267,6 @@ async function checkShareHash(){
     }
   }catch{alert('❌ קישור שיתוף לא תקין או חתוך — בקש/י אותו שוב');}
 }
-
 function openShareModal(){
   const el=document.getElementById('share-trip-info');
   if(ct()){
@@ -3293,10 +3280,8 @@ function openShareModal(){
   document.getElementById('share-link-hint').style.display=location.protocol==='file:'?'block':'none';
   document.getElementById('share-ov').classList.add('open');
 }
-
 document.getElementById('share-cls').addEventListener('click',()=>document.getElementById('share-ov').classList.remove('open'));
 document.getElementById('share-ov').addEventListener('click',e=>{if(e.target===document.getElementById('share-ov'))document.getElementById('share-ov').classList.remove('open');});
-
 document.getElementById('share-link-btn').addEventListener('click',async()=>{
   if(!ct()){alert('אין עדיין טיול לשתף — צור טיול קודם 🙂');return;}
   const btn=document.getElementById('share-link-btn');
@@ -3309,7 +3294,6 @@ document.getElementById('share-link-btn').addEventListener('click',async()=>{
   }catch(err){alert('שגיאה ביצירת קישור: '+err.message);}
   setTimeout(()=>{btn.textContent='🔗 העתק קישור לשיתוף';btn.style.background='#1d4ed8';btn.disabled=false;},4000);
 });
-
 document.getElementById('share-wa-btn').addEventListener('click',async()=>{
   if(!ct()){alert('אין עדיין טיול לשתף — צור טיול קודם 🙂');return;}
   try{
@@ -3320,7 +3304,6 @@ document.getElementById('share-wa-btn').addEventListener('click',async()=>{
     window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
   }catch(err){alert('שגיאה: '+err.message);}
 });
-
 document.getElementById('share-clean-btn').addEventListener('click',async()=>{
   const btn=document.getElementById('share-clean-btn');
   if(location.protocol==='file:'){alert('קישור נקי זמין רק באתר החי (Vercel)');return;}
@@ -3331,7 +3314,6 @@ document.getElementById('share-clean-btn').addEventListener('click',async()=>{
     setTimeout(()=>{btn.textContent='🌐 העתק קישור נקי לחברים';},3500);
   }catch{prompt('העתק את הקישור:',url);}
 });
-
 document.getElementById('share-dl-btn').addEventListener('click',()=>{
   if(!ct()){alert('אין עדיין טיול לייצא');return;}
   const withPhotos=confirm('לכלול את התמונות בקובץ?\nאישור = כן (הקובץ יהיה גדול יותר, והתמונות יעברו בייבוא) · ביטול = בלי תמונות');
@@ -3339,7 +3321,6 @@ document.getElementById('share-dl-btn').addEventListener('click',()=>{
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
   a.href=url;a.download=`share_${currentTripId}.json`;a.click();URL.revokeObjectURL(url);
 });
-
 document.getElementById('share-copy-btn').addEventListener('click',async()=>{
   if(!ct()){alert('אין עדיין טיול לשתף — צור טיול קודם 🙂');return;}
   const btn=document.getElementById('share-copy-btn');
@@ -3351,7 +3332,6 @@ document.getElementById('share-copy-btn').addEventListener('click',async()=>{
   }catch{alert('לא ניתן להעתיק — נסה להוריד קובץ JSON');}
   setTimeout(()=>{btn.textContent='📋 העתק קוד בלבד';btn.style.background='#2563eb';},3500);
 });
-
 document.getElementById('share-import-code-btn').addEventListener('click',async()=>{
   const raw=document.getElementById('share-paste-ta').value.trim();
   if(!raw){alert('הדבק/י קישור או קוד שיתוף בתיבה');return;}
@@ -3365,15 +3345,12 @@ document.getElementById('share-import-code-btn').addEventListener('click',async(
     }
   }catch{alert('❌ קישור/קוד לא תקין — ודא/י שהעתקת את כל ההודעה');}
 });
-
 // ══════════════════════════════
 //  שיתוף קישור + פידבק מחברים
 // ══════════════════════════════
 // 👇 שים כאן את המייל שלך כדי שכפתור "פידבק" יעבוד (למשל: 'dan@gmail.com')
 const FEEDBACK_EMAIL='';
-
 function appCleanUrl(){return location.origin+location.pathname;}
-
 function shareAppLink(){
   if(location.protocol==='file:'){alert('האפליקציה עדיין רצה כקובץ מקומי.\nאחרי ההעלאה ל-Vercel יהיה כאן קישור אמיתי לשיתוף 🙂');return;}
   // כפתור שיתוף מערכת מוצג רק אם הדפדפן תומך (בעיקר בטלפון)
@@ -3404,7 +3381,6 @@ function sendFeedback(){
   const body=encodeURIComponent('היי! ניסיתי את מתכנן הטיולים והנה מה שחשבתי:\n\nמה אהבתי:\n\nמה הפריע / התבלבלתי:\n\nמה חסר לי:\n');
   location.href=`mailto:${FEEDBACK_EMAIL}?subject=${subject}&body=${body}`;
 }
-
 // ══════════════════════════════
 //  NAVIGATION
 // ══════════════════════════════
@@ -3441,7 +3417,6 @@ document.getElementById('view-cur').addEventListener('change',e=>{
   t.viewCurrency=e.target.value;saveTrips();renderAll();
 });
 document.getElementById('pp-edit-trav').addEventListener('click',()=>{if(!ct())return;openTripModal(currentTripId);});
-
 // ══════════════════════════════
 //  BOOT
 // ══════════════════════════════
