@@ -387,6 +387,54 @@ body.phase-done #dsec-plan{display:none}
 .del-photo-btn:hover{background:#fee2e2}
 .empty{text-align:center;padding:44px 18px;color:var(--muted);grid-column:1/-1}
 .empty .ei{font-size:2.6rem;margin-bottom:9px}.empty p{font-size:.88rem}
+/* ═════════ MAP VIEW ═════════ */
+.map-toolbar{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:12px 14px;margin-bottom:12px}
+.map-tb-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.map-tb-row+.map-tb-row{margin-top:9px;padding-top:9px;border-top:1px solid var(--brd)}
+.map-tb-lbl{font-size:.76rem;color:var(--muted);font-weight:600;margin-left:2px}
+.day-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px 5px 8px;border-radius:20px;border:1.5px solid var(--brd);background:#fff;font-family:inherit;font-size:.78rem;cursor:pointer;transition:all .15s;color:var(--muted);white-space:nowrap}
+.day-chip .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.9) inset}
+.day-chip .cnt{font-size:.68rem;opacity:.7;background:rgba(0,0,0,.06);border-radius:9px;padding:0 5px}
+.day-chip.on{color:var(--text);font-weight:700;background:#fff}
+.day-chip.off{opacity:.42;filter:grayscale(1)}
+.day-chip:hover{transform:translateY(-1px)}
+.map-wrap{display:grid;grid-template-columns:1fr 300px;gap:12px;align-items:start}
+#trip-map{height:min(70vh,640px);min-height:420px;border-radius:var(--r);box-shadow:var(--shadow);z-index:1;background:#e8eaed}
+.map-side{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:12px;max-height:min(70vh,640px);overflow-y:auto}
+.mday{border-radius:11px;border:1px solid var(--brd);margin-bottom:9px;overflow:hidden}
+.mday-h{display:flex;align-items:center;gap:7px;padding:7px 9px;font-size:.79rem;font-weight:700;cursor:pointer}
+.mday-h .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.mday-h .km{margin-right:auto;font-size:.68rem;font-weight:400;opacity:.75}
+.mday-pts{padding:2px 8px 8px}
+.mpt{display:flex;align-items:flex-start;gap:7px;padding:5px 4px;border-radius:7px;cursor:pointer;font-size:.78rem;line-height:1.35}
+.mpt:hover{background:#f5f6f8}
+.mpt .num{width:19px;height:19px;border-radius:50%;color:#fff;font-size:.66rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.mpt .mp-sub{font-size:.68rem;color:var(--muted)}
+.mpt .gm{opacity:0;flex-shrink:0;text-decoration:none;font-size:.85rem}
+.mpt:hover .gm{opacity:1}
+.mday-go{display:block;width:100%;margin-top:5px;padding:6px;border:1px solid #4285F4;background:#eef4ff;color:#1a56db;border-radius:8px;font-family:inherit;font-size:.72rem;cursor:pointer;font-weight:600}
+.mday-go:hover{background:#dbe8ff}
+.mk{display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;border-radius:50% 50% 50% 2px;transform:rotate(45deg);box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #fff}
+.mk span{transform:rotate(-45deg);font-size:.72rem;line-height:1}
+.mk.vis{border-color:#16a34a;border-width:3px}
+.mk.here{animation:mkpulse 1.4s infinite}
+@keyframes mkpulse{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 9px rgba(37,99,235,.28)}}
+.mpop{font-family:'Assistant',Arial,sans-serif;direction:rtl;min-width:170px}
+.mpop .t{font-weight:800;font-size:.92rem;margin-bottom:2px}
+.mpop .s{font-size:.74rem;color:#666;margin-bottom:6px}
+.mpop a,.mpop button{display:block;width:100%;text-align:center;margin-top:5px;padding:5px 8px;border-radius:7px;font-size:.74rem;text-decoration:none;font-family:inherit;cursor:pointer;border:1px solid #4285F4;color:#1a56db;background:#eef4ff;box-sizing:border-box}
+.map-note{font-size:.74rem;color:var(--muted);line-height:1.6;margin-top:8px}
+.geo-status{font-size:.74rem;color:var(--muted);margin-top:6px}
+.leaflet-container{font-family:'Assistant',Arial,sans-serif}
+@media(max-width:900px){.map-wrap{grid-template-columns:1fr}.map-side{max-height:none}}
+@media(max-width:560px){
+  .map-toolbar .abtn{font-size:.72rem;padding:8px 11px}
+  .map-toolbar .map-tb-lbl{margin-right:0!important}
+  .map-tb-row>*{max-width:100%}
+  #map-open-all{flex:1 1 100%}
+  #trip-map{height:58vh;min-height:320px}
+  .day-chip{font-size:.74rem}
+}
 @media print{.nav,.abtn,.cacts,.ib,.cho-btn,.act-btn,.phase-bar,.trip-sw{display:none!important}.pcard{break-inside:avoid}}
 @media(max-width:560px){.main{padding:12px 14px}.sumrow{grid-template-columns:repeat(2,1fr)}.hdr{padding:12px 14px}.fr,.pcgrid,.rgrid{grid-template-columns:1fr}.hdr h1{font-size:1.15rem}.phase-hint{display:none}.ntab{padding:14px 15px;font-size:.92rem}.ib{padding:7px 8px;font-size:.95rem}.abtn{padding:10px 18px}.now-btn{padding:9px 15px}}
 </style>
@@ -428,6 +476,7 @@ body.phase-done #dsec-plan{display:none}
   <span id="country-tabs" style="display:contents"></span>
   <button class="ntab" data-view="dilemmas" id="dil-tab">🤔 התלבטויות</button>
   <button class="ntab" data-view="timeline">📅 ציר זמן</button>
+  <button class="ntab" data-view="map">🗺️ מפה</button>
   <button class="ntab" data-view="perpax">👥 לנוסע</button>
   <button class="ntab" data-view="summary">🏁 סיכום</button>
   <div class="nav-tools">
@@ -557,6 +606,42 @@ body.phase-done #dsec-plan{display:none}
     <div class="sec-title" style="margin-bottom:14px" id="tl-title">📅 ציר זמן</div>
     <div class="tl" id="tl-main"></div>
   </div>
+  <!-- MAP -->
+  <div class="view" id="view-map">
+    <div class="sec-hdr">
+      <div class="sec-title">🗺️ מפת הטיול</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="abtn sm" id="map-geocode-btn" style="background:#0e7490">📍 אתר מקומות חסרים</button>
+        <button class="abtn sm" id="map-kml-btn" style="background:#188038">🌍 ייצוא ל-Google My Maps</button>
+      </div>
+    </div>
+    <div class="map-toolbar">
+      <div class="map-tb-row">
+        <span class="map-tb-lbl">סינון לפי יום:</span>
+        <span id="map-day-chips" style="display:contents"></span>
+      </div>
+      <div class="map-tb-row">
+        <button class="abtn sm ink" id="map-all-days" style="background:#374151">✅ כל הימים</button>
+        <button class="abtn sm ink" id="map-no-days" style="background:#9ca3af">✖️ נקה הכל</button>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.78rem;cursor:pointer"><input type="checkbox" id="map-lines" checked> 🧭 קווי מסלול בין הנקודות</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.78rem;cursor:pointer"><input type="checkbox" id="map-hide-visited"> 👁️ הסתר מקומות שביקרנו</label>
+        <span class="map-tb-lbl" style="margin-right:auto">אופן נסיעה:</span>
+        <select class="fc" id="map-mode" style="width:auto;padding:5px 9px;font-size:.78rem">
+          <option value="transit">🚆 תחבורה ציבורית</option>
+          <option value="walking">🚶 הליכה</option>
+          <option value="driving">🚗 רכב</option>
+          <option value="bicycling">🚲 אופניים</option>
+        </select>
+        <button class="abtn sm" id="map-open-all" style="background:#4285F4">🌐 פתח מסלול ב-Google Maps</button>
+      </div>
+      <div class="geo-status" id="map-status"></div>
+    </div>
+    <div class="map-wrap">
+      <div id="trip-map"></div>
+      <div class="map-side" id="map-side"></div>
+    </div>
+    <div class="map-note" id="map-legend-note"></div>
+  </div>
   <!-- PER TRAVELER -->
   <div class="view" id="view-perpax">
     <div class="sec-hdr">
@@ -588,6 +673,15 @@ body.phase-done #dsec-plan{display:none}
         <div class="fg"><label>שם המקום</label><input type="text" class="fc" id="f-name" placeholder="Gyeongbokgung" required></div>
       </div>
       <div class="fg"><label>כתובת (אופציונלי)</label><input type="text" class="fc" id="f-address" placeholder="161 Sajik-ro, Jongno-gu"></div>
+      <div class="fg">
+        <label>📍 מיקום על המפה (אופציונלי — מאפשר להציג את המקום במפה ובמסלול)</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="fc" id="f-latlng" placeholder="הדבק קישור Google Maps או 35.6586, 139.7454" style="direction:ltr;flex:1;min-width:190px">
+          <button type="button" class="abtn sm" id="f-geo-btn" style="background:#0e7490;flex-shrink:0">🔍 אתר לפי הכתובת</button>
+          <button type="button" class="abtn sm" id="f-geo-clear" style="background:#9ca3af;flex-shrink:0">נקה</button>
+        </div>
+        <div id="f-geo-status" style="font-size:.74rem;margin-top:5px;color:var(--muted)"></div>
+      </div>
       <div class="fg">
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="abtn sm" id="sug-btn" style="background:#0e7490">💡 אולי יעניין אותך</button>
@@ -1064,7 +1158,8 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 // ══════════════════════════════
 //  STORAGE
 // ══════════════════════════════
-const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',...p,budget:p.budget??p.price??null});
+function coordOrNull(v){const n=parseFloat(v);return Number.isFinite(n)?n:null;}
+const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,...p,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng)});
 const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
 function seedFor(tid){
   if(tid==='kj2027')return seedKJ();
@@ -1113,6 +1208,7 @@ function switchTrip(newId){
   if(currentTripId&&TRIPS[currentTripId])allData[currentTripId]={places,groups,routes,phase:tripPhase,hereId};
   currentTripId=newId;
   localStorage.setItem('active_trip_id',newId);
+  _mapFitPending=true;
   loadTripData();
   renderAll();
   if(!document.querySelector('.view.active'))gotoView('dashboard');
@@ -1802,13 +1898,14 @@ function makeCard(p,opts={}){
     ?`<button class="cho-btn unpick" data-act="unchose" data-gid="${gid}">↩ הסר מהתוכנית</button>`
     :`<button class="cho-btn pick" data-act="choose" data-gid="${gid}" data-pid="${p.id}">✅ בחר כמקום מתוכנן</button>`):'';
   const hereBtn=tripPhase==='traveling'?`<button class="ib" title="אני כאן" aria-label="סמן שאני כאן עכשיו" data-act="here" data-id="${p.id}">📍</button>`:'';
+  const mapBtn=`<a class="ib" href="${gmPoint(p)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center" title="${hasCoords(p)?'פתח ב-Google Maps':'חפש ב-Google Maps (למקום עדיין אין מיקום מדויק)'}" aria-label="פתח ב-Google Maps">${hasCoords(p)?'🗺️':'🔎'}</a>`;
   const revBtn=p.visited?`<button class="ib" title="דרג / חוות דעת" aria-label="דרג וכתוב חוות דעת" data-act="review" data-id="${p.id}">⭐</button>`:'';
   const body=document.createElement('div');body.className='cbody';
   body.innerHTML=`
     <div class="ctop">
       <div><div class="cname">${esc(p.name)}</div><div class="ccity">${getCC(p.country).flag} ${esc(p.city)}</div>${p.address?`<a class="ccity" style="color:#1d4ed8;text-decoration:none;display:block;margin-top:2px" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.address+' '+p.city)}">📍 ${esc(p.address)}</a>`:''}</div>
       <div class="cacts">
-        ${hereBtn}${revBtn}
+        ${mapBtn}${hereBtn}${revBtn}
         <button class="ib" data-act="visit" data-id="${p.id}" aria-label="${p.visited?'בטל סימון ביקרנו':'סמן שביקרנו'}">${p.visited?'✅':'⬜'}</button>
         <button class="ib" data-act="edit"  data-id="${p.id}" aria-label="ערוך מקום">✏️</button>
         <button class="ib" data-act="del"   data-id="${p.id}" aria-label="מחק מקום">🗑️</button>
@@ -1906,6 +2003,7 @@ function renderAll(){
   renderHotels();renderFood();renderExpenses();renderBudget();renderRoutes();
   ct().countries.forEach(c=>renderGrid(c.id,'grid-c-'+c.id));
   renderDilemmas();renderTimeline();renderPerPax();renderSummary();updateDilBadge();updateActiveRouteBars();applyClps();
+  if(document.getElementById('view-map')?.classList.contains('active'))renderMap();
   refreshOpenLists();
 }
 function renderHeader(){
@@ -1976,6 +2074,7 @@ function gotoView(v){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   const tab=document.querySelector(`.ntab[data-view="${v}"]`);if(tab)tab.classList.add('active');
   const vw=document.getElementById('view-'+v);if(vw)vw.classList.add('active');
+  if(v==='map')setTimeout(renderMap,0);
 }
 // ── Progressive disclosure: קיפול מקטעים בדשבורד (נשמר בין ביקורים) ──
 let dashClps;
@@ -2429,6 +2528,7 @@ function openModal(country,type='planned',dgid=''){
   document.getElementById('f-pri').value='medium';document.getElementById('f-cat').value='attraction';
   document.getElementById('f-currency').value=ct().defaultCurrency;
   document.getElementById('sug-results').innerHTML='';
+  document.getElementById('f-latlng').value='';document.getElementById('f-geo-status').textContent='';
   document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';bkPhoto=null;
   document.getElementById('pl-ov').classList.add('open');
 }
@@ -2447,6 +2547,8 @@ function openEdit(id){
   document.getElementById('f-cat').value=p.cat||'attraction';document.getElementById('f-pri').value=p.pri||'medium';
   document.getElementById('f-notes').value=p.notes||'';
   document.getElementById('f-budget').value=p.budget||'';document.getElementById('f-actual').value=p.actual||'';document.getElementById('f-currency').value=p.currency||'ILS';
+  document.getElementById('f-latlng').value=(p.lat!=null&&p.lng!=null)?p.lat+', '+p.lng:'';
+  document.getElementById('f-geo-status').textContent='';
   document.getElementById('sug-results').innerHTML='';
   document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';bkPhoto=null;
   document.getElementById('pl-ov').classList.add('open');
@@ -2466,7 +2568,8 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
     type:document.getElementById('f-type').value,dilemmaGroupId:document.getElementById('f-dgid').value||null,
     budget:document.getElementById('f-budget').value?parseFloat(document.getElementById('f-budget').value):null,
     actual:document.getElementById('f-actual').value?parseFloat(document.getElementById('f-actual').value):null,
-    currency:document.getElementById('f-currency').value||'ILS'});
+    currency:document.getElementById('f-currency').value||'ILS',
+    ...(function(){const c=parseLatLngInput(document.getElementById('f-latlng').value);return c?{lat:c.lat,lng:c.lng}:{lat:null,lng:null};})()});
   if(id){const old=places.find(p=>p.id===id);if(old){data.visited=old.visited;data.refPhoto=old.refPhoto;data.myPhoto=old.myPhoto;data.rating=old.rating;data.verdict=old.verdict;data.review=old.review;}const i=places.findIndex(p=>p.id===id);places[i]=data;}
   else places.push(data);
   if(bkPhoto&&!data.refPhoto)data.refPhoto=bkPhoto;   // תמונת המלון מ-Booking
@@ -3040,7 +3143,7 @@ function loadXLSX(){
   });
   return _xlsxReady;
 }
-const XL_HEADERS=['תאריך','שעת התחלה','שעת סיום','שם המקום','עיר','מדינה','קטגוריה','עדיפות','לילות','כתובת','תקציב','בפועל','מטבע','הערות','ביקרנו','דירוג'];
+const XL_HEADERS=['תאריך','שעת התחלה','שעת סיום','שם המקום','עיר','מדינה','קטגוריה','עדיפות','לילות','כתובת','תקציב','בפועל','מטבע','הערות','ביקרנו','דירוג','קו רוחב','קו אורך'];
 const CAT_HE={accommodation:'לינה',attraction:'אטרקציה',food:'אוכל',transport:'תחבורה',pokemon:'פוקימון',other:'אחר'};
 const CAT_HE_REV=Object.fromEntries(Object.entries(CAT_HE).map(([k,v])=>[v,k]));
 const PRI_HE={high:'חייבים',medium:'רוצים',low:'אם יש זמן'};
@@ -3054,10 +3157,10 @@ async function exportExcel(){
     p.date||'',p.startTime||'',p.endTime||'',p.name||'',p.city||'',
     getCC(p.country).name,CAT_HE[p.cat]||p.cat||'',PRI_HE[p.pri]||'',
     p.nights||0,p.address||'',p.budget??'',p.actual??'',p.currency||'',
-    p.notes||'',p.visited?'כן':'',p.rating||''
+    p.notes||'',p.visited?'כן':'',p.rating||'',p.lat??'',p.lng??''
   ]));
   const ws=XLSX.utils.aoa_to_sheet(aoa);
-  ws['!cols']=[{wch:11},{wch:9},{wch:9},{wch:28},{wch:13},{wch:10},{wch:10},{wch:11},{wch:6},{wch:26},{wch:9},{wch:9},{wch:7},{wch:32},{wch:7},{wch:6}];
+  ws['!cols']=[{wch:11},{wch:9},{wch:9},{wch:28},{wch:13},{wch:10},{wch:10},{wch:11},{wch:6},{wch:26},{wch:9},{wch:9},{wch:7},{wch:32},{wch:7},{wch:6},{wch:11},{wch:11}];
   const wb=XLSX.utils.book_new();
   wb.Workbook={Views:[{RTL:true}]};
   XLSX.utils.book_append_sheet(wb,ws,'ציר זמן');
@@ -3115,7 +3218,7 @@ async function importExcelFile(f){
   const idx=n=>head.indexOf(n);
   const iDate=idx('תאריך'),iName=idx('שם המקום');
   if(iDate<0||iName<0){alert('❌ פורמט לא מזוהה — הקובץ חייב עמודות "תאריך" ו"שם המקום".\nהורד תבנית מוכנה דרך כפתור 📊 Excel (ייצוא) ומלא אותה.');return;}
-  const col={st:idx('שעת התחלה'),et:idx('שעת סיום'),city:idx('עיר'),country:idx('מדינה'),cat:idx('קטגוריה'),pri:idx('עדיפות'),n:idx('לילות'),addr:idx('כתובת'),b:idx('תקציב'),a:idx('בפועל'),cur:idx('מטבע'),notes:idx('הערות'),vis:idx('ביקרנו'),rate:idx('דירוג')};
+  const col={st:idx('שעת התחלה'),et:idx('שעת סיום'),city:idx('עיר'),country:idx('מדינה'),cat:idx('קטגוריה'),pri:idx('עדיפות'),n:idx('לילות'),addr:idx('כתובת'),b:idx('תקציב'),a:idx('בפועל'),cur:idx('מטבע'),notes:idx('הערות'),vis:idx('ביקרנו'),rate:idx('דירוג'),lat:idx('קו רוחב'),lng:idx('קו אורך')};
   const get=(row,i)=>i>=0?String(row[i]??'').trim():'';
   const fixTime=s=>{const m=s.match(/^(\d{1,2}):(\d{2})/);return m?m[1].padStart(2,'0')+':'+m[2]:'';};
   const newPlaces=[];
@@ -3144,6 +3247,7 @@ async function importExcelFile(f){
       notes:get(row,col.notes),
       visited:/^(כן|v|yes|true|✓|1)$/i.test(get(row,col.vis)),
       rating:Math.min(5,parseInt(get(row,col.rate))||0)||null,
+      lat:get(row,col.lat),lng:get(row,col.lng),
       type:'planned'
     }));
   }
@@ -3417,6 +3521,340 @@ document.getElementById('view-cur').addEventListener('change',e=>{
   t.viewCurrency=e.target.value;saveTrips();renderAll();
 });
 document.getElementById('pp-edit-trav').addEventListener('click',()=>{if(!ct())return;openTripModal(currentTripId);});
+// ══════════════════════════════
+//  MAP — נקודות על המפה, צבע לפי יום, סינון ותכנון מסלול
+// ══════════════════════════════
+const DAY_COLORS=['#e6194B','#3cb44b','#4363d8','#f58231','#911eb4','#0891b2','#f032e6','#469990','#9A6324','#65a30d','#db2777','#1d4ed8','#b45309','#7c3aed','#0f766e','#be123c','#4d7c0f','#0369a1','#a21caf','#c2410c'];
+const NODATE_COLOR='#94a3b8';
+const NODATE_KEY='__nodate';
+let _map=null,_mapLayer=null,_leafletReady=null,_mapFitPending=true;
+let _mapHidden={};            // { tripId: Set(dayKey) }
+let _mapMarkers={};           // placeId -> marker
+
+function mapHiddenSet(){
+  if(!_mapHidden[currentTripId])_mapHidden[currentTripId]=new Set();
+  return _mapHidden[currentTripId];
+}
+// ── פענוח קלט מיקום: קישור Google Maps / "lat, lng" ──
+function parseLatLngInput(raw){
+  const s=String(raw||'').trim();
+  if(!s)return null;
+  const ok=(a,b)=>{
+    const la=parseFloat(a),ln=parseFloat(b);
+    if(!Number.isFinite(la)||!Number.isFinite(ln))return null;
+    if(Math.abs(la)>90||Math.abs(ln)>180)return null;
+    return{lat:+la.toFixed(6),lng:+ln.toFixed(6)};
+  };
+  let m;
+  if((m=s.match(/!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/)))return ok(m[1],m[2]);          // קישור מקום מלא
+  if((m=s.match(/[?&](?:q|query|ll|daddr|sll|center)=(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/)))return ok(m[1],m[2]);
+  if((m=s.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/)))return ok(m[1],m[2]);              // @lat,lng,zoom
+  if((m=s.match(/^geo:(-?\d+\.?\d*),(-?\d+\.?\d*)/)))return ok(m[1],m[2]);
+  if((m=s.match(/^\s*(-?\d+\.?\d*)\s*[,;\s]\s*(-?\d+\.?\d*)\s*$/)))return ok(m[1],m[2]);
+  return null;
+}
+function hasCoords(p){return p&&Number.isFinite(p.lat)&&Number.isFinite(p.lng);}
+function hav(a,b){
+  const R=6371,r=Math.PI/180;
+  const dLa=(b.lat-a.lat)*r,dLo=(b.lng-a.lng)*r;
+  const x=Math.sin(dLa/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)**2;
+  return 2*R*Math.asin(Math.min(1,Math.sqrt(x)));
+}
+// ── חלוקת המקומות לימים + צבע קבוע לכל יום ──
+function mapDays(){
+  const pool=activePlaces();
+  const byDay=new Map();
+  pool.forEach(p=>{
+    const k=p.date||NODATE_KEY;
+    if(!byDay.has(k))byDay.set(k,[]);
+    byDay.get(k).push(p);
+  });
+  const dated=[...byDay.keys()].filter(k=>k!==NODATE_KEY).sort();
+  const out=dated.map((k,i)=>({
+    key:k,date:k,idx:i+1,color:DAY_COLORS[i%DAY_COLORS.length],
+    label:`יום ${i+1} · ${fmtD(k)} (${dayN(k)})`,
+    places:sortDayPlaces(byDay.get(k))
+  }));
+  if(byDay.has(NODATE_KEY))out.push({key:NODATE_KEY,date:'',idx:0,color:NODATE_COLOR,label:'ללא תאריך',places:sortDayPlaces(byDay.get(NODATE_KEY))});
+  return out;
+}
+function sortDayPlaces(arr){
+  return arr.map((p,i)=>({p,i})).sort((a,b)=>{
+    const ta=t2m(a.p.startTime),tb=t2m(b.p.startTime);
+    if(ta==null&&tb==null)return a.i-b.i;
+    if(ta==null)return 1;
+    if(tb==null)return -1;
+    return ta-tb||a.i-b.i;
+  }).map(x=>x.p);
+}
+function visibleDays(){
+  const hid=mapHiddenSet();
+  const hv=document.getElementById('map-hide-visited')?.checked;
+  return mapDays().filter(d=>!hid.has(d.key)).map(d=>({...d,places:d.places.filter(p=>hasCoords(p)&&!(hv&&p.visited))})).filter(d=>d.places.length);
+}
+// ── קישורי Google Maps ──
+function gmPoint(p){
+  if(hasCoords(p))return`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+  const q=[p.name,p.address,p.city].filter(Boolean).join(' ');
+  return`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+}
+function gmMode(){return document.getElementById('map-mode')?.value||'transit';}
+function gmDir(pts,mode){
+  const c=pts.filter(hasCoords).map(p=>`${p.lat},${p.lng}`);
+  if(!c.length)return null;
+  if(c.length===1)return`https://www.google.com/maps/search/?api=1&query=${c[0]}`;
+  const origin=c[0],destination=c[c.length-1],way=c.slice(1,-1);
+  let u=`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${mode||gmMode()}`;
+  if(way.length)u+=`&waypoints=${way.join('|')}`;
+  return u;
+}
+const GM_MAX=11;   // מקור + יעד + 9 עצירות ביניים — המגבלה של Google Maps
+function openGmRoute(pts,title){
+  let c=pts.filter(hasCoords);
+  if(!c.length){alert('אין נקודות עם מיקום על המפה 🙂\nהוסף מיקום למקום (או לחץ "📍 אתר מקומות חסרים").');return;}
+  if(c.length>GM_MAX){
+    if(!confirm(`ל-${title} יש ${c.length} נקודות, ו-Google Maps תומך ב-${GM_MAX} עצירות בקישור אחד.\nלפתוח את ${GM_MAX} הראשונות?`))return;
+    c=c.slice(0,GM_MAX);
+  }
+  const u=gmDir(c);
+  if(u)window.open(u,'_blank','noopener');
+}
+// ── טעינת Leaflet מה-CDN ──
+function ensureLeaflet(){
+  if(window.L)return Promise.resolve();
+  if(_leafletReady)return _leafletReady;
+  _leafletReady=new Promise((res,rej)=>{
+    const css=document.createElement('link');
+    css.rel='stylesheet';css.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
+    document.head.appendChild(css);
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js';
+    s.onload=res;s.onerror=()=>{_leafletReady=null;rej(new Error('טעינת המפה נכשלה — בדוק חיבור לאינטרנט'));};
+    document.head.appendChild(s);
+  });
+  return _leafletReady;
+}
+// ── רינדור ראשי ──
+function renderMap(){
+  if(!ct())return;
+  renderMapChips();
+  renderMapSide();
+  ensureLeaflet().then(drawMap).catch(e=>{
+    document.getElementById('trip-map').innerHTML=`<div style="padding:40px;text-align:center;color:var(--muted)">${esc(e.message)}</div>`;
+  });
+}
+function renderMapChips(){
+  const wrap=document.getElementById('map-day-chips');if(!wrap)return;
+  const hid=mapHiddenSet();
+  const days=mapDays();
+  if(!days.length){wrap.innerHTML='<span style="font-size:.8rem;color:var(--muted)">אין עדיין מקומות בטיול</span>';return;}
+  wrap.innerHTML=days.map(d=>{
+    const withCo=d.places.filter(hasCoords).length;
+    const on=!hid.has(d.key);
+    return`<button class="day-chip ${on?'on':'off'}" data-day="${esc(d.key)}" title="${withCo} מתוך ${d.places.length} עם מיקום על המפה">
+      <span class="dot" style="background:${d.color}"></span>${esc(d.label)}<span class="cnt">${withCo}/${d.places.length}</span></button>`;
+  }).join('');
+  const all=days.reduce((s,d)=>s+d.places.length,0);
+  const co=days.reduce((s,d)=>s+d.places.filter(hasCoords).length,0);
+  const note=document.getElementById('map-legend-note');
+  if(note)note.innerHTML=`💡 <b>${co}</b> מתוך <b>${all}</b> המקומות מסומנים על המפה.${co<all?' למקומות החסרים אין עדיין קואורדינטות — לחץ "📍 אתר מקומות חסרים" או פתח את המקום ✏️ והדבק קישור Google Maps.':''} כל יום מקבל צבע משלו, והמספר בסמן הוא סדר הביקור באותו יום (לפי שעת התחלה).`;
+}
+function renderMapSide(){
+  const side=document.getElementById('map-side');if(!side)return;
+  const hid=mapHiddenSet();
+  const hv=document.getElementById('map-hide-visited')?.checked;
+  const days=mapDays();
+  if(!days.length){side.innerHTML='<p style="font-size:.82rem;color:var(--muted)">אין מקומות להצגה.</p>';return;}
+  side.innerHTML=days.map(d=>{
+    const shown=hid.has(d.key)?'off':'on';
+    const pts=d.places.filter(p=>hasCoords(p)&&!(hv&&p.visited));
+    let km=0;for(let i=1;i<pts.length;i++)km+=hav(pts[i-1],pts[i]);
+    const rows=d.places.map((p,i)=>{
+      const n=i+1;const co=hasCoords(p);
+      const tim=p.startTime?`${p.startTime}${p.endTime?'–'+p.endTime:''} · `:'';
+      return`<div class="mpt" data-pid="${p.id}" title="${co?'לחץ להתמקדות על המפה':'אין מיקום — ערוך את המקום כדי להוסיף'}">
+        <span class="num" style="background:${co?d.color:'#cbd5e1'}">${n}</span>
+        <span style="flex:1">${p.visited?'✅ ':''}${esc(p.name)}<div class="mp-sub">${tim}${esc(p.city)}${co?'':' · ⚠️ ללא מיקום'}</div></span>
+        <a class="gm" href="${gmPoint(p)}" target="_blank" rel="noopener" title="פתח ב-Google Maps" onclick="event.stopPropagation()">🌐</a>
+      </div>`;
+    }).join('');
+    return`<div class="mday ${shown}" style="border-right:4px solid ${d.color}">
+      <div class="mday-h" data-toggleday="${esc(d.key)}" title="לחץ להצגה/הסתרה של היום">
+        <span class="dot" style="background:${d.color};opacity:${shown==='on'?1:.3}"></span>
+        <span style="${shown==='on'?'':'opacity:.45;text-decoration:line-through'}">${esc(d.label)}</span>
+        <span class="km">${pts.length>1?km.toFixed(1)+' ק״מ':pts.length+' נק׳'}</span>
+      </div>
+      <div class="mday-pts">${rows}
+        <button class="mday-go" data-goday="${esc(d.key)}">🌐 מסלול היום ב-Google Maps</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function mkIcon(color,n,p){
+  const cls='mk'+(p.visited?' vis':'')+(hereId===p.id?' here':'');
+  return L.divIcon({className:'mk-wrap',iconSize:[27,27],iconAnchor:[13,27],popupAnchor:[0,-24],
+    html:`<div class="${cls}" style="width:27px;height:27px;background:${color}"><span>${n}</span></div>`});
+}
+function drawMap(){
+  const el=document.getElementById('trip-map');if(!el)return;
+  if(!_map){
+    _map=L.map(el,{scrollWheelZoom:true,zoomControl:true}).setView([35.68,139.76],5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(_map);
+    _mapLayer=L.layerGroup().addTo(_map);
+  }
+  _mapLayer.clearLayers();_mapMarkers={};
+  const showLines=document.getElementById('map-lines')?.checked;
+  const days=visibleDays();
+  const all=[];
+  days.forEach(d=>{
+    const coords=[];
+    d.places.forEach((p,i)=>{
+      const ll=[p.lat,p.lng];coords.push(ll);all.push(ll);
+      const m=L.marker(ll,{icon:mkIcon(d.color,i+1,p),title:p.name}).addTo(_mapLayer);
+      const tim=p.startTime?`🕐 ${p.startTime}${p.endTime?'–'+p.endTime:''}`:'';
+      m.bindPopup(`<div class="mpop">
+        <div class="t">${esc(p.name)}</div>
+        <div class="s">${getCC(p.country).flag} ${esc(p.city)} · ${CAT[p.cat]||''}<br>${esc(d.label)} · נקודה ${i+1}${tim?'<br>'+tim:''}${p.address?'<br>📍 '+esc(p.address):''}</div>
+        <a href="${gmPoint(p)}" target="_blank" rel="noopener">🌐 פתח ב-Google Maps</a>
+        <button onclick="openEdit('${p.id}')">✏️ ערוך מקום</button>
+      </div>`);
+      _mapMarkers[p.id]=m;
+    });
+    if(showLines&&coords.length>1)
+      L.polyline(coords,{color:d.color,weight:3,opacity:.7,dashArray:'7,7'}).addTo(_mapLayer);
+  });
+  if(all.length&&_mapFitPending){
+    _map.fitBounds(L.latLngBounds(all),{padding:[38,38],maxZoom:14});
+    _mapFitPending=false;
+  }
+  setTimeout(()=>_map.invalidateSize(),60);
+  const st=document.getElementById('map-status');
+  if(st&&!st.dataset.busy)st.textContent=all.length?`מוצגות ${all.length} נקודות ב-${days.length} ימים`:'אין נקודות עם מיקום להצגה — הוסף מיקום למקומות או לחץ "📍 אתר מקומות חסרים".';
+}
+function focusPlace(pid){
+  const m=_mapMarkers[pid];
+  if(!m){alert('למקום הזה אין עדיין מיקום על המפה.\nפתח אותו עם ✏️ והדבק קישור Google Maps, או לחץ "📍 אתר מקומות חסרים".');return;}
+  _map.setView(m.getLatLng(),15,{animate:true});m.openPopup();
+}
+// ── גיאוקודינג (OpenStreetMap / Nominatim — ללא מפתח API) ──
+async function geocodeQuery(q){
+  const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q);
+  const r=await fetch(url,{headers:{Accept:'application/json'}});
+  if(!r.ok)throw new Error('שירות האיתור לא זמין ('+r.status+')');
+  const j=await r.json();
+  if(!j.length)return null;
+  return{lat:+parseFloat(j[0].lat).toFixed(6),lng:+parseFloat(j[0].lon).toFixed(6),display:j[0].display_name};
+}
+function geoQueryFor(p){return[p.name,p.address,p.city,getCC(p.country).name].filter(Boolean).join(', ');}
+async function geocodeMissing(){
+  const st=document.getElementById('map-status');
+  const todo=activePlaces().filter(p=>!hasCoords(p));
+  if(!todo.length){st.textContent='✅ לכל המקומות כבר יש מיקום על המפה.';return;}
+  if(!confirm(`ל-${todo.length} מקומות אין מיקום.\nלנסות לאתר אותם אוטומטית לפי השם והכתובת? (בערך ${todo.length} שניות — שירות חינמי של OpenStreetMap)\n\n💡 תמיד כדאי לבדוק אחר כך על המפה שהנקודות נחתו במקום הנכון.`))return;
+  st.dataset.busy='1';
+  let ok=0,fail=[];
+  for(let i=0;i<todo.length;i++){
+    const p=todo[i];
+    st.textContent=`🔎 מאתר ${i+1}/${todo.length}: ${p.name}…`;
+    try{
+      const r=await geocodeQuery(geoQueryFor(p));
+      if(r){const t=places.find(x=>x.id===p.id);if(t){t.lat=r.lat;t.lng=r.lng;ok++;}}
+      else fail.push(p.name);
+    }catch(e){fail.push(p.name+' ('+e.message+')');}
+    await new Promise(r=>setTimeout(r,1100));   // כיבוד מגבלת הקצב של השירות
+  }
+  delete st.dataset.busy;
+  _mapFitPending=true;
+  persist();
+  st.textContent=`✅ אותרו ${ok} מקומות.${fail.length?` לא נמצאו ${fail.length}: ${fail.slice(0,4).join(', ')}${fail.length>4?'…':''} — אפשר להוסיף להם מיקום ידנית דרך ✏️.`:''}`;
+}
+// ── ייצוא KML ל-Google My Maps ──
+function kmlColor(hex){
+  const h=hex.replace('#','');
+  return'ff'+h.slice(4,6)+h.slice(2,4)+h.slice(0,2);   // aabbggrr
+}
+function kesc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function exportKML(){
+  if(!ct()){alert('צור טיול קודם 🙂');return;}
+  const days=mapDays().map(d=>({...d,places:d.places.filter(hasCoords)})).filter(d=>d.places.length);
+  if(!days.length){alert('אין עדיין נקודות עם מיקום על המפה.\nלחץ "📍 אתר מקומות חסרים" או הוסף מיקום ידנית.');return;}
+  let styles='',folders='';
+  days.forEach(d=>{
+    const sid='d'+(d.key===NODATE_KEY?'x':d.key.replace(/-/g,''));
+    styles+=`<Style id="${sid}"><IconStyle><color>${kmlColor(d.color)}</color><scale>1.1</scale><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle><LabelStyle><color>${kmlColor(d.color)}</color></LabelStyle><LineStyle><color>${kmlColor(d.color)}</color><width>4</width></LineStyle></Style>`;
+    const marks=d.places.map((p,i)=>`<Placemark><name>${i+1}. ${kesc(p.name)}</name><description><![CDATA[${kesc(p.city)} · ${kesc(CAT[p.cat]||'')}<br>${p.startTime?p.startTime+(p.endTime?'–'+p.endTime:''):''}<br>${kesc(p.address||'')}<br>${kesc(p.notes||'')}]]></description><styleUrl>#${sid}</styleUrl><Point><coordinates>${p.lng},${p.lat},0</coordinates></Point></Placemark>`).join('');
+    const line=d.places.length>1?`<Placemark><name>מסלול ${kesc(d.label)}</name><styleUrl>#${sid}</styleUrl><LineString><tessellate>1</tessellate><coordinates>${d.places.map(p=>`${p.lng},${p.lat},0`).join(' ')}</coordinates></LineString></Placemark>`:'';
+    folders+=`<Folder><name>${kesc(d.label)}</name>${marks}${line}</Folder>`;
+  });
+  const kml=`<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>${kesc(ct().name)} — מפת הטיול</name><description>${kesc(ct().subtitle||'')}</description>${styles}${folders}</Document></kml>`;
+  const blob=new Blob([kml],{type:'application/vnd.google-earth.kml+xml'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`trip_${currentTripId}_map.kml`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  setTimeout(()=>alert('📥 הקובץ ירד!\n\nכדי לראות את כל הנקודות בצבעים ב-Google Maps:\n1. היכנס ל-google.com/mymaps\n2. "מפה חדשה" ← "ייבוא" ← בחר את הקובץ שירד\n3. כל יום ייכנס כשכבה נפרדת בצבע שלו\n\nהמפה שנוצרת נפתחת גם באפליקציית Google Maps בנייד תחת "שמורים ← מפות".'),300);
+}
+// ── מאזינים ──
+document.getElementById('map-day-chips').addEventListener('click',e=>{
+  const b=e.target.closest('[data-day]');if(!b)return;
+  const k=b.dataset.day,h=mapHiddenSet();
+  h.has(k)?h.delete(k):h.add(k);
+  _mapFitPending=true;renderMap();
+});
+document.getElementById('map-side').addEventListener('click',e=>{
+  const go=e.target.closest('[data-goday]');
+  if(go){
+    const d=mapDays().find(x=>x.key===go.dataset.goday);
+    if(d)openGmRoute(d.places,d.label);
+    return;
+  }
+  const tg=e.target.closest('[data-toggleday]');
+  if(tg){
+    const k=tg.dataset.toggleday,h=mapHiddenSet();
+    h.has(k)?h.delete(k):h.add(k);
+    _mapFitPending=true;renderMap();
+    return;
+  }
+  const pt=e.target.closest('[data-pid]');
+  if(pt)focusPlace(pt.dataset.pid);
+});
+document.getElementById('map-all-days').addEventListener('click',()=>{mapHiddenSet().clear();_mapFitPending=true;renderMap();});
+document.getElementById('map-no-days').addEventListener('click',()=>{const h=mapHiddenSet();mapDays().forEach(d=>h.add(d.key));renderMap();});
+document.getElementById('map-lines').addEventListener('change',renderMap);
+document.getElementById('map-hide-visited').addEventListener('change',()=>{_mapFitPending=true;renderMap();});
+document.getElementById('map-geocode-btn').addEventListener('click',geocodeMissing);
+document.getElementById('map-kml-btn').addEventListener('click',exportKML);
+document.getElementById('map-open-all').addEventListener('click',()=>{
+  const pts=visibleDays().flatMap(d=>d.places);
+  openGmRoute(pts,'המסלול המסונן');
+});
+// ── מיקום בטופס המקום ──
+document.getElementById('f-geo-btn').addEventListener('click',async()=>{
+  const st=document.getElementById('f-geo-status');
+  const name=document.getElementById('f-name').value.trim();
+  const addr=document.getElementById('f-address').value.trim();
+  const city=document.getElementById('f-city').value.trim();
+  const cid=document.getElementById('f-country').value;
+  const q=[name,addr,city,getCC(cid).name].filter(Boolean).join(', ');
+  if(!q){st.textContent='מלא קודם שם מקום או כתובת 🙂';return;}
+  st.textContent='🔎 מחפש…';
+  try{
+    const r=await geocodeQuery(q);
+    if(!r){st.textContent='❌ לא נמצא. נסה כתובת מדויקת יותר, או הדבק קישור Google Maps של המקום.';return;}
+    document.getElementById('f-latlng').value=r.lat+', '+r.lng;
+    st.innerHTML='✅ נמצא: '+esc(r.display)+' — <a href="https://www.google.com/maps/search/?api=1&query='+r.lat+','+r.lng+'" target="_blank" rel="noopener">בדוק במפה</a>';
+  }catch(e){st.textContent='❌ '+e.message;}
+});
+document.getElementById('f-geo-clear').addEventListener('click',()=>{
+  document.getElementById('f-latlng').value='';
+  document.getElementById('f-geo-status').textContent='';
+});
+document.getElementById('f-latlng').addEventListener('input',e=>{
+  const st=document.getElementById('f-geo-status');
+  const v=e.target.value.trim();
+  if(!v){st.textContent='';return;}
+  const c=parseLatLngInput(v);
+  st.textContent=c?`✅ מיקום זוהה: ${c.lat}, ${c.lng}`:'⌛ הדבק קישור Google Maps מלא (עם @lat,lng) או "31.77, 35.21"';
+});
 // ══════════════════════════════
 //  BOOT
 // ══════════════════════════════
