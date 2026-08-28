@@ -418,6 +418,13 @@ body.phase-done #dsec-plan{display:none}
 .mk span{transform:rotate(-45deg);font-size:.72rem;line-height:1}
 .mk.vis{border-color:#16a34a;border-width:3px}
 .mk.here{animation:mkpulse 1.4s infinite}
+.mk.approx{border-style:dashed;opacity:.9}
+.mpt.nogeo{opacity:.75}
+.mpt .geo{flex-shrink:0;border:1px solid #0e7490;background:#ecfeff;color:#0e7490;border-radius:7px;font-family:inherit;font-size:.66rem;padding:2px 6px;cursor:pointer;white-space:nowrap}
+.mpt .geo:hover{background:#cffafe}
+.day-chip.solo{box-shadow:0 0 0 2px #1d4ed8;border-color:#1d4ed8}
+.day-nav{border:1.5px solid var(--brd);background:#fff;border-radius:20px;width:28px;height:28px;font-family:inherit;font-size:.8rem;cursor:pointer;flex-shrink:0}
+.day-nav:hover{background:#f1f5f9}
 @keyframes mkpulse{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 9px rgba(37,99,235,.28)}}
 .mpop{font-family:'Assistant',Arial,sans-serif;direction:rtl;min-width:170px}
 .mpop .t{font-weight:800;font-size:.92rem;margin-bottom:2px}
@@ -612,12 +619,15 @@ body.phase-done #dsec-plan{display:none}
       <div class="sec-title">🗺️ מפת הטיול</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="abtn sm" id="map-geocode-btn" style="background:#0e7490">📍 אתר מקומות חסרים</button>
+        <button class="abtn sm" id="map-geo-stop" style="background:#b91c1c;display:none">✋ עצור איתור</button>
         <button class="abtn sm" id="map-kml-btn" style="background:#188038">🌍 ייצוא ל-Google My Maps</button>
       </div>
     </div>
     <div class="map-toolbar">
       <div class="map-tb-row">
-        <span class="map-tb-lbl">סינון לפי יום:</span>
+        <span class="map-tb-lbl">בחר יום:</span>
+        <button class="day-nav" id="map-prev-day" title="היום הקודם">▶</button>
+        <button class="day-nav" id="map-next-day" title="היום הבא">◀</button>
         <span id="map-day-chips" style="display:contents"></span>
       </div>
       <div class="map-tb-row">
@@ -1159,7 +1169,7 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 //  STORAGE
 // ══════════════════════════════
 function coordOrNull(v){const n=parseFloat(v);return Number.isFinite(n)?n:null;}
-const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,...p,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng)});
+const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,geoApprox:false,...p,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng),geoApprox:!!p.geoApprox});
 const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
 function seedFor(tid){
   if(tid==='kj2027')return seedKJ();
@@ -2569,7 +2579,7 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
     budget:document.getElementById('f-budget').value?parseFloat(document.getElementById('f-budget').value):null,
     actual:document.getElementById('f-actual').value?parseFloat(document.getElementById('f-actual').value):null,
     currency:document.getElementById('f-currency').value||'ILS',
-    ...(function(){const c=parseLatLngInput(document.getElementById('f-latlng').value);return c?{lat:c.lat,lng:c.lng}:{lat:null,lng:null};})()});
+    ...(function(){const c=parseLatLngInput(document.getElementById('f-latlng').value);return c?{lat:c.lat,lng:c.lng,geoApprox:false}:{lat:null,lng:null,geoApprox:false};})()});
   if(id){const old=places.find(p=>p.id===id);if(old){data.visited=old.visited;data.refPhoto=old.refPhoto;data.myPhoto=old.myPhoto;data.rating=old.rating;data.verdict=old.verdict;data.review=old.review;}const i=places.findIndex(p=>p.id===id);places[i]=data;}
   else places.push(data);
   if(bkPhoto&&!data.refPhoto)data.refPhoto=bkPhoto;   // תמונת המלון מ-Booking
@@ -3535,6 +3545,39 @@ function mapHiddenSet(){
   if(!_mapHidden[currentTripId])_mapHidden[currentTripId]=new Set();
   return _mapHidden[currentTripId];
 }
+// ── בחירת ימים: לחיצה על יום = רק אותו יום; לחיצה שנייה = חזרה לכל הימים ──
+function selectedDayKeys(){
+  const h=mapHiddenSet();
+  return mapDays().filter(d=>!h.has(d.key)).map(d=>d.key);
+}
+function selectOnlyDay(k){
+  const h=mapHiddenSet();h.clear();
+  mapDays().forEach(d=>{if(d.key!==k)h.add(d.key);});
+}
+function pickDay(k,multi){
+  const h=mapHiddenSet(),days=mapDays(),sel=selectedDayKeys();
+  if(multi){
+    h.has(k)?h.delete(k):h.add(k);
+    if(h.size>=days.length)h.clear();          // ניסיון לכבות הכל — מחזירים הכל
+  } else if(sel.length===1&&sel[0]===k){
+    h.clear();                                  // לחיצה חוזרת על היום הנבחר — כל הימים
+  } else {
+    selectOnlyDay(k);
+  }
+  _mapFitPending=true;renderMap();
+}
+function stepDay(dir){
+  const days=mapDays();if(!days.length)return;
+  const sel=selectedDayKeys();
+  let i;
+  if(sel.length===1){
+    i=days.findIndex(d=>d.key===sel[0])+dir;
+    if(i<0)i=days.length-1;
+    if(i>=days.length)i=0;
+  } else i=dir>0?0:days.length-1;
+  selectOnlyDay(days[i].key);
+  _mapFitPending=true;renderMap();
+}
 // ── פענוח קלט מיקום: קישור Google Maps / "lat, lng" ──
 function parseLatLngInput(raw){
   const s=String(raw||'').trim();
@@ -3642,22 +3685,34 @@ function renderMap(){
   ensureLeaflet().then(drawMap).catch(e=>{
     document.getElementById('trip-map').innerHTML=`<div style="padding:40px;text-align:center;color:var(--muted)">${esc(e.message)}</div>`;
   });
+  autoGeocode();
+}
+// איתור אוטומטי בכניסה למפה — כדי שהסימונים פשוט יופיעו בלי ללחוץ על כלום
+function autoGeocode(){
+  if(_geoRunning||_geoAutoDone[currentTripId])return;
+  if(!document.getElementById('view-map')?.classList.contains('active'))return;
+  if(!activePlaces().some(p=>!hasCoords(p)))return;
+  _geoAutoDone[currentTripId]=true;
+  setTimeout(()=>geocodeMissing(true),400);
 }
 function renderMapChips(){
   const wrap=document.getElementById('map-day-chips');if(!wrap)return;
   const hid=mapHiddenSet();
   const days=mapDays();
   if(!days.length){wrap.innerHTML='<span style="font-size:.8rem;color:var(--muted)">אין עדיין מקומות בטיול</span>';return;}
+  const sel=selectedDayKeys();
+  const solo=sel.length===1?sel[0]:null;
   wrap.innerHTML=days.map(d=>{
     const withCo=d.places.filter(hasCoords).length;
     const on=!hid.has(d.key);
-    return`<button class="day-chip ${on?'on':'off'}" data-day="${esc(d.key)}" title="${withCo} מתוך ${d.places.length} עם מיקום על המפה">
+    return`<button class="day-chip ${on?'on':'off'}${solo===d.key?' solo':''}" data-day="${esc(d.key)}" title="${withCo} מתוך ${d.places.length} עם מיקום על המפה&#10;לחיצה = רק היום הזה · Ctrl+לחיצה = הוספה לבחירה">
       <span class="dot" style="background:${d.color}"></span>${esc(d.label)}<span class="cnt">${withCo}/${d.places.length}</span></button>`;
   }).join('');
   const all=days.reduce((s,d)=>s+d.places.length,0);
   const co=days.reduce((s,d)=>s+d.places.filter(hasCoords).length,0);
+  const apx=days.reduce((s,d)=>s+d.places.filter(p=>hasCoords(p)&&p.geoApprox).length,0);
   const note=document.getElementById('map-legend-note');
-  if(note)note.innerHTML=`💡 <b>${co}</b> מתוך <b>${all}</b> המקומות מסומנים על המפה.${co<all?' למקומות החסרים אין עדיין קואורדינטות — לחץ "📍 אתר מקומות חסרים" או פתח את המקום ✏️ והדבק קישור Google Maps.':''} כל יום מקבל צבע משלו, והמספר בסמן הוא סדר הביקור באותו יום (לפי שעת התחלה).`;
+  if(note)note.innerHTML=`💡 <b>${co}</b> מתוך <b>${all}</b> המקומות מסומנים על המפה.${co<all?' למקומות החסרים אין עדיין קואורדינטות — לחץ "📍 אתר מקומות חסרים" או פתח את המקום ✏️ והדבק קישור Google Maps.':''}${apx?` <b>${apx}</b> סמנים מקווקוים = מיקום משוער (מרכז העיר) — כדאי לדייק ידנית.`:''}<br>👆 לחיצה על יום מציגה <b>רק</b> אותו יום ואת המסלול המקווקו שלו · לחיצה חוזרת עליו מחזירה את כל הימים · Ctrl/⌘+לחיצה מוסיפה ימים לבחירה · החיצים ◀ ▶ מדפדפים יום-יום.`;
 }
 function renderMapSide(){
   const side=document.getElementById('map-side');if(!side)return;
@@ -3672,9 +3727,11 @@ function renderMapSide(){
     const rows=d.places.map((p,i)=>{
       const n=i+1;const co=hasCoords(p);
       const tim=p.startTime?`${p.startTime}${p.endTime?'–'+p.endTime:''} · `:'';
-      return`<div class="mpt" data-pid="${p.id}" title="${co?'לחץ להתמקדות על המפה':'אין מיקום — ערוך את המקום כדי להוסיף'}">
+      const sub=co?(p.geoApprox?' · 📍 מיקום משוער':''):' · ⚠️ ללא מיקום';
+      return`<div class="mpt${co?'':' nogeo'}" data-pid="${p.id}" title="${co?'לחץ להתמקדות על המפה':'אין מיקום — לחץ "📍 אתר" או ערוך את המקום'}">
         <span class="num" style="background:${co?d.color:'#cbd5e1'}">${n}</span>
-        <span style="flex:1">${p.visited?'✅ ':''}${esc(p.name)}<div class="mp-sub">${tim}${esc(p.city)}${co?'':' · ⚠️ ללא מיקום'}</div></span>
+        <span style="flex:1">${p.visited?'✅ ':''}${esc(p.name)}<div class="mp-sub">${tim}${esc(p.city)}${sub}</div></span>
+        ${co?'':`<button class="geo" data-geo="${p.id}" title="אתר את המקום הזה עכשיו">📍 אתר</button>`}
         <a class="gm" href="${gmPoint(p)}" target="_blank" rel="noopener" title="פתח ב-Google Maps" onclick="event.stopPropagation()">🌐</a>
       </div>`;
     }).join('');
@@ -3691,7 +3748,7 @@ function renderMapSide(){
   }).join('');
 }
 function mkIcon(color,n,p){
-  const cls='mk'+(p.visited?' vis':'')+(hereId===p.id?' here':'');
+  const cls='mk'+(p.visited?' vis':'')+(hereId===p.id?' here':'')+(p.geoApprox?' approx':'');
   return L.divIcon({className:'mk-wrap',iconSize:[27,27],iconAnchor:[13,27],popupAnchor:[0,-24],
     html:`<div class="${cls}" style="width:27px;height:27px;background:${color}"><span>${n}</span></div>`});
 }
@@ -3714,7 +3771,7 @@ function drawMap(){
       const tim=p.startTime?`🕐 ${p.startTime}${p.endTime?'–'+p.endTime:''}`:'';
       m.bindPopup(`<div class="mpop">
         <div class="t">${esc(p.name)}</div>
-        <div class="s">${getCC(p.country).flag} ${esc(p.city)} · ${CAT[p.cat]||''}<br>${esc(d.label)} · נקודה ${i+1}${tim?'<br>'+tim:''}${p.address?'<br>📍 '+esc(p.address):''}</div>
+        <div class="s">${getCC(p.country).flag} ${esc(p.city)} · ${CAT[p.cat]||''}<br>${esc(d.label)} · נקודה ${i+1}${tim?'<br>'+tim:''}${p.address?'<br>📍 '+esc(p.address):''}${p.geoApprox?'<br>⚠️ מיקום משוער (מרכז העיר) — ערוך לדיוק':''}</div>
         <a href="${gmPoint(p)}" target="_blank" rel="noopener">🌐 פתח ב-Google Maps</a>
         <button onclick="openEdit('${p.id}')">✏️ ערוך מקום</button>
       </div>`);
@@ -3729,44 +3786,131 @@ function drawMap(){
   }
   setTimeout(()=>_map.invalidateSize(),60);
   const st=document.getElementById('map-status');
-  if(st&&!st.dataset.busy)st.textContent=all.length?`מוצגות ${all.length} נקודות ב-${days.length} ימים`:'אין נקודות עם מיקום להצגה — הוסף מיקום למקומות או לחץ "📍 אתר מקומות חסרים".';
+  if(st&&!st.dataset.busy){
+    const sel=selectedDayKeys(),tot=mapDays().length;
+    const scope=sel.length===1?`יום נבחר: ${mapDays().find(d=>d.key===sel[0])?.label||''}`:(sel.length===tot?'כל הימים':`${sel.length} ימים נבחרים`);
+    st.textContent=all.length?`${scope} · מוצגות ${all.length} נקודות ב-${days.length} ימים`:'אין נקודות עם מיקום להצגה — לחץ "📍 אתר מקומות חסרים" או הוסף מיקום למקום ✏️.';
+  }
 }
 function focusPlace(pid){
   const m=_mapMarkers[pid];
-  if(!m){alert('למקום הזה אין עדיין מיקום על המפה.\nפתח אותו עם ✏️ והדבק קישור Google Maps, או לחץ "📍 אתר מקומות חסרים".');return;}
+  if(!m){
+    const p=places.find(x=>x.id===pid);
+    if(p&&!hasCoords(p)){
+      if(confirm(`ל"${p.name}" אין עדיין מיקום.\nלנסות לאתר אותו עכשיו אוטומטית?\n(ביטול = פתיחת המקום לעריכה ידנית)`))geocodeOne(pid);
+      else openEdit(pid);
+      return;
+    }
+    alert('המקום מוסתר כרגע בסינון — הצג את היום שלו כדי לראות אותו.');return;
+  }
   _map.setView(m.getLatLng(),15,{animate:true});m.openPopup();
 }
 // ── גיאוקודינג (OpenStreetMap / Nominatim — ללא מפתח API) ──
-async function geocodeQuery(q){
-  const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q);
+let _geoLast=0;                 // חותמת הבקשה האחרונה — כיבוד מגבלת הקצב (בקשה לשנייה)
+const _geoCityCache={};         // "עיר|מדינה" -> מרכז העיר
+async function geoThrottle(){
+  const w=1100-(Date.now()-_geoLast);
+  if(w>0)await new Promise(r=>setTimeout(r,w));
+  _geoLast=Date.now();
+}
+async function nomSearch(q,opts={}){
+  if(!q)return null;
+  await geoThrottle();
+  let url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=he,en&q='+encodeURIComponent(q);
+  if(opts.viewbox){url+='&viewbox='+opts.viewbox;if(opts.bounded)url+='&bounded=1';}
   const r=await fetch(url,{headers:{Accept:'application/json'}});
   if(!r.ok)throw new Error('שירות האיתור לא זמין ('+r.status+')');
   const j=await r.json();
   if(!j.length)return null;
   return{lat:+parseFloat(j[0].lat).toFixed(6),lng:+parseFloat(j[0].lon).toFixed(6),display:j[0].display_name};
 }
-function geoQueryFor(p){return[p.name,p.address,p.city,getCC(p.country).name].filter(Boolean).join(', ');}
-async function geocodeMissing(){
-  const st=document.getElementById('map-status');
-  const todo=activePlaces().filter(p=>!hasCoords(p));
-  if(!todo.length){st.textContent='✅ לכל המקומות כבר יש מיקום על המפה.';return;}
-  if(!confirm(`ל-${todo.length} מקומות אין מיקום.\nלנסות לאתר אותם אוטומטית לפי השם והכתובת? (בערך ${todo.length} שניות — שירות חינמי של OpenStreetMap)\n\n💡 תמיד כדאי לבדוק אחר כך על המפה שהנקודות נחתו במקום הנכון.`))return;
-  st.dataset.busy='1';
-  let ok=0,fail=[];
-  for(let i=0;i<todo.length;i++){
-    const p=todo[i];
-    st.textContent=`🔎 מאתר ${i+1}/${todo.length}: ${p.name}…`;
-    try{
-      const r=await geocodeQuery(geoQueryFor(p));
-      if(r){const t=places.find(x=>x.id===p.id);if(t){t.lat=r.lat;t.lng=r.lng;ok++;}}
-      else fail.push(p.name);
-    }catch(e){fail.push(p.name+' ('+e.message+')');}
-    await new Promise(r=>setTimeout(r,1100));   // כיבוד מגבלת הקצב של השירות
+async function geocodeQuery(q){return nomSearch(q);}
+// מרכז העיר — נשמר במטמון ומשמש להטיית החיפוש לאזור הנכון
+async function cityCenter(p){
+  const cname=getCC(p.country).name;
+  const key=(p.city||'')+'|'+cname;
+  if(key in _geoCityCache)return _geoCityCache[key];
+  let r=null;
+  for(const q of [[p.city,cname].filter(Boolean).join(', '),p.city,cname]){
+    if(!q)continue;
+    try{r=await nomSearch(q);}catch(e){r=null;}
+    if(r)break;
   }
-  delete st.dataset.busy;
+  _geoCityCache[key]=r;
+  return r;
+}
+// איתור מקום בודד — כמה ניסיונות, ובסוף נפילה למרכז העיר כמיקום משוער
+async function geocodePlace(p){
+  const cname=getCC(p.country).name;
+  const c=await cityCenter(p);
+  const vb=c?[(c.lng-0.5).toFixed(4),(c.lat+0.42).toFixed(4),(c.lng+0.5).toFixed(4),(c.lat-0.42).toFixed(4)].join(','):null;
+  const tries=[];
+  if(p.address)tries.push({q:[p.address,p.city,cname].filter(Boolean).join(', ')});
+  tries.push({q:[p.name,p.city,cname].filter(Boolean).join(', ')});
+  if(vb)tries.push({q:p.name,viewbox:vb,bounded:1});
+  else tries.push({q:[p.name,cname].filter(Boolean).join(', ')});
+  for(const t of tries){
+    let r=null;
+    try{r=await nomSearch(t.q,{viewbox:t.viewbox||vb,bounded:t.bounded});}catch(e){r=null;}
+    if(!r)continue;
+    if(c&&hav(r,c)>90)continue;              // תוצאה רחוקה מדי מהעיר — כנראה שגויה
+    return{...r,approx:false};
+  }
+  return c?{...c,approx:true}:null;          // לפחות נראה את המקום באזור הנכון
+}
+function applyGeo(pid,r){
+  const t=places.find(x=>x.id===pid);
+  if(!t||!r)return false;
+  t.lat=r.lat;t.lng=r.lng;t.geoApprox=!!r.approx;
+  return true;
+}
+let _geoRunning=false,_geoStop=false;
+const _geoAutoDone={};          // איתור אוטומטי — פעם אחת לכל טיול בכל טעינה
+async function geocodeMissing(auto=false){
+  const st=document.getElementById('map-status');
+  if(_geoRunning)return;
+  const todo=activePlaces().filter(p=>!hasCoords(p));
+  if(!todo.length){if(!auto&&st)st.textContent='✅ לכל המקומות כבר יש מיקום על המפה.';return;}
+  _geoRunning=true;_geoStop=false;
+  if(st)st.dataset.busy='1';
+  const stopBtn=document.getElementById('map-geo-stop');
+  if(stopBtn)stopBtn.style.display='';
+  let ok=0,apx=0;const fail=[];
+  for(let i=0;i<todo.length;i++){
+    if(_geoStop)break;
+    const p=todo[i];
+    if(st)st.textContent=`🔎 מאתר מיקומים ${i+1}/${todo.length}: ${p.name}…`;
+    let r=null;
+    try{r=await geocodePlace(p);}catch(e){r=null;}
+    if(r&&applyGeo(p.id,r)){
+      r.approx?apx++:ok++;
+      persist(false);
+      if(document.getElementById('view-map')?.classList.contains('active')){
+        _mapFitPending=true;
+        renderMapChips();renderMapSide();
+        if(window.L&&_map)drawMap();
+      }
+    } else fail.push(p.name);
+  }
+  _geoRunning=false;
+  if(stopBtn)stopBtn.style.display='none';
+  if(st)delete st.dataset.busy;
   _mapFitPending=true;
   persist();
-  st.textContent=`✅ אותרו ${ok} מקומות.${fail.length?` לא נמצאו ${fail.length}: ${fail.slice(0,4).join(', ')}${fail.length>4?'…':''} — אפשר להוסיף להם מיקום ידנית דרך ✏️.`:''}`;
+  if(document.getElementById('view-map')?.classList.contains('active'))renderMap();
+  if(st)st.innerHTML=`✅ אותרו <b>${ok}</b> מקומות במדויק${apx?` · <b>${apx}</b> במיקום משוער (מרכז העיר — הסמן מקווקו, כדאי לדייק ידנית)`:''}${fail.length?` · לא נמצאו ${fail.length}: ${esc(fail.slice(0,4).join(', '))}${fail.length>4?'…':''}`:''}${_geoStop?' · האיתור הופסק':''}`;
+}
+async function geocodeOne(pid){
+  const p=places.find(x=>x.id===pid);if(!p)return;
+  const st=document.getElementById('map-status');
+  if(st){st.dataset.busy='1';st.textContent=`🔎 מאתר: ${p.name}…`;}
+  let r=null;
+  try{r=await geocodePlace(p);}catch(e){r=null;}
+  if(st)delete st.dataset.busy;
+  if(r&&applyGeo(pid,r)){
+    _mapFitPending=true;persist(false);renderMap();
+    if(st)st.textContent=r.approx?`⚠️ ${p.name}: לא נמצא במדויק — הוצב במרכז העיר. ערוך אותו ✏️ והדבק קישור Google Maps לדיוק.`:`✅ ${p.name} אותר.`;
+  } else if(st)st.textContent=`❌ ${p.name}: לא נמצא. ערוך אותו ✏️ והדבק קישור Google Maps.`;
 }
 // ── ייצוא KML ל-Google My Maps ──
 function kmlColor(hex){
@@ -3796,10 +3940,10 @@ function exportKML(){
 // ── מאזינים ──
 document.getElementById('map-day-chips').addEventListener('click',e=>{
   const b=e.target.closest('[data-day]');if(!b)return;
-  const k=b.dataset.day,h=mapHiddenSet();
-  h.has(k)?h.delete(k):h.add(k);
-  _mapFitPending=true;renderMap();
+  pickDay(b.dataset.day,e.ctrlKey||e.metaKey||e.shiftKey);
 });
+document.getElementById('map-prev-day').addEventListener('click',()=>stepDay(-1));
+document.getElementById('map-next-day').addEventListener('click',()=>stepDay(1));
 document.getElementById('map-side').addEventListener('click',e=>{
   const go=e.target.closest('[data-goday]');
   if(go){
@@ -3807,13 +3951,10 @@ document.getElementById('map-side').addEventListener('click',e=>{
     if(d)openGmRoute(d.places,d.label);
     return;
   }
+  const gb=e.target.closest('[data-geo]');
+  if(gb){e.stopPropagation();geocodeOne(gb.dataset.geo);return;}
   const tg=e.target.closest('[data-toggleday]');
-  if(tg){
-    const k=tg.dataset.toggleday,h=mapHiddenSet();
-    h.has(k)?h.delete(k):h.add(k);
-    _mapFitPending=true;renderMap();
-    return;
-  }
+  if(tg){pickDay(tg.dataset.toggleday,e.ctrlKey||e.metaKey||e.shiftKey);return;}
   const pt=e.target.closest('[data-pid]');
   if(pt)focusPlace(pt.dataset.pid);
 });
@@ -3821,7 +3962,8 @@ document.getElementById('map-all-days').addEventListener('click',()=>{mapHiddenS
 document.getElementById('map-no-days').addEventListener('click',()=>{const h=mapHiddenSet();mapDays().forEach(d=>h.add(d.key));renderMap();});
 document.getElementById('map-lines').addEventListener('change',renderMap);
 document.getElementById('map-hide-visited').addEventListener('change',()=>{_mapFitPending=true;renderMap();});
-document.getElementById('map-geocode-btn').addEventListener('click',geocodeMissing);
+document.getElementById('map-geocode-btn').addEventListener('click',()=>geocodeMissing(false));
+document.getElementById('map-geo-stop').addEventListener('click',()=>{_geoStop=true;});
 document.getElementById('map-kml-btn').addEventListener('click',exportKML);
 document.getElementById('map-open-all').addEventListener('click',()=>{
   const pts=visibleDays().flatMap(d=>d.places);
