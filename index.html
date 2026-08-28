@@ -430,6 +430,16 @@ body.phase-done #dsec-plan{display:none}
 .mpt.opt{background:#fffbeb;border:1px dashed #f59e0b}
 .mpt .optb.on{background:#fef3c7;border-color:#d97706;color:#92400e}
 .mpt .pick{background:#ecfdf5;border-color:#16a34a;color:#15803d;font-weight:700}
+.apitem{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border:1px solid var(--brd);border-radius:10px;margin-bottom:7px;cursor:pointer;font-size:.83rem;background:#fff}
+.apitem:hover{border-color:#1d4ed8;background:#f8faff}
+.apitem.in{opacity:.55;cursor:default;background:#f8fafc}
+.apitem .apn{font-weight:700}
+.apitem .apb{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.apbadge{font-size:.68rem;border-radius:9px;padding:1px 7px;background:#f1f5f9;color:#475569}
+.apbadge.sched{background:#eff6ff;color:#1e40af}
+.apbadge.grp{background:#fef3c7;color:#92400e}
+.apbadge.here{background:#dcfce7;color:#15803d}
+.apadd{margin-right:auto;flex-shrink:0;border:1px solid #16a34a;background:#ecfdf5;color:#15803d;border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:700;padding:3px 9px;cursor:pointer}
 .mpt .pick:hover{background:#d1fae5}
 .gchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid var(--brd)}
 .gchip{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--brd);background:#fff;border-radius:20px;padding:3px 9px;font-family:inherit;font-size:.71rem;cursor:pointer;color:var(--text)}
@@ -927,6 +937,19 @@ body.phase-done #dsec-plan{display:none}
     </form>
   </div>
 </div>
+<!-- ADD-FROM-PLACES MODAL -->
+<div class="overlay" id="addp-ov">
+  <div class="modal" style="max-width:560px">
+    <h2 id="addp-title">📋 הוסף אופציות מהמקומות הקיימים</h2>
+    <div id="addp-info" style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:.82rem;color:#92400e;line-height:1.5"></div>
+    <div class="fr" style="margin-bottom:10px">
+      <div class="fg" style="grid-column:1/-1"><input type="text" class="fc" id="addp-q" placeholder="🔎 חיפוש לפי שם, עיר או הערה..."></div>
+    </div>
+    <label style="display:flex;align-items:center;gap:6px;font-size:.79rem;cursor:pointer;margin-bottom:10px"><input type="checkbox" id="addp-all"> הצג מקומות מכל הקטגוריות</label>
+    <div id="addp-list" style="max-height:46vh;overflow-y:auto"></div>
+    <div class="f-acts"><button type="button" class="bcncl" id="addp-cls">סגור</button></div>
+  </div>
+</div>
 <!-- ROUTE MODAL -->
 <div class="overlay" id="rt-ov">
   <div class="modal" style="max-width:560px">
@@ -1240,7 +1263,7 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 //  STORAGE
 // ══════════════════════════════
 function coordOrNull(v){const n=parseFloat(v);return Number.isFinite(n)?n:null;}
-const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,geoApprox:false,option:null,...p,option:(p.option===true||p.option===false)?p.option:null,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng),geoApprox:!!p.geoApprox});
+const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,geoApprox:false,option:null,sourceId:null,...p,option:(p.option===true||p.option===false)?p.option:null,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng),geoApprox:!!p.geoApprox});
 const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
 function seedFor(tid){
   if(tid==='kj2027')return seedKJ();
@@ -2398,17 +2421,34 @@ function renderDilemmas(){
         <div class="dgtitle"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${gcolor(g.id)};margin-left:6px"></span>${esc(g.name)} ${getCC(g.country).flag}${g.date?`<span class="dg-slot">📅 ${fmtD(g.date)}${g.startTime?' · 🕐 '+g.startTime+(g.endTime?'–'+g.endTime:''):''}</span>`:'<span class="dg-slot none">ללא יום — ערוך כדי לשייך</span>'}</div>
         <div class="dgacts">
           ${badge}
-          <button class="abtn sm" data-act="add-opt" data-gid="${g.id}" data-gc="${g.country}">+ אופציה</button>
+          <button class="abtn sm" data-act="add-opt" data-gid="${g.id}" data-gc="${g.country}">+ אופציה חדשה</button>
+          <button class="abtn sm" data-act="pick-opt" data-gid="${g.id}" style="background:#0e7490">📋 מהמקומות הקיימים</button>
           <button class="ib" data-act="edit-g" data-gid="${g.id}">✏️</button>
           <button class="ib" data-act="del-g"  data-gid="${g.id}">🗑️</button>
         </div>
       </div>
       <div class="dgbody"><div class="dopts" id="do-${g.id}">${!opts.length?'<p style="color:#bbb;font-size:.83rem">לחץ "+ אופציה"</p>':''}</div></div>`;
-    if(opts.length){const og=el.querySelector(`#do-${g.id}`);opts.forEach(p=>og.appendChild(makeCard(p,{isDil:true,gid:g.id})));}
+    if(opts.length){
+      const og=el.querySelector(`#do-${g.id}`);
+      opts.forEach(p=>{
+        const card=makeCard(p,{isDil:true,gid:g.id});
+        const u=placeUsage(p);
+        const other=u.inGroups.filter(x=>x.id!==g.id);
+        const bd=[...u.scheduled.map(y=>`<span class="apbadge sched">🗓️ משובץ ${fmtD(y.date)}${y.startTime?' '+y.startTime:''}</span>`),
+                  ...other.map(x=>`<span class="apbadge grp">🤔 גם ב: ${esc(x.name)}${x.chosen?' ✅':''}</span>`)];
+        if(bd.length){
+          const n=document.createElement('div');
+          n.className='apb';n.style.cssText='padding:0 12px 9px';n.innerHTML=bd.join('');
+          card.appendChild(n);
+        }
+        og.appendChild(card);
+      });
+    }
     el.addEventListener('click',e=>{
       const b=e.target.closest('[data-act]');if(!b)return;
       const{act,gid,gc}=b.dataset;
       if(act==='add-opt')openModal(gc,'dilemma',gid);
+      if(act==='pick-opt')openAddPicker(gid);
       if(act==='edit-g') openDgModal(gid);
       if(act==='del-g')  delGroup(gid);
     });
@@ -3054,6 +3094,105 @@ function openDgModal(id=null){
   document.getElementById('dg-ov').classList.add('open');
 }
 function closeDgModal(){document.getElementById('dg-ov').classList.remove('open');}
+// ══════════════════════════════
+//  הוספת אופציות מהמקומות הקיימים
+// ══════════════════════════════
+const DCAT_PLACE={food:['food'],attraction:['attraction','pokemon'],view:['attraction','other'],accommodation:['accommodation'],transport:['transport'],other:null};
+let _addpGid=null;
+function baseId(p){return p.sourceId||p.id;}
+// היכן המקום הזה כבר משובץ — קבוצות התלבטות ותאריך בתוכנית
+function placeUsage(x){
+  const key=baseId(x);
+  const inGroups=[];
+  places.forEach(y=>{
+    if(baseId(y)!==key||!y.dilemmaGroupId)return;
+    const g=groups.find(z=>z.id===y.dilemmaGroupId);
+    if(g&&!inGroups.some(o=>o.id===g.id))inGroups.push({id:g.id,name:g.name,chosen:g.chosenId===y.id});
+  });
+  const scheduled=places.filter(y=>baseId(y)===key&&y.type==='planned'&&y.date);
+  return{inGroups,scheduled};
+}
+function openAddPicker(gid){
+  _addpGid=gid;
+  const g=groups.find(x=>x.id===gid);if(!g)return;
+  document.getElementById('addp-title').textContent=`📋 הוסף ל"${g.name}"`;
+  document.getElementById('addp-info').innerHTML=`קטגוריית הקבוצה: <b>${DCAT[g.cat]||DCAT.other}</b>${g.date?` · 📅 ${fmtD(g.date)}${g.startTime?' · 🕐 '+g.startTime:''}`:''}<br>המקום שתוסיף נכנס כאופציה בקבוצה הזו בלבד — הוא נשאר זמין גם לקבוצות אחרות (אפשר לבקר באותה מסעדה כמה פעמים).`;
+  document.getElementById('addp-q').value='';
+  document.getElementById('addp-all').checked=false;
+  renderAddPicker();
+  document.getElementById('addp-ov').classList.add('open');
+}
+function closeAddPicker(){document.getElementById('addp-ov').classList.remove('open');_addpGid=null;}
+function renderAddPicker(){
+  const g=groups.find(x=>x.id===_addpGid);if(!g)return;
+  const list=document.getElementById('addp-list');
+  const q=document.getElementById('addp-q').value.trim().toLowerCase();
+  const all=document.getElementById('addp-all').checked;
+  const cats=DCAT_PLACE[g.cat]||null;
+  const inGroupKeys=new Set(places.filter(p=>p.dilemmaGroupId===g.id).map(baseId));
+  let pool=places.filter(p=>{
+    if(p.dilemmaGroupId===g.id)return false;                    // כבר בקבוצה הזו
+    if(!all&&cats&&!cats.includes(p.cat))return false;
+    if(q){
+      const hay=[p.name,p.city,p.address,p.notes].filter(Boolean).join(' ').toLowerCase();
+      if(!hay.includes(q))return false;
+    }
+    return true;
+  });
+  // מקום שמופיע כמה פעמים (מקור + עותקים) — שורה אחת
+  const seen=new Set();
+  pool=pool.filter(p=>{const k=baseId(p);if(seen.has(k))return false;seen.add(k);return true;});
+  if(!pool.length){
+    list.innerHTML=`<p style="font-size:.83rem;color:var(--muted);text-align:center;padding:14px">אין מקומות מתאימים${all?'':' בקטגוריה הזו — סמן "הצג מקומות מכל הקטגוריות"'}.</p>`;
+    return;
+  }
+  list.innerHTML=pool.map(p=>{
+    const u=placeUsage(p);
+    const already=inGroupKeys.has(baseId(p));
+    const badges=[
+      `<span class="apbadge">${CAT[p.cat]||''}</span>`,
+      ...u.scheduled.map(y=>`<span class="apbadge sched">🗓️ ${fmtD(y.date)}${y.startTime?' '+y.startTime:''}</span>`),
+      ...u.inGroups.map(x=>`<span class="apbadge grp">🤔 ${esc(x.name)}${x.chosen?' ✅':''}</span>`),
+      already?'<span class="apbadge here">✔️ כבר בקבוצה הזו</span>':''
+    ].filter(Boolean).join('');
+    return`<div class="apitem${already?' in':''}" ${already?'':`data-add="${p.id}"`}>
+      <div style="flex:1">
+        <div class="apn">${esc(p.name)}</div>
+        <div style="font-size:.72rem;color:var(--muted)">${getCC(p.country).flag} ${esc(p.city||'')}${p.address?' · '+esc(p.address):''}</div>
+        <div class="apb">${badges}</div>
+      </div>
+      ${already?'':'<button class="apadd">➕ הוסף</button>'}
+    </div>`;
+  }).join('');
+}
+// יוצר עותק-אופציה של מקום קיים בתוך הקבוצה (המקור נשאר כפי שהוא)
+function addPlaceToGroup(gid,pid){
+  const g=groups.find(x=>x.id===gid),src=places.find(x=>x.id===pid);
+  if(!g||!src)return;
+  const copy=PDEF({
+    ...src,
+    id:uid(),
+    sourceId:baseId(src),
+    type:'dilemma',
+    dilemmaGroupId:gid,
+    visited:false,rating:null,verdict:'',review:'',
+    date:g.date||src.date||'',
+    startTime:g.startTime||'',
+    endTime:g.endTime||'',
+    option:null
+  });
+  places.push(copy);
+  persist();
+  renderAddPicker();
+}
+document.getElementById('addp-cls').addEventListener('click',closeAddPicker);
+document.getElementById('addp-ov').addEventListener('click',e=>{if(e.target===document.getElementById('addp-ov'))closeAddPicker();});
+document.getElementById('addp-q').addEventListener('input',renderAddPicker);
+document.getElementById('addp-all').addEventListener('change',renderAddPicker);
+document.getElementById('addp-list').addEventListener('click',e=>{
+  const it=e.target.closest('[data-add]');if(!it||!_addpGid)return;
+  addPlaceToGroup(_addpGid,it.dataset.add);
+});
 document.getElementById('dg-cncl').addEventListener('click',closeDgModal);
 document.getElementById('dg-ov').addEventListener('click',e=>{if(e.target===document.getElementById('dg-ov'))closeDgModal();});
 document.getElementById('dg-form').addEventListener('submit',e=>{
