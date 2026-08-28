@@ -307,6 +307,10 @@ body.phase-done #dsec-plan{display:none}
 .active-route-bar{background:#d1fae5;border:1.5px solid var(--ok);border-radius:9px;padding:9px 14px;margin-bottom:12px;font-size:.84rem;color:#065f46;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:10px}
 /* DILEMMA VIEW */
 .dgcard{background:#fff;border-radius:14px;margin-bottom:18px;box-shadow:var(--shadow);border:1.5px solid var(--brd);overflow:hidden}
+.dcat-hdr{display:flex;align-items:center;gap:10px;font-size:.95rem;font-weight:800;margin:20px 2px 10px;padding-bottom:6px;border-bottom:2px solid var(--brd)}
+.dcat-hdr .dcat-cnt{font-size:.72rem;font-weight:400;color:var(--muted);margin-right:auto}
+.dg-slot{font-size:.72rem;font-weight:600;color:#1e40af;background:#eff6ff;border-radius:9px;padding:2px 8px;margin-right:8px;white-space:nowrap}
+.dg-slot.none{color:var(--muted);background:#f1f5f9;font-weight:400}
 .dgcard.unresolved{border-color:var(--dil)}.dgcard.resolved{border-color:var(--ok)}.dgcard.has-conflict{border-color:var(--err)}
 .dghdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fafafa;border-bottom:1px solid var(--brd);flex-wrap:wrap;gap:8px}
 .dgtitle{font-size:.97rem;font-weight:700}
@@ -425,6 +429,12 @@ body.phase-done #dsec-plan{display:none}
 .mpt.stay{background:#fff7ed}
 .mpt.opt{background:#fffbeb;border:1px dashed #f59e0b}
 .mpt .optb.on{background:#fef3c7;border-color:#d97706;color:#92400e}
+.mpt .pick{background:#ecfdf5;border-color:#16a34a;color:#15803d;font-weight:700}
+.mpt .pick:hover{background:#d1fae5}
+.gchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid var(--brd)}
+.gchip{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--brd);background:#fff;border-radius:20px;padding:3px 9px;font-family:inherit;font-size:.71rem;cursor:pointer;color:var(--text)}
+.gchip.off{opacity:.4;filter:grayscale(1)}
+.gchip .gdot{width:9px;height:9px;border-radius:50%}
 .mk.opt{border-style:dashed;border-color:#fff;border-radius:50%;transform:rotate(0)}
 .mk.opt span{transform:rotate(0);font-size:.6rem}
 .mpt.nogeo{opacity:.75}
@@ -649,6 +659,7 @@ body.phase-done #dsec-plan{display:none}
         <button class="abtn sm ink" id="map-no-days" style="background:#9ca3af">✖️ נקה הכל</button>
         <label style="display:flex;align-items:center;gap:5px;font-size:.78rem;cursor:pointer"><input type="checkbox" id="map-lines" checked> 🧭 קווי מסלול בין הנקודות</label>
         <label style="display:flex;align-items:center;gap:5px;font-size:.78rem;cursor:pointer" title="כל יום מתחיל מהמלון של אותו בוקר ונסגר במלון של אותו לילה"><input type="checkbox" id="map-start-hotel" checked> 🏨 התחל וסיים כל יום במלון</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:.78rem;cursor:pointer" title="מציג על המפה את כל האופציות בקבוצות ההתלבטות שטרם הוחלטו"><input type="checkbox" id="map-show-dil" checked> 🤔 הצג קבוצות התלבטות</label>
         <label style="display:flex;align-items:center;gap:5px;font-size:.78rem;cursor:pointer"><input type="checkbox" id="map-hide-visited"> 👁️ הסתר מקומות שביקרנו</label>
         <span class="map-tb-lbl" style="margin-right:auto">אופן נסיעה:</span>
         <select class="fc" id="map-mode" style="width:auto;padding:5px 9px;font-size:.78rem">
@@ -743,6 +754,13 @@ body.phase-done #dsec-plan{display:none}
             <option value="high">🔴 חייבים</option><option value="medium">🟡 רוצים</option><option value="low">🟢 אם יש זמן</option>
           </select>
         </div>
+      </div>
+      <div class="fg"><label>🤔 התלבטות (אפשרות חלופית על המפה — לא נכנסת למסלול)</label>
+        <select class="fc" id="f-option">
+          <option value="auto">⚙️ אוטומטי — התלבטות אם אין שעה או שהעדיפות "אם יש זמן"</option>
+          <option value="yes">🤔 כן — סמן כהתלבטות</option>
+          <option value="no">📍 לא — עצירה קבועה במסלול</option>
+        </select>
       </div>
       <div class="fg"><label>הערות</label><textarea class="fc" id="f-notes" rows="2" placeholder="שעות פתיחה, קישור..."></textarea></div>
       <div class="fr">
@@ -890,9 +908,21 @@ body.phase-done #dsec-plan{display:none}
     <form id="dg-form">
       <input type="hidden" id="dg-id">
       <div class="fg"><label>שם ההתלבטות</label><input type="text" class="fc" id="dg-name" placeholder='"לינה בסיאול" / "פעילות ביום 3"' required></div>
-      <div class="fg"><label>מדינה</label>
-        <select class="fc" id="dg-country"></select>
+      <div class="fr">
+        <div class="fg"><label>קטגוריה</label>
+          <select class="fc" id="dg-cat"></select>
+        </div>
+        <div class="fg"><label>מדינה</label>
+          <select class="fc" id="dg-country"></select>
+        </div>
       </div>
+      <div class="fr">
+        <div class="fg"><label>יום בטיול (אופציונלי)</label><input type="date" class="fc" id="dg-date"></div>
+        <div class="fg"><label>שעה</label>
+          <div style="display:flex;gap:6px"><input type="time" class="fc" id="dg-start"><input type="time" class="fc" id="dg-end"></div>
+        </div>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);line-height:1.5;margin-bottom:6px">💡 היום והשעה שתגדיר כאן יחולו על <b>כל האופציות</b> בקבוצה — כך כולן מופיעות באותו יום במפה ואפשר להשוות ביניהן לפי מיקום.</div>
       <div class="f-acts"><button type="button" class="bcncl" id="dg-cncl">ביטול</button><button type="submit" class="bsave">צור קבוצה</button></div>
     </form>
   </div>
@@ -1072,6 +1102,10 @@ body.phase-done #dsec-plan{display:none}
 const KEY='trip_kj_2027_v4';
 const CAT={accommodation:'🏨 לינה',attraction:'🗺️ אטרקציה',food:'🍜 אוכל',transport:'✈️ תחבורה',pokemon:'🎮 Pokémon Center',other:'📌 אחר'};
 const PRI={high:'🔴 חייבים',medium:'🟡 רוצים',low:'🟢 אם יש זמן'};
+const DCAT={food:'🍜 אוכל',attraction:'🗺️ אטרקציה',view:'🌄 נוף',accommodation:'🏨 לינה',transport:'🚗 תחבורה',other:'📌 אחר'};
+const DCAT_ORDER=['food','attraction','view','accommodation','transport','other'];
+const GRP_COLORS=['#d97706','#7c3aed','#0891b2','#be123c','#4d7c0f','#c2410c','#a21caf','#0369a1'];
+function gcolor(gid){const i=groups.findIndex(g=>g.id===gid);return GRP_COLORS[(i<0?0:i)%GRP_COLORS.length];}
 const VERDICT={good:'👍 מוצלח',meh:'😐 בסדר',bad:'👎 מאכזב'};
 const VCLS={good:'v-good',meh:'v-meh',bad:'v-bad'};
 const PHASES=['planning','traveling','done'];
@@ -1206,7 +1240,7 @@ function getCC(cid){for(const t of Object.values(TRIPS))for(const c of t.countri
 //  STORAGE
 // ══════════════════════════════
 function coordOrNull(v){const n=parseFloat(v);return Number.isFinite(n)?n:null;}
-const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,geoApprox:false,option:false,...p,option:!!p.option,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng),geoApprox:!!p.geoApprox});
+const PDEF=p=>({startTime:'',endTime:'',refPhoto:null,myPhoto:null,type:'planned',dilemmaGroupId:null,budget:null,actual:null,currency:(ct()?.defaultCurrency)||'ILS',rating:null,verdict:'',review:'',address:'',lat:null,lng:null,geoApprox:false,option:null,...p,option:(p.option===true||p.option===false)?p.option:null,budget:p.budget??p.price??null,lat:coordOrNull(p.lat),lng:coordOrNull(p.lng),geoApprox:!!p.geoApprox});
 const RDEF=r=>({description:'',active:false,choices:{},placeIds:null,...r});
 function seedFor(tid){
   if(tid==='kj2027')return seedKJ();
@@ -2336,7 +2370,20 @@ function renderGrid(country,gridId){
 function renderDilemmas(){
   const c=document.getElementById('dg-container');c.innerHTML='';
   if(!groups.length){c.innerHTML=`<div class="empty"><div class="ei">🤔</div><p>לחץ "קבוצת התלבטות חדשה"</p></div>`;return;}
-  groups.forEach(g=>{
+  // קיבוץ לפי קטגוריה — אוכל / אטרקציה / נוף / לינה …
+  const byCat=new Map();
+  groups.forEach(g=>{const k=DCAT[g.cat]?g.cat:'other';if(!byCat.has(k))byCat.set(k,[]);byCat.get(k).push(g);});
+  const ordered=DCAT_ORDER.filter(k=>byCat.has(k)).flatMap(k=>[{__cat:k},...byCat.get(k)]);
+  ordered.forEach(g=>{
+    if(g.__cat){
+      const list=byCat.get(g.__cat);
+      const open=list.filter(x=>!x.chosenId).length;
+      const h=document.createElement('div');
+      h.className='dcat-hdr';
+      h.innerHTML=`<span>${DCAT[g.__cat]}</span><span class="dcat-cnt">${list.length} קבוצות${open?` · ${open} פתוחות`:' · הכל הוחלט ✅'}</span>`;
+      c.appendChild(h);
+      return;
+    }
     const opts=places.filter(p=>p.dilemmaGroupId===g.id);
     const resolved=!!g.chosenId;
     const hasCon=resolved&&opts.some(p=>p.id===g.chosenId&&hasConflict(p));
@@ -2348,7 +2395,7 @@ function renderDilemmas(){
     const el=document.createElement('div');el.className=cls;
     el.innerHTML=`
       <div class="dghdr">
-        <div class="dgtitle">🤔 ${esc(g.name)} ${getCC(g.country).flag}</div>
+        <div class="dgtitle"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${gcolor(g.id)};margin-left:6px"></span>${esc(g.name)} ${getCC(g.country).flag}${g.date?`<span class="dg-slot">📅 ${fmtD(g.date)}${g.startTime?' · 🕐 '+g.startTime+(g.endTime?'–'+g.endTime:''):''}</span>`:'<span class="dg-slot none">ללא יום — ערוך כדי לשייך</span>'}</div>
         <div class="dgacts">
           ${badge}
           <button class="abtn sm" data-act="add-opt" data-gid="${g.id}" data-gc="${g.country}">+ אופציה</button>
@@ -2565,6 +2612,7 @@ function setDateBounds(){
   fd.min=ct().startDate;fd.max=ct().endDate;
 }
 function openModal(country,type='planned',dgid=''){
+  const _g=dgid?groups.find(x=>x.id===dgid):null;
   document.getElementById('pl-title').textContent='הוסף מקום';document.getElementById('pl-form').reset();
   document.getElementById('pl-del').style.display='none';
   document.getElementById('f-id').value='';document.getElementById('f-type').value=type;
@@ -2574,10 +2622,17 @@ function openModal(country,type='planned',dgid=''){
   setDateBounds();
   document.getElementById('f-date').value=ct().startDate;document.getElementById('f-nights').value='1';
   document.getElementById('f-pri').value='medium';document.getElementById('f-cat').value='attraction';
+  document.getElementById('f-option').value='auto';
   document.getElementById('f-currency').value=ct().defaultCurrency;
   document.getElementById('sug-results').innerHTML='';
   document.getElementById('f-latlng').value='';document.getElementById('f-geo-status').textContent='';
   document.getElementById('bk-url').value='';document.getElementById('bk-status').textContent='';bkPhoto=null;
+  if(_g){                                   // אופציה חדשה בקבוצה — יורשת את היום והשעה של הקבוצה
+    if(_g.date)document.getElementById('f-date').value=_g.date;
+    if(_g.startTime)document.getElementById('f-st').value=_g.startTime;
+    if(_g.endTime)document.getElementById('f-et').value=_g.endTime;
+    if(_g.cat&&DCAT[_g.cat]&&_g.cat!=='view')document.getElementById('f-cat').value=_g.cat;
+  }
   document.getElementById('pl-ov').classList.add('open');
 }
 function openEdit(id){
@@ -2593,6 +2648,7 @@ function openEdit(id){
   document.getElementById('f-date').value=p.date||ct().startDate;document.getElementById('f-nights').value=p.nights??1;
   document.getElementById('f-st').value=p.startTime||'';document.getElementById('f-et').value=p.endTime||'';
   document.getElementById('f-cat').value=p.cat||'attraction';document.getElementById('f-pri').value=p.pri||'medium';
+  document.getElementById('f-option').value=p.option===true?'yes':(p.option===false?'no':'auto');
   document.getElementById('f-notes').value=p.notes||'';
   document.getElementById('f-budget').value=p.budget||'';document.getElementById('f-actual').value=p.actual||'';document.getElementById('f-currency').value=p.currency||'ILS';
   document.getElementById('f-latlng').value=(p.lat!=null&&p.lng!=null)?p.lat+', '+p.lng:'';
@@ -2621,11 +2677,12 @@ document.getElementById('pl-form').addEventListener('submit',e=>{
     cat:document.getElementById('f-cat').value,pri:document.getElementById('f-pri').value,
     notes:document.getElementById('f-notes').value.trim(),visited:false,
     type:document.getElementById('f-type').value,dilemmaGroupId:document.getElementById('f-dgid').value||null,
+    option:(v=>v==='yes'?true:(v==='no'?false:null))(document.getElementById('f-option').value),
     budget:document.getElementById('f-budget').value?parseFloat(document.getElementById('f-budget').value):null,
     actual:document.getElementById('f-actual').value?parseFloat(document.getElementById('f-actual').value):null,
     currency:document.getElementById('f-currency').value||'ILS',
     ...(function(){const c=parseLatLngInput(document.getElementById('f-latlng').value);return c?{lat:c.lat,lng:c.lng,geoApprox:false}:{lat:null,lng:null,geoApprox:false};})()});
-  if(id){const old=places.find(p=>p.id===id);if(old){data.option=!!old.option;data.visited=old.visited;data.refPhoto=old.refPhoto;data.myPhoto=old.myPhoto;data.rating=old.rating;data.verdict=old.verdict;data.review=old.review;}const i=places.findIndex(p=>p.id===id);places[i]=data;}
+  if(id){const old=places.find(p=>p.id===id);if(old){data.visited=old.visited;data.refPhoto=old.refPhoto;data.myPhoto=old.myPhoto;data.rating=old.rating;data.verdict=old.verdict;data.review=old.review;}const i=places.findIndex(p=>p.id===id);places[i]=data;}
   else places.push(data);
   if(bkPhoto&&!data.refPhoto)data.refPhoto=bkPhoto;   // תמונת המלון מ-Booking
   bkPhoto=null;
@@ -2976,8 +3033,24 @@ function openDgModal(id=null){
   document.getElementById('dg-id').value=id||'';
   const dgcs=document.getElementById('dg-country');
   dgcs.innerHTML=ct().countries.map(c=>`<option value="${c.id}">${c.flag} ${c.name}</option>`).join('');
-  if(id){const g=groups.find(x=>x.id===id);if(!g)return;document.getElementById('dg-title').textContent='ערוך קבוצה';document.getElementById('dg-name').value=g.name;dgcs.value=g.country;}
-  else{document.getElementById('dg-title').textContent='קבוצת התלבטות חדשה';document.getElementById('dg-name').value='';dgcs.value=ct().countries[0].id;}
+  const dgcat=document.getElementById('dg-cat');
+  dgcat.innerHTML=DCAT_ORDER.map(k=>`<option value="${k}">${DCAT[k]}</option>`).join('');
+  const dd=document.getElementById('dg-date');
+  dd.min=ct().startDate;dd.max=ct().endDate;
+  if(id){
+    const g=groups.find(x=>x.id===id);if(!g)return;
+    document.getElementById('dg-title').textContent='ערוך קבוצה';
+    document.getElementById('dg-name').value=g.name;dgcs.value=g.country;
+    dgcat.value=g.cat||'other';
+    dd.value=g.date||'';
+    document.getElementById('dg-start').value=g.startTime||'';
+    document.getElementById('dg-end').value=g.endTime||'';
+  } else {
+    document.getElementById('dg-title').textContent='קבוצת התלבטות חדשה';
+    document.getElementById('dg-name').value='';dgcs.value=ct().countries[0].id;
+    dgcat.value='attraction';dd.value='';
+    document.getElementById('dg-start').value='';document.getElementById('dg-end').value='';
+  }
   document.getElementById('dg-ov').classList.add('open');
 }
 function closeDgModal(){document.getElementById('dg-ov').classList.remove('open');}
@@ -2986,8 +3059,14 @@ document.getElementById('dg-ov').addEventListener('click',e=>{if(e.target===docu
 document.getElementById('dg-form').addEventListener('submit',e=>{
   e.preventDefault();const id=document.getElementById('dg-id').value;
   const name=document.getElementById('dg-name').value.trim(),country=document.getElementById('dg-country').value;
-  if(id){const g=groups.find(x=>x.id===id);if(g){g.name=name;g.country=country;}}
-  else groups.push({id:uid(),name,country,chosenId:null});
+  const cat=document.getElementById('dg-cat').value;
+  const date=document.getElementById('dg-date').value;
+  const startTime=document.getElementById('dg-start').value;
+  const endTime=document.getElementById('dg-end').value;
+  let gid=id;
+  if(id){const g=groups.find(x=>x.id===id);if(g)Object.assign(g,{name,country,cat,date,startTime,endTime});}
+  else{gid=uid();groups.push({id:gid,name,country,cat,date,startTime,endTime,chosenId:null});}
+  applyGroupSlot(gid);      // היום והשעה של הקבוצה חלים על כל האופציות שבה
   persist();closeDgModal();
 });
 // ══════════════════════════════
@@ -3174,6 +3253,17 @@ function delGroup(gid){
   places=places.filter(p=>p.dilemmaGroupId!==gid);
   routes.forEach(r=>{delete r.choices[gid];});
   groups=groups.filter(x=>x.id!==gid);persist();
+}
+// היום/השעה של הקבוצה חלים על כל האופציות שבה
+function applyGroupSlot(gid){
+  const g=groups.find(x=>x.id===gid);if(!g)return;
+  if(!g.date&&!g.startTime)return;
+  places.forEach(p=>{
+    if(p.dilemmaGroupId!==gid)return;
+    if(g.date)p.date=g.date;
+    if(g.startTime!==undefined)p.startTime=g.startTime||'';
+    if(g.endTime!==undefined)p.endTime=g.endTime||'';
+  });
 }
 function chooseFrom(gid,pid){const g=groups.find(x=>x.id===gid);if(g){g.chosenId=pid;persist();}}
 function unchoseFrom(gid){const g=groups.find(x=>x.id===gid);if(g){g.chosenId=null;persist();}}
@@ -3664,9 +3754,29 @@ function hotelForDay(dateKey,pool){
   if(dateKey===NODATE_KEY)return null;
   return hotelForNight(dPlus(dateKey,-1),pool)||hotelForNight(dateKey,pool);
 }
+// ── מאגר המפה: המקומות הפעילים + האופציות בקבוצות ההתלבטות שטרם הוכרעו ──
+function openGroups(){return groups.filter(g=>!g.chosenId);}
+function groupOf(p){return p.dilemmaGroupId?groups.find(g=>g.id===p.dilemmaGroupId):null;}
+function mapPool(){
+  const base=activePlaces();
+  if(document.getElementById('map-show-dil')?.checked===false)return base;
+  const ids=new Set(base.map(p=>p.id));
+  const hidden=mapHiddenGroups();
+  const extra=places.filter(p=>{
+    if(ids.has(p.id)||p.type!=='dilemma'||!p.dilemmaGroupId)return false;
+    const g=groupOf(p);
+    return g&&!g.chosenId&&!hidden.has(g.id);
+  });
+  return[...base,...extra];
+}
+let _mapHiddenG={};
+function mapHiddenGroups(){
+  if(!_mapHiddenG[currentTripId])_mapHiddenG[currentTripId]=new Set();
+  return _mapHiddenG[currentTripId];
+}
 // ── חלוקת המקומות לימים + צבע קבוע לכל יום ──
 function mapDays(){
-  const pool=activePlaces();
+  const pool=mapPool();
   const byDay=new Map();
   pool.forEach(p=>{
     const k=p.date||NODATE_KEY;
@@ -3678,13 +3788,13 @@ function mapDays(){
   const out=dated.map((k,i)=>{
     let list=sortDayPlaces(byDay.get(k));
     if(startHotel){
-      const h=hotelForDay(k,pool);
+      const h=hotelForDay(k,activePlaces());
       if(h){
         const at=list.findIndex(p=>p.id===h.id);
         if(at>=0)list=[list[at],...list.filter((_,j)=>j!==at)];        // המלון של אותו יום — ראשון
         else list=[{...h,_stay:true},...list];                          // ממשיכים באותו מלון — נקודת פתיחה
       }
-      const hn=hotelForNight(k,pool);                                   // המלון של הלילה הקרוב — סוגרים אליו את היום
+      const hn=hotelForNight(k,activePlaces());                                   // המלון של הלילה הקרוב — סוגרים אליו את היום
       if(hn&&list.length>1&&list[list.length-1].id!==hn.id)
         list=[...list,{...hn,_stay:true,_end:true}];
     }
@@ -3699,23 +3809,51 @@ function mapDays(){
 }
 // ── מספור נקודות היום: עצירות רגילות 1,2,3… · התלבטויות 3.1, 3.2… · מלון 🏨 ──
 const OPT_COLOR='#d97706';
+// מקום נחשב להתלבטות אם סומן ידנית, או — בברירת מחדל — אם אין לו שעה או שהעדיפות "אם יש זמן"
+function isOption(p){
+  if(p.type==='dilemma'){                 // אופציה בקבוצת התלבטות — עד שנבחרת
+    const g=groupOf(p);
+    return !(g&&g.chosenId===p.id);
+  }
+  if(p.option===true)return true;
+  if(p.option===false)return false;
+  return !p.startTime||p.pri==='low';
+}
+function optReason(p){
+  const g=groupOf(p);
+  if(g)return'קבוצה: '+g.name;
+  if(p.option===true)return'סומן ידנית';
+  if(!p.startTime&&p.pri==='low')return'אין שעה · אם יש זמן';
+  if(!p.startTime)return'אין שעה';
+  return'אם יש זמן';
+}
 function numberDay(list){
   let main=0;const subs={};
   return list.map(p=>{
     if(p._stay||p.cat==='accommodation')return{...p,_no:'🏨'};
-    if(p.option){
+    if(isOption(p)){
       const a=main||1;
       subs[a]=(subs[a]||0)+1;
-      return{...p,_no:a+'.'+subs[a],_opt:true,_anchor:a};
+      const g=groupOf(p);
+      return{...p,_no:a+'.'+subs[a],_opt:true,_anchor:a,_why:optReason(p),_gid:g?g.id:null,_gname:g?g.name:'',_gcolor:g?gcolor(g.id):OPT_COLOR};
     }
     main++;
     return{...p,_no:String(main)};
   });
 }
 function mainStops(places){return places.filter(p=>!p._opt);}
+function chooseOption(gid,pid){
+  const g=groups.find(x=>x.id===gid),p=places.find(x=>x.id===pid);
+  if(!g||!p)return;
+  const others=places.filter(x=>x.dilemmaGroupId===gid&&x.id!==pid).length;
+  if(!confirm(`לבחור ב"${p.name}" עבור "${g.name}"?\n${others?`${others} האפשרויות האחרות יירדו מהמפה (אפשר תמיד לשנות בלשונית ההתלבטויות).`:''}`))return;
+  g.chosenId=pid;
+  _mapFitPending=true;
+  persist();
+}
 function toggleOption(pid){
   const p=places.find(x=>x.id===pid);if(!p)return;
-  p.option=!p.option;
+  p.option=isOption(p)?false:true;      // סימון מפורש — גובר על הכלל האוטומטי
   persist();
 }
 function sortDayPlaces(arr){
@@ -3788,7 +3926,7 @@ function renderMap(){
 function autoGeocode(){
   if(_geoRunning||_geoAutoDone[currentTripId])return;
   if(!document.getElementById('view-map')?.classList.contains('active'))return;
-  if(!activePlaces().some(p=>!hasCoords(p)))return;
+  if(!mapPool().some(p=>!hasCoords(p)))return;
   _geoAutoDone[currentTripId]=true;
   setTimeout(()=>geocodeMissing(true),400);
 }
@@ -3809,7 +3947,7 @@ function renderMapChips(){
   const co=days.reduce((s,d)=>s+d.places.filter(hasCoords).length,0);
   const apx=days.reduce((s,d)=>s+d.places.filter(p=>hasCoords(p)&&p.geoApprox).length,0);
   const note=document.getElementById('map-legend-note');
-  if(note)note.innerHTML=`💡 <b>${co}</b> מתוך <b>${all}</b> המקומות מסומנים על המפה.${co<all?' למקומות החסרים אין עדיין קואורדינטות — לחץ "📍 אתר מקומות חסרים" או פתח את המקום ✏️ והדבק קישור Google Maps.':''}${apx?` <b>${apx}</b> סמנים מקווקוים = מיקום משוער (מרכז העיר) — כדאי לדייק ידנית.`:''}<br>👆 לחיצה על יום מציגה <b>רק</b> אותו יום ואת המסלול המקווקו שלו · לחיצה חוזרת עליו מחזירה את כל הימים · Ctrl/⌘+לחיצה מוסיפה ימים לבחירה · החיצים ◀ ▶ מדפדפים יום-יום.<br>🏨 כל יום נפתח במלון של אותו בוקר ונסגר במלון של אותו לילה · ▲▼ בסרגל הצד מזיזים נקודה קדימה/אחורה ומעדכנים שעה · בזום פנימה מופיעות על הקו הערכות זמן הליכה/נסיעה בין הנקודות (לחיצה עליהן פותחת ניווט).<br>🤔 כפתור ההתלבטות בכל שורה הופך את המקום לאפשרות חלופית: מסומן בכתום עגול וממוספר <b>3.1 / 3.2</b> לפי העצירה שלפניו, מחובר אליה בקו מנוקד, ולא נכנס למסלול הניווט עד שתחליט.`;
+  if(note)note.innerHTML=`💡 <b>${co}</b> מתוך <b>${all}</b> המקומות מסומנים על המפה.${co<all?' למקומות החסרים אין עדיין קואורדינטות — לחץ "📍 אתר מקומות חסרים" או פתח את המקום ✏️ והדבק קישור Google Maps.':''}${apx?` <b>${apx}</b> סמנים מקווקוים = מיקום משוער (מרכז העיר) — כדאי לדייק ידנית.`:''}<br>👆 לחיצה על יום מציגה <b>רק</b> אותו יום ואת המסלול המקווקו שלו · לחיצה חוזרת עליו מחזירה את כל הימים · Ctrl/⌘+לחיצה מוסיפה ימים לבחירה · החיצים ◀ ▶ מדפדפים יום-יום.<br>🏨 כל יום נפתח במלון של אותו בוקר ונסגר במלון של אותו לילה · ▲▼ בסרגל הצד מזיזים נקודה קדימה/אחורה ומעדכנים שעה · בזום פנימה מופיעות על הקו הערכות זמן הליכה/נסיעה בין הנקודות (לחיצה עליהן פותחת ניווט).<br>🤔 <b>התלבטויות</b> — מקום בלי שעה, או שעדיפותו "אם יש זמן", מסומן אוטומטית כהתלבטות: בכתום עגול, ממוספר <b>3.1 / 3.2</b> לפי העצירה שלפניו, מחובר אליה בקו מנוקד ולא נכנס למסלול הניווט. כפתור 🤔 בשורה (או השדה בעריכת המקום) קובע ידנית — כן / לא / אוטומטי.`;
 }
 function renderMapSide(){
   const side=document.getElementById('map-side');if(!side)return;
@@ -3817,7 +3955,19 @@ function renderMapSide(){
   const hv=document.getElementById('map-hide-visited')?.checked;
   const days=mapDays();
   if(!days.length){side.innerHTML='<p style="font-size:.82rem;color:var(--muted)">אין מקומות להצגה.</p>';return;}
-  side.innerHTML=days.map(d=>{
+  // צ'יפים לקבוצות ההתלבטות הפתוחות — הצגה/הסתרה של כל קבוצה
+  const og=openGroups();
+  const showDil=document.getElementById('map-show-dil')?.checked!==false;
+  const hidG=mapHiddenGroups();
+  const gbar=(showDil&&og.length)?`<div class="gchips">
+    <span style="font-size:.71rem;color:var(--muted);align-self:center">🤔 התלבטויות פתוחות:</span>
+    ${og.map(g=>{
+      const n=places.filter(p=>p.dilemmaGroupId===g.id).length;
+      return`<button class="gchip ${hidG.has(g.id)?'off':''}" data-grp="${g.id}" title="${esc(DCAT[g.cat]||'')}${g.date?' · '+fmtD(g.date):''}">
+        <span class="gdot" style="background:${gcolor(g.id)}"></span>${esc(g.name)} <span style="opacity:.6">(${n})</span></button>`;
+    }).join('')}
+  </div>`:'';
+  side.innerHTML=gbar+days.map(d=>{
     const shown=hid.has(d.key)?'off':'on';
     const pts=mainStops(d.places).filter(p=>hasCoords(p)&&!(hv&&p.visited));
     let km=0;for(let i=1;i<pts.length;i++)km+=hav(pts[i-1],pts[i]);
@@ -3831,9 +3981,10 @@ function renderMapSide(){
           <button data-up="${p.id}" title="הזז למעלה — מוקדם יותר ביום" ${(i===0||stay||d.places[i-1]?._stay)?'disabled':''}>▲</button>
           <button data-down="${p.id}" title="הזז למטה — מאוחר יותר ביום" ${(i===d.places.length-1||stay)?'disabled':''}>▼</button>
         </span>
-        <span class="num" style="background:${co?(opt?OPT_COLOR:d.color):'#cbd5e1'}${opt?';font-size:.6rem;width:23px;border-radius:8px':''}">${n}</span>
-        <span style="flex:1">${p.visited?'✅ ':''}${esc(p.name)}<div class="mp-sub">${stay?(p._end?'🏨 חוזרים לכאן · ':'🏨 יוצאים מכאן · '):tim}${esc(p.city)}${sub}${opt?' · 🤔 התלבטות':''}</div></span>
-        ${stay?'':`<button class="tbtn2 optb${opt?' on':''}" data-opt="${p.id}" title="${opt?'בטל סימון כהתלבטות — יחזור להיות עצירה רגילה':'סמן כהתלבטות — אפשרות חלופית לעצירה הזו'}">🤔</button>`}
+        <span class="num" style="background:${co?(opt?(p._gcolor||OPT_COLOR):d.color):'#cbd5e1'}${opt?';font-size:.6rem;width:23px;border-radius:8px':''}">${n}</span>
+        <span style="flex:1">${p.visited?'✅ ':''}${esc(p.name)}<div class="mp-sub">${stay?(p._end?'🏨 חוזרים לכאן · ':'🏨 יוצאים מכאן · '):tim}${esc(p.city)}${sub}${opt?' · 🤔 התלבטות ('+esc(p._why||'')+')':''}</div></span>
+        ${p._gid?`<button class="tbtn2 pick" data-choose="${p._gid}|${p.id}" title="בחר את האפשרות הזו וסגור את ההתלבטות">✅ בחר</button>`
+          :(stay?'':`<button class="tbtn2 optb${opt?' on':''}" data-opt="${p.id}" title="${opt?'בטל סימון כהתלבטות — יחזור להיות עצירה רגילה':'סמן כהתלבטות — אפשרות חלופית לעצירה הזו'}">🤔</button>`)}
         ${stay?'':`<button class="tbtn2" data-time="${p.id}" title="ערוך שעה משוערת">🕐${p.startTime?'':' קבע שעה'}</button>`}
         ${co?'':`<button class="geo" data-geo="${p.id}" title="אתר את המקום הזה עכשיו">📍 אתר</button>`}
         <a class="gm" href="${gmPoint(p)}" target="_blank" rel="noopener" title="פתח ב-Google Maps" onclick="event.stopPropagation()">🌐</a>
@@ -3920,7 +4071,7 @@ function mkIcon(color,n,p){
   const opt=!!p._opt;
   const cls='mk'+(p.visited?' vis':'')+(hereId===p.id?' here':'')+(p.geoApprox?' approx':'')+(opt?' opt':'');
   const glyph=p._no||n;
-  const bg=opt?OPT_COLOR:color;
+  const bg=opt?(p._gcolor||OPT_COLOR):color;
   const sz=opt?30:27;
   return L.divIcon({className:'mk-wrap',iconSize:[sz,sz],iconAnchor:opt?[sz/2,sz/2]:[13,27],popupAnchor:[0,opt?-16:-24],
     html:`<div class="${cls}" style="width:${sz}px;height:${sz}px;background:${bg}"><span style="${p.cat==='accommodation'?'font-size:.62rem':''}">${glyph}</span></div>`});
@@ -3980,10 +4131,10 @@ function drawMap(){
       const m=L.marker(ll,{icon:mkIcon(d.color,p._no,p),title:p.name,zIndexOffset:p._opt?-100:0}).addTo(_mapLayer);
       const tim=p.startTime?`🕐 ${p.startTime}${p.endTime?'–'+p.endTime:''}`:'';
       m.bindPopup(`<div class="mpop">
-        <div class="t">${p._opt?'🤔 ':''}${esc(p.name)}</div>
-        <div class="s">${getCC(p.country).flag} ${esc(p.city)} · ${CAT[p.cat]||''}<br>${esc(d.label)} · ${p._opt?`התלבטות ${p._no} — אפשרות לעצירה ${p._anchor}`:`נקודה ${p._no}`}${tim?'<br>'+tim:''}${p.address?'<br>📍 '+esc(p.address):''}${p.geoApprox?'<br>⚠️ מיקום משוער (מרכז העיר) — ערוך לדיוק':''}</div>
+        <div class="t">${p._opt?'🤔 ':''}${esc(p.name)}${p._gname?` <span style="font-size:.7rem;color:${p._gcolor}">· ${esc(p._gname)}</span>`:''}</div>
+        <div class="s">${getCC(p.country).flag} ${esc(p.city)} · ${CAT[p.cat]||''}<br>${esc(d.label)} · ${p._opt?`התלבטות ${p._no} — אפשרות לעצירה ${p._anchor} (${esc(p._why||'')})`:`נקודה ${p._no}`}${tim?'<br>'+tim:''}${p.address?'<br>📍 '+esc(p.address):''}${p.geoApprox?'<br>⚠️ מיקום משוער (מרכז העיר) — ערוך לדיוק':''}</div>
         <a href="${gmPoint(p)}" target="_blank" rel="noopener">🌐 פתח ב-Google Maps</a>
-        <button onclick="toggleOption('${p.id}')">${p._opt?'✅ הפוך לעצירה רגילה':'🤔 סמן כהתלבטות'}</button>
+        ${p._gid?`<button onclick="chooseOption('${p._gid}','${p.id}')">✅ בוחרים באפשרות הזו</button>`:`<button onclick="toggleOption('${p.id}')">${p._opt?'✅ הפוך לעצירה רגילה':'🤔 סמן כהתלבטות'}</button>`}
         <button onclick="openEdit('${p.id}')">✏️ ערוך מקום</button>
       </div>`);
       _mapMarkers[p.id]=m;
@@ -3998,8 +4149,9 @@ function drawMap(){
       d.places.filter(p=>p._opt).forEach(p=>{
         const a=main.find(x=>x._no===String(p._anchor))||main[0];
         if(!a||!hasCoords(a))return;
-        L.polyline([[a.lat,a.lng],[p.lat,p.lng]],{color:OPT_COLOR,weight:2,opacity:.75,dashArray:'2,6'}).addTo(_mapLayer);
-        if(_map.getZoom()>=SEG_ZOOM+2)addLegLabel(a,p,OPT_COLOR,true);
+        const oc=p._gcolor||OPT_COLOR;
+        L.polyline([[a.lat,a.lng],[p.lat,p.lng]],{color:oc,weight:2,opacity:.75,dashArray:'2,6'}).addTo(_mapLayer);
+        if(_map.getZoom()>=SEG_ZOOM+2)addLegLabel(a,p,oc,true);
       });
     }
   });
@@ -4092,7 +4244,7 @@ const _geoAutoDone={};          // איתור אוטומטי — פעם אחת �
 async function geocodeMissing(auto=false){
   const st=document.getElementById('map-status');
   if(_geoRunning)return;
-  const todo=activePlaces().filter(p=>!hasCoords(p));
+  const todo=mapPool().filter(p=>!hasCoords(p));
   if(!todo.length){if(!auto&&st)st.textContent='✅ לכל המקומות כבר יש מיקום על המפה.';return;}
   _geoRunning=true;_geoStop=false;
   if(st)st.dataset.busy='1';
@@ -4186,6 +4338,15 @@ document.getElementById('map-side').addEventListener('click',e=>{
     openTimeModal(pid,{dayLabel:day?day.label:''});
     return;
   }
+  const gc=e.target.closest('[data-grp]');
+  if(gc){
+    const h=mapHiddenGroups(),k=gc.dataset.grp;
+    h.has(k)?h.delete(k):h.add(k);
+    _mapFitPending=true;renderMap();
+    return;
+  }
+  const pk=e.target.closest('[data-choose]');
+  if(pk){e.stopPropagation();const[gid,pid]=pk.dataset.choose.split('|');chooseOption(gid,pid);return;}
   const ob=e.target.closest('[data-opt]');
   if(ob){e.stopPropagation();toggleOption(ob.dataset.opt);return;}
   const gb=e.target.closest('[data-geo]');
@@ -4199,6 +4360,7 @@ document.getElementById('map-all-days').addEventListener('click',()=>{mapHiddenS
 document.getElementById('map-no-days').addEventListener('click',()=>{const h=mapHiddenSet();mapDays().forEach(d=>h.add(d.key));renderMap();});
 document.getElementById('map-lines').addEventListener('change',renderMap);
 document.getElementById('map-start-hotel').addEventListener('change',()=>{_mapFitPending=true;renderMap();});
+document.getElementById('map-show-dil').addEventListener('change',()=>{_mapFitPending=true;renderMap();});
 document.getElementById('map-hide-visited').addEventListener('change',()=>{_mapFitPending=true;renderMap();});
 document.getElementById('map-geocode-btn').addEventListener('click',()=>geocodeMissing(false));
 document.getElementById('map-geo-stop').addEventListener('click',()=>{_geoStop=true;});
